@@ -226,7 +226,13 @@ atomicCondition
     ;
 
 predicateFormula
-    : LPAREN predicateName (term)* RPAREN
+    : LPAREN 'imply' predicateFormula predicateFormula RPAREN
+    | LPAREN 'or' predicateFormula+ RPAREN
+    | LPAREN 'and' predicateFormula+ RPAREN
+    | LPAREN 'not' predicateFormula RPAREN
+    | LPAREN 'exists' LPAREN typedVariableList RPAREN predicateFormula RPAREN
+    | LPAREN 'forall' LPAREN typedVariableList RPAREN predicateFormula RPAREN
+    | LPAREN predicateName (groundTerm)* RPAREN
     ;
 
 atomicEqFormula
