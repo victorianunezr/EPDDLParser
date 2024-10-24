@@ -51,19 +51,19 @@ problemItemDef
     ;
 
 domainLibrariesNameDef
-    : LPAREN COLON ACTION_TYPE_LIBRARIES (libraryName)+ RPAREN
+    : LPAREN ACTION_TYPE_LIBRARIES (libraryName)+ RPAREN
     ;
 
 problemDomainNameDef
-    : LPAREN COLON DOMAIN domainName RPAREN
+    : LPAREN CDOMAIN domainName RPAREN
     ;
 
 agentNamesDef
-    : LPAREN COLON AGENTS typedAgentList RPAREN
+    : LPAREN AGENTS typedAgentList RPAREN
     ;
 
 agentGroupsListDef
-    : LPAREN COLON AGENT_GROUPS (agentGroupDef)+ RPAREN
+    : LPAREN AGENT_GROUPS (agentGroupDef)+ RPAREN
     ;
 
 agentGroupDef
@@ -71,23 +71,23 @@ agentGroupDef
     ;
 
 objectNamesDef
-    : LPAREN COLON OBJECTS typedIdentList RPAREN
+    : LPAREN OBJECTS typedIdentList RPAREN
     ;
 
 staticPredListDef
-    : LPAREN COLON STATIC (staticPredDef)+ RPAREN
+    : LPAREN STATIC (staticPredDef)+ RPAREN
     ;
 
 requireDef
-    : LPAREN COLON REQUIREMENTS (requirementKey)* RPAREN
+    : LPAREN REQUIREMENTS (requirementKey)* RPAREN
     ;
 
 typesDef
-    : LPAREN COLON TYPES typedIdentList RPAREN
+    : LPAREN TYPES typedIdentList RPAREN
     ;
 
 predicateListDef
-    : LPAREN COLON PREDICATES (predicateDef)+ RPAREN
+    : LPAREN PREDICATES (predicateDef)+ RPAREN
     ;
 
 predicateDef
@@ -95,31 +95,31 @@ predicateDef
     ;
 
 actionDef
-    : LPAREN COLON ACTION actionName parametersDef actionConditionDef actionTypeSignatureDef actionPreDef actionObsDef RPAREN
+    : LPAREN ACTION actionName parametersDef actionConditionDef actionPreDef actionTypeSignatureDef actionObsDef RPAREN
     ;
 
 parametersDef
-    : COLON PARAMETERS LPAREN typedVariableList RPAREN
+    : PARAMETERS LPAREN typedVariableList RPAREN
     ;
 
 modalityDef
-    : LPAREN COLON MODALITY (modalityName)* RPAREN
+    : LPAREN MODALITY (modalityName)* RPAREN
     ;
 
 observabilityGroupsDef
-    : LPAREN COLON OBSERVABILITY_GROUPS (observingAgentGroup)* RPAREN
+    : LPAREN OBSERVABILITY_GROUPS (observingAgentGroup)* RPAREN
     ;
 
 eventDef
-    : LPAREN COLON EVENT eventName parametersDef eventPreDef eventPostDef RPAREN
+    : LPAREN EVENT eventName parametersDef eventPreDef eventPostDef RPAREN
     ;
 
 eventPreDef
-    : COLON PRECONDITION formulaOrEmpty
+    : PRECONDITION formulaOrEmpty
     ;
 
 eventPostDef
-    : COLON POSTCONDITIONS postconditionBlock
+    : POSTCONDITIONS postconditionBlock
     | /* empty */
     ;
 
@@ -140,36 +140,36 @@ simplePostcondition
     ;
 
 actionTypeDef
-    : LPAREN COLON ACTION_TYPE actionTypeName parametersDef actionTypeGroupsDef actionTypeEventsDef actionTypeRelDef actionTypeDesignDef RPAREN
+    : LPAREN ACTION_TYPE actionTypeName parametersDef actionTypeGroupsDef actionTypeEventsDef actionTypeRelDef actionTypeDesignDef RPAREN
     ;
 
 stateDef
-    : LPAREN COLON STATE stateName stateWorldsDef stateRelDef stateValDef stateDesignDef RPAREN
+    : LPAREN STATE stateName stateWorldsDef stateRelDef stateValDef stateDesignDef RPAREN
     ;
 
 initDef
-    : LPAREN COLON INIT initialStateDescr RPAREN
+    : LPAREN INIT initialStateDescr RPAREN
     ;
 
 goalDef
-    : LPAREN COLON GOAL formula RPAREN
+    : LPAREN GOAL formula RPAREN
     ;
 
 actionConditionDef
-    : COLON WHERE conditionFormula
+    : WHERE conditionFormula
     | /* empty */ 
     ;
 
 actionTypeSignatureDef
-    : COLON ACTION_TYPE LPAREN actionTypeName (parameter)* RPAREN
+    : ACTION_TYPE LPAREN actionTypeName (parameter)* RPAREN
     ;
 
 actionPreDef
-    : COLON PRECONDITION formulaOrEmpty
+    : PRECONDITION formulaOrEmpty
     ;
 
 actionObsDef
-    : COLON OBSERVABILITY_CONDITIONS (obsConditionDef)*
+    : OBSERVABILITY_CONDITIONS (obsConditionDef)*
     | /* empty */ 
     ;
 
@@ -178,7 +178,8 @@ typedIdentList
     ;
 
 typedVariableList
-    : (VARIABLE (VARIABLE)* ASSIGN type typedVariableList)*
+    : (VARIABLE (VARIABLE)* DASH type typedVariableList)?
+    | /* empty */  // For optional empty list case
     ;
 
 type
@@ -248,11 +249,13 @@ modality
     ;
 
 singleModality
-    : LPAREN modalityLabel modalityAgent RPAREN
+    : LBRACKET modalityLabel modalityAgent RBRACKET
+    | LT modalityLabel modalityAgent GT
     ;
 
 groupModality
-    : LPAREN modalityLabel modalityAgentGroup RPAREN
+    : LBRACKET modalityLabel modalityAgentGroup RBRACKET
+    | LT modalityLabel modalityAgentGroup GT
     ;
 
 modalityLabel
@@ -324,16 +327,16 @@ genericName
     ;
 
 stateWorldsDef
-    : COLON 'worlds' LPAREN (worldName)+ RPAREN
+    : WORLDS LPAREN (worldName)+ RPAREN
     ;
 
 stateRelDef
-    : COLON RELATIONS stateRelations
+    : RELATIONS stateRelations
     ;
 
 stateRelations
     : (worldRelation)+
-    | LPAREN '()' RPAREN  // Trivial relation
+    | LPAREN TRIVIAL_DEF RPAREN
     ;
 
 worldRelation
@@ -345,12 +348,12 @@ worldNamePair
     ;
 
 stateValDef
-    : COLON VALUTATION stateValuation
+    : VALUATION stateValuation
     ;
 
 stateValuation
     : (worldValuation)+
-    | LPAREN '()' RPAREN  // Trivial valuation
+    | LPAREN TRIVIAL_DEF RPAREN  // Trivial valuation
     ;
 
 worldValuation
@@ -358,7 +361,7 @@ worldValuation
     ;
 
 stateDesignDef
-    : COLON DESIGNATED LPAREN (worldName)+ RPAREN
+    : DESIGNATED LPAREN (worldName)+ RPAREN
     ;
 
 // Agent Group Definition
@@ -376,7 +379,7 @@ literal
 // Initial State Description
 initialStateDescr
     : (fTheoryFormula)+
-    | LPAREN COLON STATE_NAME stateName RPAREN
+    | LPAREN STATE_NAME stateName RPAREN
     ;
 
 fTheoryFormula
@@ -408,7 +411,7 @@ expression
 
 formulaOrEmpty
     : formula
-    | LPAREN RPAREN  // Trivial case, representing an empty formula
+    | TRIVIAL_DEF  // Trivial case, representing an empty formula
     ;
 
 obsConditionDef
@@ -458,12 +461,12 @@ predicate
     ;
 
 actionTypeGroupsDef
-    : COLON OBSERVABILITY_GROUPS LPAREN (observingAgentGroup)* RPAREN
+    : OBSERVABILITY_GROUPS LPAREN (observingAgentGroup)* RPAREN
     | /* empty */
     ;
 
 actionTypeEventsDef
-    : COLON EVENT (eventSignature)+
+    : EVENT (eventSignature)+
     ;
 
 eventSignature
@@ -471,12 +474,12 @@ eventSignature
     ;
 
 actionTypeRelDef
-    : COLON RELATIONS actionRelations
+    : RELATIONS actionRelations
     ;
 
 actionRelations
     : (eventRelation)+
-    | LPAREN TRIVIAL_RELATION RPAREN  // Trivial relation
+    | LPAREN TRIVIAL_DEF RPAREN 
     ;
 
 eventRelation
@@ -488,7 +491,7 @@ eventNamePair
     ;
 
 actionTypeDesignDef
-    : COLON DESIGNATED LPAREN (eventName)* RPAREN
+    : DESIGNATED LPAREN (eventName)* RPAREN
     ;
 
 typedAgentList
@@ -503,6 +506,8 @@ requirementKey
     : DEL
     | TYPING
     | EQUALITY
+    | MULTI_AGENT
+    | ONTIC_ACTIONS
     | EXISTENTIAL_FORMULAE
     | UNIVERSAL_FORMULAE
     | UNIVERSAL_POSTCONDITIONS

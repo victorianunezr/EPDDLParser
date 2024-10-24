@@ -1,0 +1,2 @@
+Notes:
+- Parser rule "Parameter" (used by action-type and events) doesn't match syntax from examples.
