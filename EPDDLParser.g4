@@ -378,7 +378,7 @@ literal
 
 // Initial State Description
 initialStateDescr
-    : (fTheoryFormula)+
+    : (fTheoryFormula)*
     | LPAREN STATE_NAME stateName RPAREN
     ;
 
@@ -495,7 +495,8 @@ actionTypeDesignDef
     ;
 
 typedAgentList
-    : (AGENT_NAME (AGENT_NAME)* DASH type typedAgentList)?
+    : (AGENT_NAME)*
+    | AGENT_NAME (AGENT_NAME)* DASH type typedAgentList
     ;
 
 knowsWhether
@@ -521,4 +522,5 @@ requirementKey
     | LPAREN MAX_PRECONDITIONS_DEPTH INT RPAREN
     | LPAREN MAX_POSTCONDITIONS_DEPTH INT RPAREN
     | LPAREN MAX_MODAL_DEPTH INT RPAREN
+    | FINITARY_THEORY
     ;

@@ -46,6 +46,7 @@ FINITARY_S5_THEORY         : ':finitary-S5-theory' ;
 MAX_PRECONDITIONS_DEPTH    : ':maximum-preconditions-depth' ;
 MAX_POSTCONDITIONS_DEPTH   : ':maximum-postconditions-depth' ;
 MAX_MODAL_DEPTH            : ':maximum-modal-depth' ;
+FINITARY_THEORY            : ':ma-star-finitary-theory' ;
 
 COLON           : ':' ;
 IMPLY           : 'imply' ;
@@ -83,8 +84,8 @@ MODALITY_NAME   : [a-z] [a-zA-Z0-9_'-]* '.' ;
 VARIABLE        : '?' [a-zA-Z] [a-zA-Z0-9_']* ;
 INT             : [0-9]+ ;
 WS              : [ \t\n\r]+ -> skip ;
+COMMENT         : ';' ~[\r\n]* -> skip ;
 DASH            : '-' ;
-SEMICOLON       : ';' ;
 LPAREN          : '(' ;
 RPAREN          : ')' ;
 LBRACKET        : '[' ;
