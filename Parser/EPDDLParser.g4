@@ -395,11 +395,13 @@ fTheoryFormula
 
 simpleFTheoryFormula
     : predicateFormula
-    | LPAREN LBRACKET ALL RBRACKET predicateFormula RPAREN
-    | LPAREN LBRACKET ALL RBRACKET LBRACKET agentName RBRACKET predicateFormula RPAREN
-    | LPAREN LBRACKET ALL RBRACKET knowsWhether predicateFormula RPAREN
-    | LPAREN LBRACKET ALL RBRACKET LPAREN NOT knowsWhether predicateFormula RPAREN RPAREN
+    | LBRACKET ALL RBRACKET predicateFormula
+    | LBRACKET ALL RBRACKET LBRACKET agentName RBRACKET predicateFormula
+    | LBRACKET ALL RBRACKET knowsWhether predicateFormula
+    | LBRACKET ALL RBRACKET LPAREN NOT knowsWhether predicateFormula RPAREN
     ;
+
+    
 
 actionTypeName
     : NAME

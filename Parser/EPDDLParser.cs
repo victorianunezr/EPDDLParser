@@ -36,22 +36,23 @@ public partial class EPDDLParser : Parser {
 	protected static DFA[] decisionToDFA;
 	protected static PredictionContextCache sharedContextCache = new PredictionContextCache();
 	public const int
-		NAME=1, AGENT_NAME=2, MODALITY_NAME=3, VARIABLE=4, INT=5, WS=6, DASH=7, 
-		SEMICOLON=8, LPAREN=9, RPAREN=10, LBRACKET=11, RBRACKET=12, LBRACE=13, 
-		RBRACE=14, COLON=15, IMPLY=16, OR=17, AND=18, NOT=19, EXISTS=20, FORALL=21, 
-		TRUE=22, FALSE=23, ASSIGN=24, KW=25, IFF=26, WHEN=27, ALWAYS=28, IF=29, 
-		OTHERWISE=30, DEFINE=31, DOMAIN=32, LIBRARY=33, PROBLEM=34, ACTION_TYPE_LIBRARIES=35, 
-		REQUIREMENTS=36, TYPES=37, PREDICATE=38, PREDICATE_FORMULA=39, FORMULA=40, 
-		POSTCONDITION=41, LITERAL=42, PREDICATES=43, MODALITY=44, ACTION=45, PARAMETERS=46, 
-		OBSERVABILITY_GROUPS=47, ALL=48, EVENT=49, PRECONDITION=50, POSTCONDITIONS=51, 
-		STATE=52, INIT=53, GOAL=54, WHERE=55, RELATIONS=56, DESIGNATED=57, WORLD=58, 
-		OBJECTS=59, STATIC=60, AGENT=61, AGENTS=62, AGENT_GROUPS=63, VALUTATION=64, 
-		STATE_NAME=65, OBSERVABILITY_CONDITIONS=66, ACTION_TYPE=67, WORLDS=68, 
-		TRIVIAL_RELATION=69, DEL=70, TYPING=71, EQUALITY=72, EXISTENTIAL_FORMULAE=73, 
-		UNIVERSAL_FORMULAE=74, UNIVERSAL_POSTCONDITIONS=75, MODAL_PRECONDITIONS=76, 
-		MODAL_POSTCONDITIONS=77, MODALITIES=78, ONTIC_CHANGE=79, COMMON_KNOWLEDGE=80, 
-		DYNAMIC_COMMON_KNOWLEDGE=81, FINITARY_S5_THEORY=82, MAX_PRECONDITIONS_DEPTH=83, 
-		MAX_POSTCONDITIONS_DEPTH=84, MAX_MODAL_DEPTH=85;
+		EVENT=1, PRECONDITION=2, POSTCONDITIONS=3, STATE=4, INIT=5, GOAL=6, WHERE=7, 
+		RELATIONS=8, DESIGNATED=9, PREDICATES=10, MODALITY=11, ACTION=12, PARAMETERS=13, 
+		OBSERVABILITY_GROUPS=14, ACTION_TYPE_LIBRARIES=15, REQUIREMENTS=16, TYPES=17, 
+		OBJECTS=18, STATIC=19, AGENTS=20, AGENT_GROUPS=21, VALUATION=22, STATE_NAME=23, 
+		OBSERVABILITY_CONDITIONS=24, ACTION_TYPE=25, WORLDS=26, DEL=27, TYPING=28, 
+		EQUALITY=29, CDOMAIN=30, EXISTENTIAL_FORMULAE=31, MULTI_AGENT=32, ONTIC_ACTIONS=33, 
+		UNIVERSAL_FORMULAE=34, UNIVERSAL_POSTCONDITIONS=35, MODAL_PRECONDITIONS=36, 
+		MODAL_POSTCONDITIONS=37, MODALITIES=38, ONTIC_CHANGE=39, COMMON_KNOWLEDGE=40, 
+		DYNAMIC_COMMON_KNOWLEDGE=41, FINITARY_S5_THEORY=42, MAX_PRECONDITIONS_DEPTH=43, 
+		MAX_POSTCONDITIONS_DEPTH=44, MAX_MODAL_DEPTH=45, FINITARY_THEORY=46, COLON=47, 
+		IMPLY=48, OR=49, AND=50, NOT=51, EXISTS=52, FORALL=53, TRUE=54, FALSE=55, 
+		ASSIGN=56, KW=57, IFF=58, WHEN=59, ALWAYS=60, IF=61, OTHERWISE=62, DEFINE=63, 
+		DOMAIN=64, LIBRARY=65, PROBLEM=66, PREDICATE=67, PREDICATE_FORMULA=68, 
+		FORMULA=69, POSTCONDITION=70, LITERAL=71, ALL=72, WORLD=73, AGENT=74, 
+		TRIVIAL_DEF=75, NAME=76, AGENT_NAME=77, MODALITY_NAME=78, VARIABLE=79, 
+		INT=80, WS=81, COMMENT=82, DASH=83, LPAREN=84, RPAREN=85, LBRACKET=86, 
+		RBRACKET=87, LBRACE=88, RBRACE=89, LT=90, GT=91;
 	public const int
 		RULE_mainDef = 0, RULE_domainDef = 1, RULE_libraryDef = 2, RULE_problemDef = 3, 
 		RULE_domainItemDef = 4, RULE_libraryItemDef = 5, RULE_problemItemDef = 6, 
@@ -114,39 +115,42 @@ public partial class EPDDLParser : Parser {
 	};
 
 	private static readonly string[] _LiteralNames = {
-		null, null, null, null, null, null, null, "'-'", "';'", "'('", "')'", 
-		"'['", "']'", "'{'", "'}'", "':'", "'imply'", "'or'", "'and'", "'not'", 
-		"'exists'", "'forall'", "'true'", "'false'", "'<-'", "'kw'", "'iff'", 
-		"'when'", "'always'", "'if'", "'otherwise'", "'define'", "'domain'", "'library'", 
-		"'problem'", "'action-type-libraries'", "'requirements'", "'types'", "'predicate'", 
-		"'predicate-formula'", "'formula'", "'postcondition'", "'literal'", "'predicates'", 
-		"'modality'", "'action'", "'parameters'", "'observability-groups'", "'All'", 
-		"'event'", "'precondition'", "'postconditions'", "'state'", "'init'", 
-		"'goal'", "'where'", "'relations'", "'designated'", "'world'", "'objects'", 
-		"'static'", "'agent'", "'agents'", "'agent-groups'", "'valuation'", "'state-name'", 
-		"'observability-conditions'", "'action-type'", "'worlds'", "'()'", "':del'", 
-		"':typing'", "':equality'", "':existential-formulae'", "':universal-formulae'", 
-		"':universal-postconditions'", "':modal-preconditions'", "':modal-postconditions'", 
-		"':modalities'", "':ontic-change'", "':common-knowledge'", "':dynamic-common-knowledge'", 
+		null, "':event'", "':precondition'", "':postconditions'", "':state'", 
+		"':init'", "':goal'", "':where'", "':relations'", "':designated'", "':predicates'", 
+		"':modality'", "':action'", "':parameters'", "':observability-groups'", 
+		"':action-type-libraries'", "':requirements'", "':types'", "':objects'", 
+		"':static'", "':agents'", "':agent-groups'", "':valuation'", "':state-name'", 
+		"':observability-conditions'", "':action-type'", "':worlds'", "':del'", 
+		"':typing'", "':equality'", "':domain'", "':existential-formulae'", "':multi-agent'", 
+		"':ontic-actions'", "':universal-formulae'", "':universal-postconditions'", 
+		"':modal-preconditions'", "':modal-postconditions'", "':modalities'", 
+		"':ontic-change'", "':common-knowledge'", "':dynamic-common-knowledge'", 
 		"':finitary-S5-theory'", "':maximum-preconditions-depth'", "':maximum-postconditions-depth'", 
-		"':maximum-modal-depth'"
+		"':maximum-modal-depth'", "':ma-star-finitary-theory'", "':'", "'imply'", 
+		"'or'", "'and'", "'not'", "'exists'", "'forall'", "'true'", "'false'", 
+		"'<-'", "'kw'", "'iff'", "'when'", "'always'", "'if'", "'otherwise'", 
+		"'define'", "'domain'", "'library'", "'problem'", "'predicate'", "'predicate-formula'", 
+		"'formula'", "'postcondition'", "'literal'", "'All'", "'world'", "'agent'", 
+		"'()'", null, null, null, null, null, null, null, "'-'", "'('", "')'", 
+		"'['", "']'", "'{'", "'}'", "'<'", "'>'"
 	};
 	private static readonly string[] _SymbolicNames = {
-		null, "NAME", "AGENT_NAME", "MODALITY_NAME", "VARIABLE", "INT", "WS", 
-		"DASH", "SEMICOLON", "LPAREN", "RPAREN", "LBRACKET", "RBRACKET", "LBRACE", 
-		"RBRACE", "COLON", "IMPLY", "OR", "AND", "NOT", "EXISTS", "FORALL", "TRUE", 
-		"FALSE", "ASSIGN", "KW", "IFF", "WHEN", "ALWAYS", "IF", "OTHERWISE", "DEFINE", 
-		"DOMAIN", "LIBRARY", "PROBLEM", "ACTION_TYPE_LIBRARIES", "REQUIREMENTS", 
-		"TYPES", "PREDICATE", "PREDICATE_FORMULA", "FORMULA", "POSTCONDITION", 
-		"LITERAL", "PREDICATES", "MODALITY", "ACTION", "PARAMETERS", "OBSERVABILITY_GROUPS", 
-		"ALL", "EVENT", "PRECONDITION", "POSTCONDITIONS", "STATE", "INIT", "GOAL", 
-		"WHERE", "RELATIONS", "DESIGNATED", "WORLD", "OBJECTS", "STATIC", "AGENT", 
-		"AGENTS", "AGENT_GROUPS", "VALUTATION", "STATE_NAME", "OBSERVABILITY_CONDITIONS", 
-		"ACTION_TYPE", "WORLDS", "TRIVIAL_RELATION", "DEL", "TYPING", "EQUALITY", 
-		"EXISTENTIAL_FORMULAE", "UNIVERSAL_FORMULAE", "UNIVERSAL_POSTCONDITIONS", 
-		"MODAL_PRECONDITIONS", "MODAL_POSTCONDITIONS", "MODALITIES", "ONTIC_CHANGE", 
-		"COMMON_KNOWLEDGE", "DYNAMIC_COMMON_KNOWLEDGE", "FINITARY_S5_THEORY", 
-		"MAX_PRECONDITIONS_DEPTH", "MAX_POSTCONDITIONS_DEPTH", "MAX_MODAL_DEPTH"
+		null, "EVENT", "PRECONDITION", "POSTCONDITIONS", "STATE", "INIT", "GOAL", 
+		"WHERE", "RELATIONS", "DESIGNATED", "PREDICATES", "MODALITY", "ACTION", 
+		"PARAMETERS", "OBSERVABILITY_GROUPS", "ACTION_TYPE_LIBRARIES", "REQUIREMENTS", 
+		"TYPES", "OBJECTS", "STATIC", "AGENTS", "AGENT_GROUPS", "VALUATION", "STATE_NAME", 
+		"OBSERVABILITY_CONDITIONS", "ACTION_TYPE", "WORLDS", "DEL", "TYPING", 
+		"EQUALITY", "CDOMAIN", "EXISTENTIAL_FORMULAE", "MULTI_AGENT", "ONTIC_ACTIONS", 
+		"UNIVERSAL_FORMULAE", "UNIVERSAL_POSTCONDITIONS", "MODAL_PRECONDITIONS", 
+		"MODAL_POSTCONDITIONS", "MODALITIES", "ONTIC_CHANGE", "COMMON_KNOWLEDGE", 
+		"DYNAMIC_COMMON_KNOWLEDGE", "FINITARY_S5_THEORY", "MAX_PRECONDITIONS_DEPTH", 
+		"MAX_POSTCONDITIONS_DEPTH", "MAX_MODAL_DEPTH", "FINITARY_THEORY", "COLON", 
+		"IMPLY", "OR", "AND", "NOT", "EXISTS", "FORALL", "TRUE", "FALSE", "ASSIGN", 
+		"KW", "IFF", "WHEN", "ALWAYS", "IF", "OTHERWISE", "DEFINE", "DOMAIN", 
+		"LIBRARY", "PROBLEM", "PREDICATE", "PREDICATE_FORMULA", "FORMULA", "POSTCONDITION", 
+		"LITERAL", "ALL", "WORLD", "AGENT", "TRIVIAL_DEF", "NAME", "AGENT_NAME", 
+		"MODALITY_NAME", "VARIABLE", "INT", "WS", "COMMENT", "DASH", "LPAREN", 
+		"RPAREN", "LBRACKET", "RBRACKET", "LBRACE", "RBRACE", "LT", "GT"
 	};
 	public static readonly IVocabulary DefaultVocabulary = new Vocabulary(_LiteralNames, _SymbolicNames);
 
@@ -878,7 +882,6 @@ public partial class EPDDLParser : Parser {
 
 	public partial class DomainLibrariesNameDefContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ACTION_TYPE_LIBRARIES() { return GetToken(EPDDLParser.ACTION_TYPE_LIBRARIES, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(EPDDLParser.RPAREN, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public LibraryNameContext[] libraryName() {
@@ -921,24 +924,22 @@ public partial class EPDDLParser : Parser {
 			State = 286;
 			Match(LPAREN);
 			State = 287;
-			Match(COLON);
-			State = 288;
 			Match(ACTION_TYPE_LIBRARIES);
-			State = 290;
+			State = 289;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			do {
 				{
 				{
-				State = 289;
+				State = 288;
 				libraryName();
 				}
 				}
-				State = 292;
+				State = 291;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			} while ( _la==NAME );
-			State = 294;
+			State = 293;
 			Match(RPAREN);
 			}
 		}
@@ -955,8 +956,7 @@ public partial class EPDDLParser : Parser {
 
 	public partial class ProblemDomainNameDefContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode DOMAIN() { return GetToken(EPDDLParser.DOMAIN, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode CDOMAIN() { return GetToken(EPDDLParser.CDOMAIN, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public DomainNameContext domainName() {
 			return GetRuleContext<DomainNameContext>(0);
 		}
@@ -991,15 +991,13 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 296;
+			State = 295;
 			Match(LPAREN);
+			State = 296;
+			Match(CDOMAIN);
 			State = 297;
-			Match(COLON);
-			State = 298;
-			Match(DOMAIN);
-			State = 299;
 			domainName();
-			State = 300;
+			State = 298;
 			Match(RPAREN);
 			}
 		}
@@ -1016,7 +1014,6 @@ public partial class EPDDLParser : Parser {
 
 	public partial class AgentNamesDefContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode AGENTS() { return GetToken(EPDDLParser.AGENTS, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public TypedAgentListContext typedAgentList() {
 			return GetRuleContext<TypedAgentListContext>(0);
@@ -1052,15 +1049,13 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 302;
+			State = 300;
 			Match(LPAREN);
-			State = 303;
-			Match(COLON);
-			State = 304;
+			State = 301;
 			Match(AGENTS);
-			State = 305;
+			State = 302;
 			typedAgentList();
-			State = 306;
+			State = 303;
 			Match(RPAREN);
 			}
 		}
@@ -1077,7 +1072,6 @@ public partial class EPDDLParser : Parser {
 
 	public partial class AgentGroupsListDefContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode AGENT_GROUPS() { return GetToken(EPDDLParser.AGENT_GROUPS, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(EPDDLParser.RPAREN, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public AgentGroupDefContext[] agentGroupDef() {
@@ -1117,27 +1111,25 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 308;
+			State = 305;
 			Match(LPAREN);
-			State = 309;
-			Match(COLON);
-			State = 310;
+			State = 306;
 			Match(AGENT_GROUPS);
-			State = 312;
+			State = 308;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			do {
 				{
 				{
-				State = 311;
+				State = 307;
 				agentGroupDef();
 				}
 				}
-				State = 314;
+				State = 310;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			} while ( _la==LPAREN );
-			State = 316;
+			State = 312;
 			Match(RPAREN);
 			}
 		}
@@ -1202,33 +1194,33 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 318;
+			State = 314;
 			Match(LPAREN);
-			State = 319;
+			State = 315;
 			agentGroupName();
-			State = 320;
+			State = 316;
 			Match(ASSIGN);
-			State = 321;
+			State = 317;
 			Match(LPAREN);
-			State = 322;
+			State = 318;
 			agentName();
-			State = 326;
+			State = 322;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==AGENT_NAME) {
 				{
 				{
-				State = 323;
+				State = 319;
 				agentName();
 				}
 				}
-				State = 328;
+				State = 324;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 329;
+			State = 325;
 			Match(RPAREN);
-			State = 330;
+			State = 326;
 			Match(RPAREN);
 			}
 		}
@@ -1245,7 +1237,6 @@ public partial class EPDDLParser : Parser {
 
 	public partial class ObjectNamesDefContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode OBJECTS() { return GetToken(EPDDLParser.OBJECTS, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public TypedIdentListContext typedIdentList() {
 			return GetRuleContext<TypedIdentListContext>(0);
@@ -1281,15 +1272,13 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 332;
+			State = 328;
 			Match(LPAREN);
-			State = 333;
-			Match(COLON);
-			State = 334;
+			State = 329;
 			Match(OBJECTS);
-			State = 335;
+			State = 330;
 			typedIdentList();
-			State = 336;
+			State = 331;
 			Match(RPAREN);
 			}
 		}
@@ -1306,7 +1295,6 @@ public partial class EPDDLParser : Parser {
 
 	public partial class StaticPredListDefContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STATIC() { return GetToken(EPDDLParser.STATIC, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(EPDDLParser.RPAREN, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public StaticPredDefContext[] staticPredDef() {
@@ -1346,27 +1334,25 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 338;
+			State = 333;
 			Match(LPAREN);
-			State = 339;
-			Match(COLON);
-			State = 340;
+			State = 334;
 			Match(STATIC);
-			State = 342;
+			State = 336;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			do {
 				{
 				{
-				State = 341;
+				State = 335;
 				staticPredDef();
 				}
 				}
-				State = 344;
+				State = 338;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			} while ( _la==LPAREN );
-			State = 346;
+			State = 340;
 			Match(RPAREN);
 			}
 		}
@@ -1383,7 +1369,6 @@ public partial class EPDDLParser : Parser {
 
 	public partial class RequireDefContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode REQUIREMENTS() { return GetToken(EPDDLParser.REQUIREMENTS, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(EPDDLParser.RPAREN, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public RequirementKeyContext[] requirementKey() {
@@ -1423,27 +1408,25 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 348;
+			State = 342;
 			Match(LPAREN);
-			State = 349;
-			Match(COLON);
-			State = 350;
+			State = 343;
 			Match(REQUIREMENTS);
-			State = 354;
+			State = 347;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while (_la==LPAREN || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & 8191L) != 0)) {
+			while (((((_la - 27)) & ~0x3f) == 0 && ((1L << (_la - 27)) & 144115188076445687L) != 0)) {
 				{
 				{
-				State = 351;
+				State = 344;
 				requirementKey();
 				}
 				}
-				State = 356;
+				State = 349;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 357;
+			State = 350;
 			Match(RPAREN);
 			}
 		}
@@ -1460,7 +1443,6 @@ public partial class EPDDLParser : Parser {
 
 	public partial class TypesDefContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TYPES() { return GetToken(EPDDLParser.TYPES, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public TypedIdentListContext typedIdentList() {
 			return GetRuleContext<TypedIdentListContext>(0);
@@ -1496,15 +1478,13 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 359;
+			State = 352;
 			Match(LPAREN);
-			State = 360;
-			Match(COLON);
-			State = 361;
+			State = 353;
 			Match(TYPES);
-			State = 362;
+			State = 354;
 			typedIdentList();
-			State = 363;
+			State = 355;
 			Match(RPAREN);
 			}
 		}
@@ -1521,7 +1501,6 @@ public partial class EPDDLParser : Parser {
 
 	public partial class PredicateListDefContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode PREDICATES() { return GetToken(EPDDLParser.PREDICATES, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(EPDDLParser.RPAREN, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public PredicateDefContext[] predicateDef() {
@@ -1561,27 +1540,25 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 365;
+			State = 357;
 			Match(LPAREN);
-			State = 366;
-			Match(COLON);
-			State = 367;
+			State = 358;
 			Match(PREDICATES);
-			State = 369;
+			State = 360;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			do {
 				{
 				{
-				State = 368;
+				State = 359;
 				predicateDef();
 				}
 				}
-				State = 371;
+				State = 362;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			} while ( _la==LPAREN );
-			State = 373;
+			State = 364;
 			Match(RPAREN);
 			}
 		}
@@ -1635,13 +1612,13 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 375;
+			State = 366;
 			Match(LPAREN);
-			State = 376;
+			State = 367;
 			predicateName();
-			State = 377;
+			State = 368;
 			typedVariableList();
-			State = 378;
+			State = 369;
 			Match(RPAREN);
 			}
 		}
@@ -1658,7 +1635,6 @@ public partial class EPDDLParser : Parser {
 
 	public partial class ActionDefContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ACTION() { return GetToken(EPDDLParser.ACTION, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ActionNameContext actionName() {
 			return GetRuleContext<ActionNameContext>(0);
@@ -1669,11 +1645,11 @@ public partial class EPDDLParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public ActionConditionDefContext actionConditionDef() {
 			return GetRuleContext<ActionConditionDefContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ActionTypeSignatureDefContext actionTypeSignatureDef() {
-			return GetRuleContext<ActionTypeSignatureDefContext>(0);
-		}
 		[System.Diagnostics.DebuggerNonUserCode] public ActionPreDefContext actionPreDef() {
 			return GetRuleContext<ActionPreDefContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ActionTypeSignatureDefContext actionTypeSignatureDef() {
+			return GetRuleContext<ActionTypeSignatureDefContext>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ActionObsDefContext actionObsDef() {
 			return GetRuleContext<ActionObsDefContext>(0);
@@ -1709,25 +1685,23 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 380;
+			State = 371;
 			Match(LPAREN);
-			State = 381;
-			Match(COLON);
-			State = 382;
+			State = 372;
 			Match(ACTION);
-			State = 383;
+			State = 373;
 			actionName();
-			State = 384;
+			State = 374;
 			parametersDef();
-			State = 385;
+			State = 375;
 			actionConditionDef();
-			State = 386;
-			actionTypeSignatureDef();
-			State = 387;
+			State = 376;
 			actionPreDef();
-			State = 388;
+			State = 377;
+			actionTypeSignatureDef();
+			State = 378;
 			actionObsDef();
-			State = 389;
+			State = 379;
 			Match(RPAREN);
 			}
 		}
@@ -1743,7 +1717,6 @@ public partial class EPDDLParser : Parser {
 	}
 
 	public partial class ParametersDefContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode PARAMETERS() { return GetToken(EPDDLParser.PARAMETERS, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public TypedVariableListContext typedVariableList() {
@@ -1780,15 +1753,13 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 391;
-			Match(COLON);
-			State = 392;
+			State = 381;
 			Match(PARAMETERS);
-			State = 393;
+			State = 382;
 			Match(LPAREN);
-			State = 394;
+			State = 383;
 			typedVariableList();
-			State = 395;
+			State = 384;
 			Match(RPAREN);
 			}
 		}
@@ -1805,7 +1776,6 @@ public partial class EPDDLParser : Parser {
 
 	public partial class ModalityDefContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MODALITY() { return GetToken(EPDDLParser.MODALITY, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(EPDDLParser.RPAREN, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ModalityNameContext[] modalityName() {
@@ -1845,27 +1815,25 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 397;
+			State = 386;
 			Match(LPAREN);
-			State = 398;
-			Match(COLON);
-			State = 399;
+			State = 387;
 			Match(MODALITY);
-			State = 403;
+			State = 391;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==MODALITY_NAME) {
 				{
 				{
-				State = 400;
+				State = 388;
 				modalityName();
 				}
 				}
-				State = 405;
+				State = 393;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 406;
+			State = 394;
 			Match(RPAREN);
 			}
 		}
@@ -1882,7 +1850,6 @@ public partial class EPDDLParser : Parser {
 
 	public partial class ObservabilityGroupsDefContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode OBSERVABILITY_GROUPS() { return GetToken(EPDDLParser.OBSERVABILITY_GROUPS, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(EPDDLParser.RPAREN, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ObservingAgentGroupContext[] observingAgentGroup() {
@@ -1922,27 +1889,25 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 408;
+			State = 396;
 			Match(LPAREN);
-			State = 409;
-			Match(COLON);
-			State = 410;
+			State = 397;
 			Match(OBSERVABILITY_GROUPS);
-			State = 414;
+			State = 401;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 281474976710676L) != 0)) {
+			while (((((_la - 72)) & ~0x3f) == 0 && ((1L << (_la - 72)) & 161L) != 0)) {
 				{
 				{
-				State = 411;
+				State = 398;
 				observingAgentGroup();
 				}
 				}
-				State = 416;
+				State = 403;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 417;
+			State = 404;
 			Match(RPAREN);
 			}
 		}
@@ -1959,7 +1924,6 @@ public partial class EPDDLParser : Parser {
 
 	public partial class EventDefContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode EVENT() { return GetToken(EPDDLParser.EVENT, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public EventNameContext eventName() {
 			return GetRuleContext<EventNameContext>(0);
@@ -2004,21 +1968,19 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 419;
+			State = 406;
 			Match(LPAREN);
-			State = 420;
-			Match(COLON);
-			State = 421;
+			State = 407;
 			Match(EVENT);
-			State = 422;
+			State = 408;
 			eventName();
-			State = 423;
+			State = 409;
 			parametersDef();
-			State = 424;
+			State = 410;
 			eventPreDef();
-			State = 425;
+			State = 411;
 			eventPostDef();
-			State = 426;
+			State = 412;
 			Match(RPAREN);
 			}
 		}
@@ -2034,7 +1996,6 @@ public partial class EPDDLParser : Parser {
 	}
 
 	public partial class EventPreDefContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode PRECONDITION() { return GetToken(EPDDLParser.PRECONDITION, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public FormulaOrEmptyContext formulaOrEmpty() {
 			return GetRuleContext<FormulaOrEmptyContext>(0);
@@ -2069,11 +2030,9 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 428;
-			Match(COLON);
-			State = 429;
+			State = 414;
 			Match(PRECONDITION);
-			State = 430;
+			State = 415;
 			formulaOrEmpty();
 			}
 		}
@@ -2089,7 +2048,6 @@ public partial class EPDDLParser : Parser {
 	}
 
 	public partial class EventPostDefContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode POSTCONDITIONS() { return GetToken(EPDDLParser.POSTCONDITIONS, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public PostconditionBlockContext postconditionBlock() {
 			return GetRuleContext<PostconditionBlockContext>(0);
@@ -2122,17 +2080,15 @@ public partial class EPDDLParser : Parser {
 		EventPostDefContext _localctx = new EventPostDefContext(Context, State);
 		EnterRule(_localctx, 48, RULE_eventPostDef);
 		try {
-			State = 436;
+			State = 420;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
-			case COLON:
+			case POSTCONDITIONS:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 432;
-				Match(COLON);
-				State = 433;
+				State = 417;
 				Match(POSTCONDITIONS);
-				State = 434;
+				State = 418;
 				postconditionBlock();
 				}
 				break;
@@ -2197,25 +2153,25 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 438;
+			State = 422;
 			Match(LPAREN);
-			State = 439;
+			State = 423;
 			Match(COLON);
-			State = 443;
+			State = 427;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==LPAREN) {
 				{
 				{
-				State = 440;
+				State = 424;
 				postcondition();
 				}
 				}
-				State = 445;
+				State = 429;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 446;
+			State = 430;
 			Match(RPAREN);
 			}
 		}
@@ -2275,43 +2231,43 @@ public partial class EPDDLParser : Parser {
 		PostconditionContext _localctx = new PostconditionContext(Context, State);
 		EnterRule(_localctx, 52, RULE_postcondition);
 		try {
-			State = 460;
+			State = 444;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,17,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 448;
+				State = 432;
 				simplePostcondition();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 449;
+				State = 433;
 				Match(LPAREN);
-				State = 450;
+				State = 434;
 				Match(FORALL);
-				State = 451;
+				State = 435;
 				Match(LPAREN);
-				State = 452;
+				State = 436;
 				typedVariableList();
-				State = 453;
+				State = 437;
 				Match(RPAREN);
-				State = 454;
+				State = 438;
 				simplePostcondition();
-				State = 455;
+				State = 439;
 				Match(RPAREN);
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 457;
+				State = 441;
 				Match(LPAREN);
-				State = 458;
+				State = 442;
 				Match(VARIABLE);
-				State = 459;
+				State = 443;
 				Match(RPAREN);
 				}
 				break;
@@ -2368,49 +2324,49 @@ public partial class EPDDLParser : Parser {
 		SimplePostconditionContext _localctx = new SimplePostconditionContext(Context, State);
 		EnterRule(_localctx, 54, RULE_simplePostcondition);
 		try {
-			State = 479;
+			State = 463;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,18,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 462;
+				State = 446;
 				Match(LPAREN);
-				State = 463;
+				State = 447;
 				Match(IFF);
-				State = 464;
+				State = 448;
 				formulaOrEmpty();
-				State = 465;
+				State = 449;
 				literal();
-				State = 466;
+				State = 450;
 				Match(RPAREN);
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 468;
+				State = 452;
 				Match(LPAREN);
-				State = 469;
+				State = 453;
 				Match(WHEN);
-				State = 470;
+				State = 454;
 				formulaOrEmpty();
-				State = 471;
+				State = 455;
 				literal();
-				State = 472;
+				State = 456;
 				Match(RPAREN);
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 474;
+				State = 458;
 				Match(LPAREN);
-				State = 475;
+				State = 459;
 				Match(ALWAYS);
-				State = 476;
+				State = 460;
 				literal();
-				State = 477;
+				State = 461;
 				Match(RPAREN);
 				}
 				break;
@@ -2429,7 +2385,6 @@ public partial class EPDDLParser : Parser {
 
 	public partial class ActionTypeDefContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ACTION_TYPE() { return GetToken(EPDDLParser.ACTION_TYPE, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ActionTypeNameContext actionTypeName() {
 			return GetRuleContext<ActionTypeNameContext>(0);
@@ -2480,25 +2435,23 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 481;
+			State = 465;
 			Match(LPAREN);
-			State = 482;
-			Match(COLON);
-			State = 483;
+			State = 466;
 			Match(ACTION_TYPE);
-			State = 484;
+			State = 467;
 			actionTypeName();
-			State = 485;
+			State = 468;
 			parametersDef();
-			State = 486;
+			State = 469;
 			actionTypeGroupsDef();
-			State = 487;
+			State = 470;
 			actionTypeEventsDef();
-			State = 488;
+			State = 471;
 			actionTypeRelDef();
-			State = 489;
+			State = 472;
 			actionTypeDesignDef();
-			State = 490;
+			State = 473;
 			Match(RPAREN);
 			}
 		}
@@ -2515,7 +2468,6 @@ public partial class EPDDLParser : Parser {
 
 	public partial class StateDefContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STATE() { return GetToken(EPDDLParser.STATE, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public StateNameContext stateName() {
 			return GetRuleContext<StateNameContext>(0);
@@ -2563,23 +2515,21 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 492;
+			State = 475;
 			Match(LPAREN);
-			State = 493;
-			Match(COLON);
-			State = 494;
+			State = 476;
 			Match(STATE);
-			State = 495;
+			State = 477;
 			stateName();
-			State = 496;
+			State = 478;
 			stateWorldsDef();
-			State = 497;
+			State = 479;
 			stateRelDef();
-			State = 498;
+			State = 480;
 			stateValDef();
-			State = 499;
+			State = 481;
 			stateDesignDef();
-			State = 500;
+			State = 482;
 			Match(RPAREN);
 			}
 		}
@@ -2596,7 +2546,6 @@ public partial class EPDDLParser : Parser {
 
 	public partial class InitDefContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode INIT() { return GetToken(EPDDLParser.INIT, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public InitialStateDescrContext initialStateDescr() {
 			return GetRuleContext<InitialStateDescrContext>(0);
@@ -2632,15 +2581,13 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 502;
+			State = 484;
 			Match(LPAREN);
-			State = 503;
-			Match(COLON);
-			State = 504;
+			State = 485;
 			Match(INIT);
-			State = 505;
+			State = 486;
 			initialStateDescr();
-			State = 506;
+			State = 487;
 			Match(RPAREN);
 			}
 		}
@@ -2657,7 +2604,6 @@ public partial class EPDDLParser : Parser {
 
 	public partial class GoalDefContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode GOAL() { return GetToken(EPDDLParser.GOAL, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public FormulaContext formula() {
 			return GetRuleContext<FormulaContext>(0);
@@ -2693,15 +2639,13 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 508;
+			State = 489;
 			Match(LPAREN);
-			State = 509;
-			Match(COLON);
-			State = 510;
+			State = 490;
 			Match(GOAL);
-			State = 511;
+			State = 491;
 			formula();
-			State = 512;
+			State = 492;
 			Match(RPAREN);
 			}
 		}
@@ -2717,7 +2661,6 @@ public partial class EPDDLParser : Parser {
 	}
 
 	public partial class ActionConditionDefContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode WHERE() { return GetToken(EPDDLParser.WHERE, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ConditionFormulaContext conditionFormula() {
 			return GetRuleContext<ConditionFormulaContext>(0);
@@ -2750,25 +2693,25 @@ public partial class EPDDLParser : Parser {
 		ActionConditionDefContext _localctx = new ActionConditionDefContext(Context, State);
 		EnterRule(_localctx, 64, RULE_actionConditionDef);
 		try {
-			State = 518;
+			State = 497;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,19,Context) ) {
-			case 1:
+			switch (TokenStream.LA(1)) {
+			case WHERE:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 514;
-				Match(COLON);
-				State = 515;
+				State = 494;
 				Match(WHERE);
-				State = 516;
+				State = 495;
 				conditionFormula();
 				}
 				break;
-			case 2:
+			case PRECONDITION:
 				EnterOuterAlt(_localctx, 2);
 				{
 				}
 				break;
+			default:
+				throw new NoViableAltException(this);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2783,7 +2726,6 @@ public partial class EPDDLParser : Parser {
 	}
 
 	public partial class ActionTypeSignatureDefContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ACTION_TYPE() { return GetToken(EPDDLParser.ACTION_TYPE, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ActionTypeNameContext actionTypeName() {
@@ -2827,29 +2769,27 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 520;
-			Match(COLON);
-			State = 521;
+			State = 499;
 			Match(ACTION_TYPE);
-			State = 522;
+			State = 500;
 			Match(LPAREN);
-			State = 523;
+			State = 501;
 			actionTypeName();
-			State = 527;
+			State = 505;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==LPAREN) {
 				{
 				{
-				State = 524;
+				State = 502;
 				parameter();
 				}
 				}
-				State = 529;
+				State = 507;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 530;
+			State = 508;
 			Match(RPAREN);
 			}
 		}
@@ -2865,7 +2805,6 @@ public partial class EPDDLParser : Parser {
 	}
 
 	public partial class ActionPreDefContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode PRECONDITION() { return GetToken(EPDDLParser.PRECONDITION, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public FormulaOrEmptyContext formulaOrEmpty() {
 			return GetRuleContext<FormulaOrEmptyContext>(0);
@@ -2900,11 +2839,9 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 532;
-			Match(COLON);
-			State = 533;
+			State = 510;
 			Match(PRECONDITION);
-			State = 534;
+			State = 511;
 			formulaOrEmpty();
 			}
 		}
@@ -2920,7 +2857,6 @@ public partial class EPDDLParser : Parser {
 	}
 
 	public partial class ActionObsDefContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode OBSERVABILITY_CONDITIONS() { return GetToken(EPDDLParser.OBSERVABILITY_CONDITIONS, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ObsConditionDefContext[] obsConditionDef() {
 			return GetRuleContexts<ObsConditionDefContext>();
@@ -2957,27 +2893,25 @@ public partial class EPDDLParser : Parser {
 		EnterRule(_localctx, 70, RULE_actionObsDef);
 		int _la;
 		try {
-			State = 545;
+			State = 521;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
-			case COLON:
+			case OBSERVABILITY_CONDITIONS:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 536;
-				Match(COLON);
-				State = 537;
+				State = 513;
 				Match(OBSERVABILITY_CONDITIONS);
-				State = 541;
+				State = 517;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				while (_la==LPAREN) {
 					{
 					{
-					State = 538;
+					State = 514;
 					obsConditionDef();
 					}
 					}
-					State = 543;
+					State = 519;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 				}
@@ -3056,39 +2990,39 @@ public partial class EPDDLParser : Parser {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 560;
+			State = 536;
 			ErrorHandler.Sync(this);
 			_alt = Interpreter.AdaptivePredict(TokenStream,24,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					State = 547;
+					State = 523;
 					Match(NAME);
-					State = 551;
+					State = 527;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 					while (_la==NAME) {
 						{
 						{
-						State = 548;
+						State = 524;
 						Match(NAME);
 						}
 						}
-						State = 553;
+						State = 529;
 						ErrorHandler.Sync(this);
 						_la = TokenStream.LA(1);
 					}
-					State = 554;
+					State = 530;
 					Match(ASSIGN);
-					State = 555;
+					State = 531;
 					type();
-					State = 556;
+					State = 532;
 					typedIdentList();
 					}
 					} 
 				}
-				State = 562;
+				State = 538;
 				ErrorHandler.Sync(this);
 				_alt = Interpreter.AdaptivePredict(TokenStream,24,Context);
 			}
@@ -3110,21 +3044,12 @@ public partial class EPDDLParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode VARIABLE(int i) {
 			return GetToken(EPDDLParser.VARIABLE, i);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] ASSIGN() { return GetTokens(EPDDLParser.ASSIGN); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ASSIGN(int i) {
-			return GetToken(EPDDLParser.ASSIGN, i);
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode DASH() { return GetToken(EPDDLParser.DASH, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public TypeContext type() {
+			return GetRuleContext<TypeContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public TypeContext[] type() {
-			return GetRuleContexts<TypeContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public TypeContext type(int i) {
-			return GetRuleContext<TypeContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public TypedVariableListContext[] typedVariableList() {
-			return GetRuleContexts<TypedVariableListContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public TypedVariableListContext typedVariableList(int i) {
-			return GetRuleContext<TypedVariableListContext>(i);
+		[System.Diagnostics.DebuggerNonUserCode] public TypedVariableListContext typedVariableList() {
+			return GetRuleContext<TypedVariableListContext>(0);
 		}
 		public TypedVariableListContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -3155,45 +3080,49 @@ public partial class EPDDLParser : Parser {
 		EnterRule(_localctx, 74, RULE_typedVariableList);
 		int _la;
 		try {
-			int _alt;
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 576;
+			State = 553;
 			ErrorHandler.Sync(this);
-			_alt = Interpreter.AdaptivePredict(TokenStream,26,Context);
-			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1 ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,27,Context) ) {
+			case 1:
+				EnterOuterAlt(_localctx, 1);
+				{
+				State = 550;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+				if (_la==VARIABLE) {
 					{
-					{
-					State = 563;
+					State = 539;
 					Match(VARIABLE);
-					State = 567;
+					State = 543;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 					while (_la==VARIABLE) {
 						{
 						{
-						State = 564;
+						State = 540;
 						Match(VARIABLE);
 						}
 						}
-						State = 569;
+						State = 545;
 						ErrorHandler.Sync(this);
 						_la = TokenStream.LA(1);
 					}
-					State = 570;
-					Match(ASSIGN);
-					State = 571;
+					State = 546;
+					Match(DASH);
+					State = 547;
 					type();
-					State = 572;
+					State = 548;
 					typedVariableList();
 					}
-					} 
 				}
-				State = 578;
-				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,26,Context);
-			}
+
+				}
+				break;
+			case 2:
+				EnterOuterAlt(_localctx, 2);
+				{
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -3240,7 +3169,7 @@ public partial class EPDDLParser : Parser {
 		TypeContext _localctx = new TypeContext(Context, State);
 		EnterRule(_localctx, 76, RULE_type);
 		try {
-			State = 581;
+			State = 557;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case PREDICATE:
@@ -3251,14 +3180,14 @@ public partial class EPDDLParser : Parser {
 			case AGENT:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 579;
+				State = 555;
 				reservedType();
 				}
 				break;
 			case NAME:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 580;
+				State = 556;
 				Match(NAME);
 				}
 				break;
@@ -3315,9 +3244,9 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 583;
+			State = 559;
 			_la = TokenStream.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 2305851530428809216L) != 0)) ) {
+			if ( !(((((_la - 67)) & ~0x3f) == 0 && ((1L << (_la - 67)) & 159L) != 0)) ) {
 			ErrorHandler.RecoverInline(this);
 			}
 			else {
@@ -3401,163 +3330,163 @@ public partial class EPDDLParser : Parser {
 		EnterRule(_localctx, 80, RULE_formula);
 		int _la;
 		try {
-			State = 641;
+			State = 617;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,30,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,31,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 585;
+				State = 561;
 				Match(LPAREN);
-				State = 586;
+				State = 562;
 				Match(IMPLY);
-				State = 587;
+				State = 563;
 				formula();
-				State = 588;
+				State = 564;
 				formula();
-				State = 589;
+				State = 565;
 				Match(RPAREN);
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 591;
+				State = 567;
 				Match(LPAREN);
-				State = 592;
+				State = 568;
 				Match(OR);
-				State = 593;
+				State = 569;
 				formula();
-				State = 597;
+				State = 573;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 12583424L) != 0)) {
+				while (((((_la - 54)) & ~0x3f) == 0 && ((1L << (_la - 54)) & 74088185859L) != 0)) {
 					{
 					{
-					State = 594;
+					State = 570;
 					formula();
 					}
 					}
-					State = 599;
+					State = 575;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 				}
-				State = 600;
+				State = 576;
 				Match(RPAREN);
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 602;
+				State = 578;
 				Match(LPAREN);
-				State = 603;
+				State = 579;
 				Match(AND);
-				State = 604;
+				State = 580;
 				formula();
-				State = 608;
+				State = 584;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 12583424L) != 0)) {
+				while (((((_la - 54)) & ~0x3f) == 0 && ((1L << (_la - 54)) & 74088185859L) != 0)) {
 					{
 					{
-					State = 605;
+					State = 581;
 					formula();
 					}
 					}
-					State = 610;
+					State = 586;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 				}
-				State = 611;
+				State = 587;
 				Match(RPAREN);
 				}
 				break;
 			case 4:
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 613;
+				State = 589;
 				Match(LPAREN);
-				State = 614;
+				State = 590;
 				Match(NOT);
-				State = 615;
+				State = 591;
 				formula();
-				State = 616;
+				State = 592;
 				Match(RPAREN);
 				}
 				break;
 			case 5:
 				EnterOuterAlt(_localctx, 5);
 				{
-				State = 618;
+				State = 594;
 				Match(LPAREN);
-				State = 619;
+				State = 595;
 				Match(EXISTS);
-				State = 620;
+				State = 596;
 				Match(LPAREN);
-				State = 621;
+				State = 597;
 				typedVariableList();
-				State = 622;
+				State = 598;
 				Match(RPAREN);
-				State = 623;
+				State = 599;
 				formula();
-				State = 624;
+				State = 600;
 				Match(RPAREN);
 				}
 				break;
 			case 6:
 				EnterOuterAlt(_localctx, 6);
 				{
-				State = 626;
+				State = 602;
 				Match(LPAREN);
-				State = 627;
+				State = 603;
 				Match(FORALL);
-				State = 628;
+				State = 604;
 				Match(LPAREN);
-				State = 629;
+				State = 605;
 				typedVariableList();
-				State = 630;
+				State = 606;
 				Match(RPAREN);
-				State = 631;
+				State = 607;
 				formula();
-				State = 632;
+				State = 608;
 				Match(RPAREN);
 				}
 				break;
 			case 7:
 				EnterOuterAlt(_localctx, 7);
 				{
-				State = 634;
+				State = 610;
 				modality();
-				State = 635;
+				State = 611;
 				formula();
 				}
 				break;
 			case 8:
 				EnterOuterAlt(_localctx, 8);
 				{
-				State = 637;
+				State = 613;
 				predicateFormula();
 				}
 				break;
 			case 9:
 				EnterOuterAlt(_localctx, 9);
 				{
-				State = 638;
+				State = 614;
 				atomicEqFormula();
 				}
 				break;
 			case 10:
 				EnterOuterAlt(_localctx, 10);
 				{
-				State = 639;
+				State = 615;
 				Match(TRUE);
 				}
 				break;
 			case 11:
 				EnterOuterAlt(_localctx, 11);
 				{
-				State = 640;
+				State = 616;
 				Match(FALSE);
 				}
 				break;
@@ -3613,40 +3542,40 @@ public partial class EPDDLParser : Parser {
 		EnterRule(_localctx, 82, RULE_conditionFormula);
 		int _la;
 		try {
-			State = 655;
+			State = 631;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,32,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,33,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 643;
+				State = 619;
 				Match(LPAREN);
-				State = 644;
+				State = 620;
 				Match(AND);
-				State = 645;
+				State = 621;
 				condition();
-				State = 649;
+				State = 625;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				while (_la==LPAREN) {
 					{
 					{
-					State = 646;
+					State = 622;
 					condition();
 					}
 					}
-					State = 651;
+					State = 627;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 				}
-				State = 652;
+				State = 628;
 				Match(RPAREN);
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 654;
+				State = 630;
 				condition();
 				}
 				break;
@@ -3698,26 +3627,26 @@ public partial class EPDDLParser : Parser {
 		ConditionContext _localctx = new ConditionContext(Context, State);
 		EnterRule(_localctx, 84, RULE_condition);
 		try {
-			State = 663;
+			State = 639;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,33,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,34,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 657;
+				State = 633;
 				atomicCondition();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 658;
+				State = 634;
 				Match(LPAREN);
-				State = 659;
+				State = 635;
 				Match(NOT);
-				State = 660;
+				State = 636;
 				atomicCondition();
-				State = 661;
+				State = 637;
 				Match(RPAREN);
 				}
 				break;
@@ -3776,46 +3705,46 @@ public partial class EPDDLParser : Parser {
 		EnterRule(_localctx, 86, RULE_atomicCondition);
 		int _la;
 		try {
-			State = 681;
+			State = 657;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,35,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,36,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 665;
+				State = 641;
 				Match(LPAREN);
-				State = 666;
+				State = 642;
 				predicateName();
-				State = 670;
+				State = 646;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 22L) != 0)) {
+				while (((((_la - 76)) & ~0x3f) == 0 && ((1L << (_la - 76)) & 11L) != 0)) {
 					{
 					{
-					State = 667;
+					State = 643;
 					term();
 					}
 					}
-					State = 672;
+					State = 648;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 				}
-				State = 673;
+				State = 649;
 				Match(RPAREN);
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 675;
+				State = 651;
 				Match(LPAREN);
-				State = 676;
+				State = 652;
 				Match(ASSIGN);
-				State = 677;
+				State = 653;
 				term();
-				State = 678;
+				State = 654;
 				term();
-				State = 679;
+				State = 655;
 				Match(RPAREN);
 				}
 				break;
@@ -3833,16 +3762,37 @@ public partial class EPDDLParser : Parser {
 	}
 
 	public partial class PredicateFormulaContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] LPAREN() { return GetTokens(EPDDLParser.LPAREN); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN(int i) {
+			return GetToken(EPDDLParser.LPAREN, i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode IMPLY() { return GetToken(EPDDLParser.IMPLY, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public PredicateFormulaContext[] predicateFormula() {
+			return GetRuleContexts<PredicateFormulaContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public PredicateFormulaContext predicateFormula(int i) {
+			return GetRuleContext<PredicateFormulaContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] RPAREN() { return GetTokens(EPDDLParser.RPAREN); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN(int i) {
+			return GetToken(EPDDLParser.RPAREN, i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode OR() { return GetToken(EPDDLParser.OR, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode AND() { return GetToken(EPDDLParser.AND, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NOT() { return GetToken(EPDDLParser.NOT, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode EXISTS() { return GetToken(EPDDLParser.EXISTS, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public TypedVariableListContext typedVariableList() {
+			return GetRuleContext<TypedVariableListContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode FORALL() { return GetToken(EPDDLParser.FORALL, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public PredicateNameContext predicateName() {
 			return GetRuleContext<PredicateNameContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(EPDDLParser.RPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public TermContext[] term() {
-			return GetRuleContexts<TermContext>();
+		[System.Diagnostics.DebuggerNonUserCode] public GroundTermContext[] groundTerm() {
+			return GetRuleContexts<GroundTermContext>();
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public TermContext term(int i) {
-			return GetRuleContext<TermContext>(i);
+		[System.Diagnostics.DebuggerNonUserCode] public GroundTermContext groundTerm(int i) {
+			return GetRuleContext<GroundTermContext>(i);
 		}
 		public PredicateFormulaContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -3873,28 +3823,150 @@ public partial class EPDDLParser : Parser {
 		EnterRule(_localctx, 88, RULE_predicateFormula);
 		int _la;
 		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 683;
-			Match(LPAREN);
-			State = 684;
-			predicateName();
-			State = 688;
+			State = 714;
 			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 22L) != 0)) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,40,Context) ) {
+			case 1:
+				EnterOuterAlt(_localctx, 1);
 				{
+				State = 659;
+				Match(LPAREN);
+				State = 660;
+				Match(IMPLY);
+				State = 661;
+				predicateFormula();
+				State = 662;
+				predicateFormula();
+				State = 663;
+				Match(RPAREN);
+				}
+				break;
+			case 2:
+				EnterOuterAlt(_localctx, 2);
 				{
-				State = 685;
-				term();
-				}
-				}
-				State = 690;
+				State = 665;
+				Match(LPAREN);
+				State = 666;
+				Match(OR);
+				State = 668;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-			}
-			State = 691;
-			Match(RPAREN);
+				do {
+					{
+					{
+					State = 667;
+					predicateFormula();
+					}
+					}
+					State = 670;
+					ErrorHandler.Sync(this);
+					_la = TokenStream.LA(1);
+				} while ( _la==LPAREN );
+				State = 672;
+				Match(RPAREN);
+				}
+				break;
+			case 3:
+				EnterOuterAlt(_localctx, 3);
+				{
+				State = 674;
+				Match(LPAREN);
+				State = 675;
+				Match(AND);
+				State = 677;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+				do {
+					{
+					{
+					State = 676;
+					predicateFormula();
+					}
+					}
+					State = 679;
+					ErrorHandler.Sync(this);
+					_la = TokenStream.LA(1);
+				} while ( _la==LPAREN );
+				State = 681;
+				Match(RPAREN);
+				}
+				break;
+			case 4:
+				EnterOuterAlt(_localctx, 4);
+				{
+				State = 683;
+				Match(LPAREN);
+				State = 684;
+				Match(NOT);
+				State = 685;
+				predicateFormula();
+				State = 686;
+				Match(RPAREN);
+				}
+				break;
+			case 5:
+				EnterOuterAlt(_localctx, 5);
+				{
+				State = 688;
+				Match(LPAREN);
+				State = 689;
+				Match(EXISTS);
+				State = 690;
+				Match(LPAREN);
+				State = 691;
+				typedVariableList();
+				State = 692;
+				Match(RPAREN);
+				State = 693;
+				predicateFormula();
+				State = 694;
+				Match(RPAREN);
+				}
+				break;
+			case 6:
+				EnterOuterAlt(_localctx, 6);
+				{
+				State = 696;
+				Match(LPAREN);
+				State = 697;
+				Match(FORALL);
+				State = 698;
+				Match(LPAREN);
+				State = 699;
+				typedVariableList();
+				State = 700;
+				Match(RPAREN);
+				State = 701;
+				predicateFormula();
+				State = 702;
+				Match(RPAREN);
+				}
+				break;
+			case 7:
+				EnterOuterAlt(_localctx, 7);
+				{
+				State = 704;
+				Match(LPAREN);
+				State = 705;
+				predicateName();
+				State = 709;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+				while (_la==NAME || _la==AGENT_NAME) {
+					{
+					{
+					State = 706;
+					groundTerm();
+					}
+					}
+					State = 711;
+					ErrorHandler.Sync(this);
+					_la = TokenStream.LA(1);
+				}
+				State = 712;
+				Match(RPAREN);
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -3948,15 +4020,15 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 693;
+			State = 716;
 			Match(LPAREN);
-			State = 694;
+			State = 717;
 			Match(ASSIGN);
-			State = 695;
+			State = 718;
 			term();
-			State = 696;
+			State = 719;
 			term();
-			State = 697;
+			State = 720;
 			Match(RPAREN);
 			}
 		}
@@ -4004,21 +4076,21 @@ public partial class EPDDLParser : Parser {
 		TermContext _localctx = new TermContext(Context, State);
 		EnterRule(_localctx, 92, RULE_term);
 		try {
-			State = 701;
+			State = 724;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case NAME:
 			case AGENT_NAME:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 699;
+				State = 722;
 				groundTerm();
 				}
 				break;
 			case VARIABLE:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 700;
+				State = 723;
 				Match(VARIABLE);
 				}
 				break;
@@ -4070,20 +4142,20 @@ public partial class EPDDLParser : Parser {
 		GroundTermContext _localctx = new GroundTermContext(Context, State);
 		EnterRule(_localctx, 94, RULE_groundTerm);
 		try {
-			State = 705;
+			State = 728;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case NAME:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 703;
+				State = 726;
 				Match(NAME);
 				}
 				break;
 			case AGENT_NAME:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 704;
+				State = 727;
 				agentName();
 				}
 				break;
@@ -4137,20 +4209,20 @@ public partial class EPDDLParser : Parser {
 		ModalityContext _localctx = new ModalityContext(Context, State);
 		EnterRule(_localctx, 96, RULE_modality);
 		try {
-			State = 709;
+			State = 732;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,39,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,43,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 707;
+				State = 730;
 				singleModality();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 708;
+				State = 731;
 				groupModality();
 				}
 				break;
@@ -4168,14 +4240,16 @@ public partial class EPDDLParser : Parser {
 	}
 
 	public partial class SingleModalityContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LBRACKET() { return GetToken(EPDDLParser.LBRACKET, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ModalityLabelContext modalityLabel() {
 			return GetRuleContext<ModalityLabelContext>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ModalityAgentContext modalityAgent() {
 			return GetRuleContext<ModalityAgentContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(EPDDLParser.RPAREN, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RBRACKET() { return GetToken(EPDDLParser.RBRACKET, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LT() { return GetToken(EPDDLParser.LT, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode GT() { return GetToken(EPDDLParser.GT, 0); }
 		public SingleModalityContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -4204,16 +4278,37 @@ public partial class EPDDLParser : Parser {
 		SingleModalityContext _localctx = new SingleModalityContext(Context, State);
 		EnterRule(_localctx, 98, RULE_singleModality);
 		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 711;
-			Match(LPAREN);
-			State = 712;
-			modalityLabel();
-			State = 713;
-			modalityAgent();
-			State = 714;
-			Match(RPAREN);
+			State = 744;
+			ErrorHandler.Sync(this);
+			switch (TokenStream.LA(1)) {
+			case LBRACKET:
+				EnterOuterAlt(_localctx, 1);
+				{
+				State = 734;
+				Match(LBRACKET);
+				State = 735;
+				modalityLabel();
+				State = 736;
+				modalityAgent();
+				State = 737;
+				Match(RBRACKET);
+				}
+				break;
+			case LT:
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 739;
+				Match(LT);
+				State = 740;
+				modalityLabel();
+				State = 741;
+				modalityAgent();
+				State = 742;
+				Match(GT);
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
 			}
 		}
 		catch (RecognitionException re) {
@@ -4228,14 +4323,16 @@ public partial class EPDDLParser : Parser {
 	}
 
 	public partial class GroupModalityContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LBRACKET() { return GetToken(EPDDLParser.LBRACKET, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ModalityLabelContext modalityLabel() {
 			return GetRuleContext<ModalityLabelContext>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ModalityAgentGroupContext modalityAgentGroup() {
 			return GetRuleContext<ModalityAgentGroupContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(EPDDLParser.RPAREN, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RBRACKET() { return GetToken(EPDDLParser.RBRACKET, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LT() { return GetToken(EPDDLParser.LT, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode GT() { return GetToken(EPDDLParser.GT, 0); }
 		public GroupModalityContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -4264,16 +4361,37 @@ public partial class EPDDLParser : Parser {
 		GroupModalityContext _localctx = new GroupModalityContext(Context, State);
 		EnterRule(_localctx, 100, RULE_groupModality);
 		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 716;
-			Match(LPAREN);
-			State = 717;
-			modalityLabel();
-			State = 718;
-			modalityAgentGroup();
-			State = 719;
-			Match(RPAREN);
+			State = 756;
+			ErrorHandler.Sync(this);
+			switch (TokenStream.LA(1)) {
+			case LBRACKET:
+				EnterOuterAlt(_localctx, 1);
+				{
+				State = 746;
+				Match(LBRACKET);
+				State = 747;
+				modalityLabel();
+				State = 748;
+				modalityAgentGroup();
+				State = 749;
+				Match(RBRACKET);
+				}
+				break;
+			case LT:
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 751;
+				Match(LT);
+				State = 752;
+				modalityLabel();
+				State = 753;
+				modalityAgentGroup();
+				State = 754;
+				Match(GT);
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
 			}
 		}
 		catch (RecognitionException re) {
@@ -4319,19 +4437,19 @@ public partial class EPDDLParser : Parser {
 		ModalityLabelContext _localctx = new ModalityLabelContext(Context, State);
 		EnterRule(_localctx, 102, RULE_modalityLabel);
 		try {
-			State = 723;
+			State = 760;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case MODALITY_NAME:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 721;
+				State = 758;
 				modalityName();
 				}
 				break;
+			case ALL:
 			case AGENT_NAME:
 			case VARIABLE:
-			case ALL:
 				EnterOuterAlt(_localctx, 2);
 				{
 				}
@@ -4387,27 +4505,27 @@ public partial class EPDDLParser : Parser {
 		ModalityAgentContext _localctx = new ModalityAgentContext(Context, State);
 		EnterRule(_localctx, 104, RULE_modalityAgent);
 		try {
-			State = 728;
+			State = 765;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case AGENT_NAME:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 725;
+				State = 762;
 				agentName();
 				}
 				break;
 			case VARIABLE:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 726;
+				State = 763;
 				Match(VARIABLE);
 				}
 				break;
 			case ALL:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 727;
+				State = 764;
 				allAgents();
 				}
 				break;
@@ -4464,19 +4582,19 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 730;
+			State = 767;
 			modalityAgent();
-			State = 734;
+			State = 771;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 281474976710676L) != 0)) {
+			while (((((_la - 72)) & ~0x3f) == 0 && ((1L << (_la - 72)) & 161L) != 0)) {
 				{
 				{
-				State = 731;
+				State = 768;
 				modalityAgent();
 				}
 				}
-				State = 736;
+				State = 773;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -4525,7 +4643,7 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 737;
+			State = 774;
 			Match(ALL);
 			}
 		}
@@ -4572,7 +4690,7 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 739;
+			State = 776;
 			Match(NAME);
 			}
 		}
@@ -4619,7 +4737,7 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 741;
+			State = 778;
 			Match(NAME);
 			}
 		}
@@ -4666,7 +4784,7 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 743;
+			State = 780;
 			Match(NAME);
 			}
 		}
@@ -4713,7 +4831,7 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 745;
+			State = 782;
 			Match(NAME);
 			}
 		}
@@ -4760,7 +4878,7 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 747;
+			State = 784;
 			Match(NAME);
 			}
 		}
@@ -4807,7 +4925,7 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 749;
+			State = 786;
 			Match(NAME);
 			}
 		}
@@ -4854,7 +4972,7 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 751;
+			State = 788;
 			Match(NAME);
 			}
 		}
@@ -4901,7 +5019,7 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 753;
+			State = 790;
 			Match(NAME);
 			}
 		}
@@ -4948,7 +5066,7 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 755;
+			State = 792;
 			Match(AGENT_NAME);
 			}
 		}
@@ -4995,7 +5113,7 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 757;
+			State = 794;
 			Match(MODALITY_NAME);
 			}
 		}
@@ -5053,25 +5171,25 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 759;
+			State = 796;
 			Match(LPAREN);
-			State = 760;
+			State = 797;
 			predicateName();
-			State = 764;
+			State = 801;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==NAME || _la==AGENT_NAME) {
 				{
 				{
-				State = 761;
+				State = 798;
 				genericName();
 				}
 				}
-				State = 766;
+				State = 803;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 767;
+			State = 804;
 			Match(RPAREN);
 			}
 		}
@@ -5119,20 +5237,20 @@ public partial class EPDDLParser : Parser {
 		GenericNameContext _localctx = new GenericNameContext(Context, State);
 		EnterRule(_localctx, 132, RULE_genericName);
 		try {
-			State = 771;
+			State = 808;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case NAME:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 769;
+				State = 806;
 				Match(NAME);
 				}
 				break;
 			case AGENT_NAME:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 770;
+				State = 807;
 				agentName();
 				}
 				break;
@@ -5152,7 +5270,6 @@ public partial class EPDDLParser : Parser {
 	}
 
 	public partial class StateWorldsDefContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode WORLDS() { return GetToken(EPDDLParser.WORLDS, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(EPDDLParser.RPAREN, 0); }
@@ -5193,27 +5310,25 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 773;
-			Match(COLON);
-			State = 774;
+			State = 810;
 			Match(WORLDS);
-			State = 775;
+			State = 811;
 			Match(LPAREN);
-			State = 777;
+			State = 813;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			do {
 				{
 				{
-				State = 776;
+				State = 812;
 				worldName();
 				}
 				}
-				State = 779;
+				State = 815;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			} while ( _la==NAME );
-			State = 781;
+			State = 817;
 			Match(RPAREN);
 			}
 		}
@@ -5229,7 +5344,6 @@ public partial class EPDDLParser : Parser {
 	}
 
 	public partial class StateRelDefContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RELATIONS() { return GetToken(EPDDLParser.RELATIONS, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public StateRelationsContext stateRelations() {
 			return GetRuleContext<StateRelationsContext>(0);
@@ -5264,11 +5378,9 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 783;
-			Match(COLON);
-			State = 784;
+			State = 819;
 			Match(RELATIONS);
-			State = 785;
+			State = 820;
 			stateRelations();
 			}
 		}
@@ -5291,7 +5403,7 @@ public partial class EPDDLParser : Parser {
 			return GetRuleContext<WorldRelationContext>(i);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TRIVIAL_RELATION() { return GetToken(EPDDLParser.TRIVIAL_RELATION, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TRIVIAL_DEF() { return GetToken(EPDDLParser.TRIVIAL_DEF, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(EPDDLParser.RPAREN, 0); }
 		public StateRelationsContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -5322,23 +5434,23 @@ public partial class EPDDLParser : Parser {
 		EnterRule(_localctx, 138, RULE_stateRelations);
 		int _la;
 		try {
-			State = 795;
+			State = 830;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,47,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,53,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 788;
+				State = 823;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				do {
 					{
 					{
-					State = 787;
+					State = 822;
 					worldRelation();
 					}
 					}
-					State = 790;
+					State = 825;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 				} while ( _la==LPAREN );
@@ -5347,11 +5459,11 @@ public partial class EPDDLParser : Parser {
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 792;
+				State = 827;
 				Match(LPAREN);
-				State = 793;
-				Match(TRIVIAL_RELATION);
-				State = 794;
+				State = 828;
+				Match(TRIVIAL_DEF);
+				State = 829;
 				Match(RPAREN);
 				}
 				break;
@@ -5411,25 +5523,25 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 797;
+			State = 832;
 			Match(LPAREN);
-			State = 798;
+			State = 833;
 			agentGroup();
-			State = 800;
+			State = 835;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			do {
 				{
 				{
-				State = 799;
+				State = 834;
 				worldNamePair();
 				}
 				}
-				State = 802;
+				State = 837;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			} while ( _la==LPAREN );
-			State = 804;
+			State = 839;
 			Match(RPAREN);
 			}
 		}
@@ -5483,13 +5595,13 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 806;
+			State = 841;
 			Match(LPAREN);
-			State = 807;
+			State = 842;
 			worldName();
-			State = 808;
+			State = 843;
 			worldName();
-			State = 809;
+			State = 844;
 			Match(RPAREN);
 			}
 		}
@@ -5505,8 +5617,7 @@ public partial class EPDDLParser : Parser {
 	}
 
 	public partial class StateValDefContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode VALUTATION() { return GetToken(EPDDLParser.VALUTATION, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode VALUATION() { return GetToken(EPDDLParser.VALUATION, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public StateValuationContext stateValuation() {
 			return GetRuleContext<StateValuationContext>(0);
 		}
@@ -5540,11 +5651,9 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 811;
-			Match(COLON);
-			State = 812;
-			Match(VALUTATION);
-			State = 813;
+			State = 846;
+			Match(VALUATION);
+			State = 847;
 			stateValuation();
 			}
 		}
@@ -5567,7 +5676,7 @@ public partial class EPDDLParser : Parser {
 			return GetRuleContext<WorldValuationContext>(i);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TRIVIAL_RELATION() { return GetToken(EPDDLParser.TRIVIAL_RELATION, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TRIVIAL_DEF() { return GetToken(EPDDLParser.TRIVIAL_DEF, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(EPDDLParser.RPAREN, 0); }
 		public StateValuationContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -5598,23 +5707,23 @@ public partial class EPDDLParser : Parser {
 		EnterRule(_localctx, 146, RULE_stateValuation);
 		int _la;
 		try {
-			State = 823;
+			State = 857;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,50,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,56,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 816;
+				State = 850;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				do {
 					{
 					{
-					State = 815;
+					State = 849;
 					worldValuation();
 					}
 					}
-					State = 818;
+					State = 852;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 				} while ( _la==LPAREN );
@@ -5623,11 +5732,11 @@ public partial class EPDDLParser : Parser {
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 820;
+				State = 854;
 				Match(LPAREN);
-				State = 821;
-				Match(TRIVIAL_RELATION);
-				State = 822;
+				State = 855;
+				Match(TRIVIAL_DEF);
+				State = 856;
 				Match(RPAREN);
 				}
 				break;
@@ -5689,29 +5798,29 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 825;
+			State = 859;
 			Match(LPAREN);
-			State = 826;
+			State = 860;
 			worldName();
-			State = 827;
+			State = 861;
 			Match(LBRACKET);
-			State = 831;
+			State = 865;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==LPAREN) {
 				{
 				{
-				State = 828;
+				State = 862;
 				literal();
 				}
 				}
-				State = 833;
+				State = 867;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 834;
+			State = 868;
 			Match(RBRACKET);
-			State = 835;
+			State = 869;
 			Match(RPAREN);
 			}
 		}
@@ -5727,7 +5836,6 @@ public partial class EPDDLParser : Parser {
 	}
 
 	public partial class StateDesignDefContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode DESIGNATED() { return GetToken(EPDDLParser.DESIGNATED, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(EPDDLParser.RPAREN, 0); }
@@ -5768,27 +5876,25 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 837;
-			Match(COLON);
-			State = 838;
+			State = 871;
 			Match(DESIGNATED);
-			State = 839;
+			State = 872;
 			Match(LPAREN);
-			State = 841;
+			State = 874;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			do {
 				{
 				{
-				State = 840;
+				State = 873;
 				worldName();
 				}
 				}
-				State = 843;
+				State = 876;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			} while ( _la==NAME );
-			State = 845;
+			State = 878;
 			Match(RPAREN);
 			}
 		}
@@ -5844,39 +5950,39 @@ public partial class EPDDLParser : Parser {
 		EnterRule(_localctx, 152, RULE_agentGroup);
 		int _la;
 		try {
-			State = 858;
+			State = 891;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
-			case AGENT_NAME:
 			case ALL:
+			case AGENT_NAME:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 847;
+				State = 880;
 				agentGroupName();
 				}
 				break;
 			case LBRACE:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 848;
+				State = 881;
 				Match(LBRACE);
-				State = 849;
+				State = 882;
 				agentName();
-				State = 853;
+				State = 886;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				while (_la==AGENT_NAME) {
 					{
 					{
-					State = 850;
+					State = 883;
 					agentName();
 					}
 					}
-					State = 855;
+					State = 888;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 				}
-				State = 856;
+				State = 889;
 				Match(RBRACE);
 				}
 				break;
@@ -5930,26 +6036,26 @@ public partial class EPDDLParser : Parser {
 		LiteralContext _localctx = new LiteralContext(Context, State);
 		EnterRule(_localctx, 154, RULE_literal);
 		try {
-			State = 866;
+			State = 899;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,55,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,61,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 860;
+				State = 893;
 				predicate();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 861;
+				State = 894;
 				Match(LPAREN);
-				State = 862;
+				State = 895;
 				Match(NOT);
-				State = 863;
+				State = 896;
 				predicate();
-				State = 864;
+				State = 897;
 				Match(RPAREN);
 				}
 				break;
@@ -5974,7 +6080,6 @@ public partial class EPDDLParser : Parser {
 			return GetRuleContext<FTheoryFormulaContext>(i);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STATE_NAME() { return GetToken(EPDDLParser.STATE_NAME, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public StateNameContext stateName() {
 			return GetRuleContext<StateNameContext>(0);
@@ -6009,40 +6114,38 @@ public partial class EPDDLParser : Parser {
 		EnterRule(_localctx, 156, RULE_initialStateDescr);
 		int _la;
 		try {
-			State = 879;
+			State = 912;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,57,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,63,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 869;
+				State = 904;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				do {
+				while (_la==LPAREN || _la==LBRACKET) {
 					{
 					{
-					State = 868;
+					State = 901;
 					fTheoryFormula();
 					}
 					}
-					State = 871;
+					State = 906;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
-				} while ( _la==LPAREN );
+				}
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 873;
+				State = 907;
 				Match(LPAREN);
-				State = 874;
-				Match(COLON);
-				State = 875;
+				State = 908;
 				Match(STATE_NAME);
-				State = 876;
+				State = 909;
 				stateName();
-				State = 877;
+				State = 910;
 				Match(RPAREN);
 				}
 				break;
@@ -6103,32 +6206,32 @@ public partial class EPDDLParser : Parser {
 		FTheoryFormulaContext _localctx = new FTheoryFormulaContext(Context, State);
 		EnterRule(_localctx, 158, RULE_fTheoryFormula);
 		try {
-			State = 890;
+			State = 923;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,58,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,64,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 881;
+				State = 914;
 				simpleFTheoryFormula();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 882;
+				State = 915;
 				Match(LPAREN);
-				State = 883;
+				State = 916;
 				Match(FORALL);
-				State = 884;
+				State = 917;
 				Match(LPAREN);
-				State = 885;
+				State = 918;
 				typedVariableList();
-				State = 886;
+				State = 919;
 				Match(RPAREN);
-				State = 887;
+				State = 920;
 				simpleFTheoryFormula();
-				State = 888;
+				State = 921;
 				Match(RPAREN);
 				}
 				break;
@@ -6149,10 +6252,6 @@ public partial class EPDDLParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public PredicateFormulaContext predicateFormula() {
 			return GetRuleContext<PredicateFormulaContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] LPAREN() { return GetTokens(EPDDLParser.LPAREN); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN(int i) {
-			return GetToken(EPDDLParser.LPAREN, i);
-		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] LBRACKET() { return GetTokens(EPDDLParser.LBRACKET); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LBRACKET(int i) {
 			return GetToken(EPDDLParser.LBRACKET, i);
@@ -6162,17 +6261,15 @@ public partial class EPDDLParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RBRACKET(int i) {
 			return GetToken(EPDDLParser.RBRACKET, i);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] RPAREN() { return GetTokens(EPDDLParser.RPAREN); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN(int i) {
-			return GetToken(EPDDLParser.RPAREN, i);
-		}
 		[System.Diagnostics.DebuggerNonUserCode] public AgentNameContext agentName() {
 			return GetRuleContext<AgentNameContext>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public KnowsWhetherContext knowsWhether() {
 			return GetRuleContext<KnowsWhetherContext>(0);
 		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NOT() { return GetToken(EPDDLParser.NOT, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(EPDDLParser.RPAREN, 0); }
 		public SimpleFTheoryFormulaContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -6201,97 +6298,81 @@ public partial class EPDDLParser : Parser {
 		SimpleFTheoryFormulaContext _localctx = new SimpleFTheoryFormulaContext(Context, State);
 		EnterRule(_localctx, 160, RULE_simpleFTheoryFormula);
 		try {
-			State = 929;
+			State = 953;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,59,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,65,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 892;
+				State = 925;
 				predicateFormula();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 893;
-				Match(LPAREN);
-				State = 894;
+				State = 926;
 				Match(LBRACKET);
-				State = 895;
+				State = 927;
 				Match(ALL);
-				State = 896;
+				State = 928;
 				Match(RBRACKET);
-				State = 897;
+				State = 929;
 				predicateFormula();
-				State = 898;
-				Match(RPAREN);
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 900;
-				Match(LPAREN);
-				State = 901;
+				State = 930;
 				Match(LBRACKET);
-				State = 902;
+				State = 931;
 				Match(ALL);
-				State = 903;
+				State = 932;
 				Match(RBRACKET);
-				State = 904;
+				State = 933;
 				Match(LBRACKET);
-				State = 905;
+				State = 934;
 				agentName();
-				State = 906;
+				State = 935;
 				Match(RBRACKET);
-				State = 907;
+				State = 936;
 				predicateFormula();
-				State = 908;
-				Match(RPAREN);
 				}
 				break;
 			case 4:
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 910;
-				Match(LPAREN);
-				State = 911;
+				State = 938;
 				Match(LBRACKET);
-				State = 912;
+				State = 939;
 				Match(ALL);
-				State = 913;
+				State = 940;
 				Match(RBRACKET);
-				State = 914;
+				State = 941;
 				knowsWhether();
-				State = 915;
+				State = 942;
 				predicateFormula();
-				State = 916;
-				Match(RPAREN);
 				}
 				break;
 			case 5:
 				EnterOuterAlt(_localctx, 5);
 				{
-				State = 918;
-				Match(LPAREN);
-				State = 919;
+				State = 944;
 				Match(LBRACKET);
-				State = 920;
+				State = 945;
 				Match(ALL);
-				State = 921;
+				State = 946;
 				Match(RBRACKET);
-				State = 922;
+				State = 947;
 				Match(LPAREN);
-				State = 923;
+				State = 948;
 				Match(NOT);
-				State = 924;
+				State = 949;
 				knowsWhether();
-				State = 925;
+				State = 950;
 				predicateFormula();
-				State = 926;
-				Match(RPAREN);
-				State = 927;
+				State = 951;
 				Match(RPAREN);
 				}
 				break;
@@ -6340,7 +6421,7 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 931;
+			State = 955;
 			Match(NAME);
 			}
 		}
@@ -6393,15 +6474,15 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 933;
+			State = 957;
 			Match(LPAREN);
-			State = 934;
+			State = 958;
 			Match(VARIABLE);
-			State = 935;
+			State = 959;
 			Match(ASSIGN);
-			State = 936;
+			State = 960;
 			expression();
-			State = 937;
+			State = 961;
 			Match(RPAREN);
 			}
 		}
@@ -6454,27 +6535,27 @@ public partial class EPDDLParser : Parser {
 		ExpressionContext _localctx = new ExpressionContext(Context, State);
 		EnterRule(_localctx, 166, RULE_expression);
 		try {
-			State = 942;
+			State = 966;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,60,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,66,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 939;
+				State = 963;
 				term();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 940;
+				State = 964;
 				formula();
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 941;
+				State = 965;
 				postconditionBlock();
 				}
 				break;
@@ -6495,8 +6576,7 @@ public partial class EPDDLParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public FormulaContext formula() {
 			return GetRuleContext<FormulaContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(EPDDLParser.RPAREN, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TRIVIAL_DEF() { return GetToken(EPDDLParser.TRIVIAL_DEF, 0); }
 		public FormulaOrEmptyContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -6525,25 +6605,29 @@ public partial class EPDDLParser : Parser {
 		FormulaOrEmptyContext _localctx = new FormulaOrEmptyContext(Context, State);
 		EnterRule(_localctx, 168, RULE_formulaOrEmpty);
 		try {
-			State = 947;
+			State = 970;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,61,Context) ) {
-			case 1:
+			switch (TokenStream.LA(1)) {
+			case TRUE:
+			case FALSE:
+			case LPAREN:
+			case LBRACKET:
+			case LT:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 944;
+				State = 968;
 				formula();
 				}
 				break;
-			case 2:
+			case TRIVIAL_DEF:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 945;
-				Match(LPAREN);
-				State = 946;
-				Match(RPAREN);
+				State = 969;
+				Match(TRIVIAL_DEF);
 				}
 				break;
+			default:
+				throw new NoViableAltException(this);
 			}
 		}
 		catch (RecognitionException re) {
@@ -6592,20 +6676,20 @@ public partial class EPDDLParser : Parser {
 		ObsConditionDefContext _localctx = new ObsConditionDefContext(Context, State);
 		EnterRule(_localctx, 170, RULE_obsConditionDef);
 		try {
-			State = 951;
+			State = 974;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,62,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,68,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 949;
+				State = 972;
 				universalObsCond();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 950;
+				State = 973;
 				obsCondition();
 				}
 				break;
@@ -6674,35 +6758,35 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 953;
+			State = 976;
 			Match(LPAREN);
-			State = 954;
+			State = 977;
 			Match(FORALL);
-			State = 955;
+			State = 978;
 			Match(LPAREN);
-			State = 956;
+			State = 979;
 			Match(VARIABLE);
-			State = 957;
+			State = 980;
 			Match(DASH);
-			State = 958;
+			State = 981;
 			type();
-			State = 959;
+			State = 982;
 			Match(RPAREN);
-			State = 961;
+			State = 984;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			do {
 				{
 				{
-				State = 960;
+				State = 983;
 				obsCondition();
 				}
 				}
-				State = 963;
+				State = 986;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			} while ( _la==LPAREN );
-			State = 965;
+			State = 988;
 			Match(RPAREN);
 			}
 		}
@@ -6755,27 +6839,27 @@ public partial class EPDDLParser : Parser {
 		ObsConditionContext _localctx = new ObsConditionContext(Context, State);
 		EnterRule(_localctx, 174, RULE_obsCondition);
 		try {
-			State = 970;
+			State = 993;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,64,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,70,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 967;
+				State = 990;
 				trivialObsCond();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 968;
+				State = 991;
 				ifObsCond();
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 969;
+				State = 992;
 				otherwiseObsCond();
 				}
 				break;
@@ -6831,13 +6915,13 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 972;
+			State = 995;
 			Match(LPAREN);
-			State = 973;
+			State = 996;
 			observingAgent();
-			State = 974;
+			State = 997;
 			observingAgentGroup();
-			State = 975;
+			State = 998;
 			Match(RPAREN);
 			}
 		}
@@ -6895,17 +6979,17 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 977;
+			State = 1000;
 			Match(LPAREN);
-			State = 978;
+			State = 1001;
 			Match(IF);
-			State = 979;
+			State = 1002;
 			formula();
-			State = 980;
+			State = 1003;
 			observingAgent();
-			State = 981;
+			State = 1004;
 			observingAgentGroup();
-			State = 982;
+			State = 1005;
 			Match(RPAREN);
 			}
 		}
@@ -6960,15 +7044,15 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 984;
+			State = 1007;
 			Match(LPAREN);
-			State = 985;
+			State = 1008;
 			Match(OTHERWISE);
-			State = 986;
+			State = 1009;
 			observingAgent();
-			State = 987;
+			State = 1010;
 			observingAgentGroup();
-			State = 988;
+			State = 1011;
 			Match(RPAREN);
 			}
 		}
@@ -7018,9 +7102,9 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 990;
+			State = 1013;
 			_la = TokenStream.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 281474976710676L) != 0)) ) {
+			if ( !(((((_la - 72)) & ~0x3f) == 0 && ((1L << (_la - 72)) & 161L) != 0)) ) {
 			ErrorHandler.RecoverInline(this);
 			}
 			else {
@@ -7078,23 +7162,23 @@ public partial class EPDDLParser : Parser {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 992;
+			State = 1015;
 			observingAgent();
-			State = 996;
+			State = 1019;
 			ErrorHandler.Sync(this);
-			_alt = Interpreter.AdaptivePredict(TokenStream,65,Context);
+			_alt = Interpreter.AdaptivePredict(TokenStream,71,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					State = 993;
+					State = 1016;
 					observingAgent();
 					}
 					} 
 				}
-				State = 998;
+				State = 1021;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,65,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,71,Context);
 			}
 			}
 		}
@@ -7143,9 +7227,9 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 999;
+			State = 1022;
 			_la = TokenStream.LA(1);
-			if ( !(_la==AGENT_NAME || _la==ALL) ) {
+			if ( !(_la==ALL || _la==AGENT_NAME) ) {
 			ErrorHandler.RecoverInline(this);
 			}
 			else {
@@ -7208,25 +7292,25 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 1001;
+			State = 1024;
 			Match(LPAREN);
-			State = 1002;
+			State = 1025;
 			predicateName();
-			State = 1006;
+			State = 1029;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 22L) != 0)) {
+			while (((((_la - 76)) & ~0x3f) == 0 && ((1L << (_la - 76)) & 11L) != 0)) {
 				{
 				{
-				State = 1003;
+				State = 1026;
 				term();
 				}
 				}
-				State = 1008;
+				State = 1031;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 1009;
+			State = 1032;
 			Match(RPAREN);
 			}
 		}
@@ -7242,7 +7326,6 @@ public partial class EPDDLParser : Parser {
 	}
 
 	public partial class ActionTypeGroupsDefContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode OBSERVABILITY_GROUPS() { return GetToken(EPDDLParser.OBSERVABILITY_GROUPS, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(EPDDLParser.RPAREN, 0); }
@@ -7281,41 +7364,41 @@ public partial class EPDDLParser : Parser {
 		EnterRule(_localctx, 190, RULE_actionTypeGroupsDef);
 		int _la;
 		try {
-			State = 1022;
+			State = 1044;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,68,Context) ) {
-			case 1:
+			switch (TokenStream.LA(1)) {
+			case OBSERVABILITY_GROUPS:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 1011;
-				Match(COLON);
-				State = 1012;
+				State = 1034;
 				Match(OBSERVABILITY_GROUPS);
-				State = 1013;
+				State = 1035;
 				Match(LPAREN);
-				State = 1017;
+				State = 1039;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 281474976710676L) != 0)) {
+				while (((((_la - 72)) & ~0x3f) == 0 && ((1L << (_la - 72)) & 161L) != 0)) {
 					{
 					{
-					State = 1014;
+					State = 1036;
 					observingAgentGroup();
 					}
 					}
-					State = 1019;
+					State = 1041;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 				}
-				State = 1020;
+				State = 1042;
 				Match(RPAREN);
 				}
 				break;
-			case 2:
+			case EVENT:
 				EnterOuterAlt(_localctx, 2);
 				{
 				}
 				break;
+			default:
+				throw new NoViableAltException(this);
 			}
 		}
 		catch (RecognitionException re) {
@@ -7330,7 +7413,6 @@ public partial class EPDDLParser : Parser {
 	}
 
 	public partial class ActionTypeEventsDefContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode EVENT() { return GetToken(EPDDLParser.EVENT, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public EventSignatureContext[] eventSignature() {
 			return GetRuleContexts<EventSignatureContext>();
@@ -7369,21 +7451,19 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 1024;
-			Match(COLON);
-			State = 1025;
+			State = 1046;
 			Match(EVENT);
-			State = 1027;
+			State = 1048;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			do {
 				{
 				{
-				State = 1026;
+				State = 1047;
 				eventSignature();
 				}
 				}
-				State = 1029;
+				State = 1050;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			} while ( _la==LPAREN );
@@ -7443,25 +7523,25 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 1031;
+			State = 1052;
 			Match(LPAREN);
-			State = 1032;
+			State = 1053;
 			eventName();
-			State = 1036;
+			State = 1057;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==LPAREN) {
 				{
 				{
-				State = 1033;
+				State = 1054;
 				parameter();
 				}
 				}
-				State = 1038;
+				State = 1059;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 1039;
+			State = 1060;
 			Match(RPAREN);
 			}
 		}
@@ -7477,7 +7557,6 @@ public partial class EPDDLParser : Parser {
 	}
 
 	public partial class ActionTypeRelDefContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RELATIONS() { return GetToken(EPDDLParser.RELATIONS, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ActionRelationsContext actionRelations() {
 			return GetRuleContext<ActionRelationsContext>(0);
@@ -7512,11 +7591,9 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 1041;
-			Match(COLON);
-			State = 1042;
+			State = 1062;
 			Match(RELATIONS);
-			State = 1043;
+			State = 1063;
 			actionRelations();
 			}
 		}
@@ -7539,7 +7616,7 @@ public partial class EPDDLParser : Parser {
 			return GetRuleContext<EventRelationContext>(i);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TRIVIAL_RELATION() { return GetToken(EPDDLParser.TRIVIAL_RELATION, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TRIVIAL_DEF() { return GetToken(EPDDLParser.TRIVIAL_DEF, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(EPDDLParser.RPAREN, 0); }
 		public ActionRelationsContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -7570,23 +7647,23 @@ public partial class EPDDLParser : Parser {
 		EnterRule(_localctx, 198, RULE_actionRelations);
 		int _la;
 		try {
-			State = 1053;
+			State = 1073;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,72,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,78,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 1046;
+				State = 1066;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				do {
 					{
 					{
-					State = 1045;
+					State = 1065;
 					eventRelation();
 					}
 					}
-					State = 1048;
+					State = 1068;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 				} while ( _la==LPAREN );
@@ -7595,11 +7672,11 @@ public partial class EPDDLParser : Parser {
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 1050;
+				State = 1070;
 				Match(LPAREN);
-				State = 1051;
-				Match(TRIVIAL_RELATION);
-				State = 1052;
+				State = 1071;
+				Match(TRIVIAL_DEF);
+				State = 1072;
 				Match(RPAREN);
 				}
 				break;
@@ -7659,25 +7736,25 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 1055;
+			State = 1075;
 			Match(LPAREN);
-			State = 1056;
+			State = 1076;
 			agentGroup();
-			State = 1058;
+			State = 1078;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			do {
 				{
 				{
-				State = 1057;
+				State = 1077;
 				eventNamePair();
 				}
 				}
-				State = 1060;
+				State = 1080;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			} while ( _la==LPAREN );
-			State = 1062;
+			State = 1082;
 			Match(RPAREN);
 			}
 		}
@@ -7731,13 +7808,13 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 1064;
+			State = 1084;
 			Match(LPAREN);
-			State = 1065;
+			State = 1085;
 			eventName();
-			State = 1066;
+			State = 1086;
 			eventName();
-			State = 1067;
+			State = 1087;
 			Match(RPAREN);
 			}
 		}
@@ -7753,7 +7830,6 @@ public partial class EPDDLParser : Parser {
 	}
 
 	public partial class ActionTypeDesignDefContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COLON() { return GetToken(EPDDLParser.COLON, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode DESIGNATED() { return GetToken(EPDDLParser.DESIGNATED, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPAREN() { return GetToken(EPDDLParser.LPAREN, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(EPDDLParser.RPAREN, 0); }
@@ -7794,27 +7870,25 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 1069;
-			Match(COLON);
-			State = 1070;
+			State = 1089;
 			Match(DESIGNATED);
-			State = 1071;
+			State = 1090;
 			Match(LPAREN);
-			State = 1075;
+			State = 1094;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==NAME) {
 				{
 				{
-				State = 1072;
+				State = 1091;
 				eventName();
 				}
 				}
-				State = 1077;
+				State = 1096;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 1078;
+			State = 1097;
 			Match(RPAREN);
 			}
 		}
@@ -7870,38 +7944,55 @@ public partial class EPDDLParser : Parser {
 		EnterRule(_localctx, 206, RULE_typedAgentList);
 		int _la;
 		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 1091;
+			State = 1116;
 			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			if (_la==AGENT_NAME) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,83,Context) ) {
+			case 1:
+				EnterOuterAlt(_localctx, 1);
 				{
-				State = 1080;
-				Match(AGENT_NAME);
-				State = 1084;
+				State = 1102;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				while (_la==AGENT_NAME) {
 					{
 					{
-					State = 1081;
+					State = 1099;
 					Match(AGENT_NAME);
 					}
 					}
-					State = 1086;
+					State = 1104;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 				}
-				State = 1087;
+				}
+				break;
+			case 2:
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 1105;
+				Match(AGENT_NAME);
+				State = 1109;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+				while (_la==AGENT_NAME) {
+					{
+					{
+					State = 1106;
+					Match(AGENT_NAME);
+					}
+					}
+					State = 1111;
+					ErrorHandler.Sync(this);
+					_la = TokenStream.LA(1);
+				}
+				State = 1112;
 				Match(DASH);
-				State = 1088;
+				State = 1113;
 				type();
-				State = 1089;
+				State = 1114;
 				typedAgentList();
 				}
-			}
-
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -7952,13 +8043,13 @@ public partial class EPDDLParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 1093;
+			State = 1118;
 			Match(LBRACKET);
-			State = 1094;
+			State = 1119;
 			Match(MODALITY_NAME);
-			State = 1095;
+			State = 1120;
 			agentName();
-			State = 1096;
+			State = 1121;
 			Match(RBRACKET);
 			}
 		}
@@ -7977,6 +8068,8 @@ public partial class EPDDLParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode DEL() { return GetToken(EPDDLParser.DEL, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode TYPING() { return GetToken(EPDDLParser.TYPING, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode EQUALITY() { return GetToken(EPDDLParser.EQUALITY, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MULTI_AGENT() { return GetToken(EPDDLParser.MULTI_AGENT, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ONTIC_ACTIONS() { return GetToken(EPDDLParser.ONTIC_ACTIONS, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode EXISTENTIAL_FORMULAE() { return GetToken(EPDDLParser.EXISTENTIAL_FORMULAE, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode UNIVERSAL_FORMULAE() { return GetToken(EPDDLParser.UNIVERSAL_FORMULAE, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode UNIVERSAL_POSTCONDITIONS() { return GetToken(EPDDLParser.UNIVERSAL_POSTCONDITIONS, 0); }
@@ -7993,6 +8086,7 @@ public partial class EPDDLParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RPAREN() { return GetToken(EPDDLParser.RPAREN, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MAX_POSTCONDITIONS_DEPTH() { return GetToken(EPDDLParser.MAX_POSTCONDITIONS_DEPTH, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MAX_MODAL_DEPTH() { return GetToken(EPDDLParser.MAX_MODAL_DEPTH, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode FINITARY_THEORY() { return GetToken(EPDDLParser.FINITARY_THEORY, 0); }
 		public RequirementKeyContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -8021,137 +8115,158 @@ public partial class EPDDLParser : Parser {
 		RequirementKeyContext _localctx = new RequirementKeyContext(Context, State);
 		EnterRule(_localctx, 210, RULE_requirementKey);
 		try {
-			State = 1123;
+			State = 1151;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,77,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,84,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 1098;
+				State = 1123;
 				Match(DEL);
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 1099;
+				State = 1124;
 				Match(TYPING);
 				}
 				break;
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 1100;
+				State = 1125;
 				Match(EQUALITY);
 				}
 				break;
 			case 4:
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 1101;
-				Match(EXISTENTIAL_FORMULAE);
+				State = 1126;
+				Match(MULTI_AGENT);
 				}
 				break;
 			case 5:
 				EnterOuterAlt(_localctx, 5);
 				{
-				State = 1102;
-				Match(UNIVERSAL_FORMULAE);
+				State = 1127;
+				Match(ONTIC_ACTIONS);
 				}
 				break;
 			case 6:
 				EnterOuterAlt(_localctx, 6);
 				{
-				State = 1103;
-				Match(UNIVERSAL_POSTCONDITIONS);
+				State = 1128;
+				Match(EXISTENTIAL_FORMULAE);
 				}
 				break;
 			case 7:
 				EnterOuterAlt(_localctx, 7);
 				{
-				State = 1104;
-				Match(MODAL_PRECONDITIONS);
+				State = 1129;
+				Match(UNIVERSAL_FORMULAE);
 				}
 				break;
 			case 8:
 				EnterOuterAlt(_localctx, 8);
 				{
-				State = 1105;
-				Match(MODAL_POSTCONDITIONS);
+				State = 1130;
+				Match(UNIVERSAL_POSTCONDITIONS);
 				}
 				break;
 			case 9:
 				EnterOuterAlt(_localctx, 9);
 				{
-				State = 1106;
-				Match(MODALITIES);
+				State = 1131;
+				Match(MODAL_PRECONDITIONS);
 				}
 				break;
 			case 10:
 				EnterOuterAlt(_localctx, 10);
 				{
-				State = 1107;
-				Match(ONTIC_CHANGE);
+				State = 1132;
+				Match(MODAL_POSTCONDITIONS);
 				}
 				break;
 			case 11:
 				EnterOuterAlt(_localctx, 11);
 				{
-				State = 1108;
-				Match(COMMON_KNOWLEDGE);
+				State = 1133;
+				Match(MODALITIES);
 				}
 				break;
 			case 12:
 				EnterOuterAlt(_localctx, 12);
 				{
-				State = 1109;
-				Match(DYNAMIC_COMMON_KNOWLEDGE);
+				State = 1134;
+				Match(ONTIC_CHANGE);
 				}
 				break;
 			case 13:
 				EnterOuterAlt(_localctx, 13);
 				{
-				State = 1110;
-				Match(FINITARY_S5_THEORY);
+				State = 1135;
+				Match(COMMON_KNOWLEDGE);
 				}
 				break;
 			case 14:
 				EnterOuterAlt(_localctx, 14);
 				{
-				State = 1111;
-				Match(LPAREN);
-				State = 1112;
-				Match(MAX_PRECONDITIONS_DEPTH);
-				State = 1113;
-				Match(INT);
-				State = 1114;
-				Match(RPAREN);
+				State = 1136;
+				Match(DYNAMIC_COMMON_KNOWLEDGE);
 				}
 				break;
 			case 15:
 				EnterOuterAlt(_localctx, 15);
 				{
-				State = 1115;
-				Match(LPAREN);
-				State = 1116;
-				Match(MAX_POSTCONDITIONS_DEPTH);
-				State = 1117;
-				Match(INT);
-				State = 1118;
-				Match(RPAREN);
+				State = 1137;
+				Match(FINITARY_S5_THEORY);
 				}
 				break;
 			case 16:
 				EnterOuterAlt(_localctx, 16);
 				{
-				State = 1119;
+				State = 1138;
 				Match(LPAREN);
-				State = 1120;
-				Match(MAX_MODAL_DEPTH);
-				State = 1121;
+				State = 1139;
+				Match(MAX_PRECONDITIONS_DEPTH);
+				State = 1140;
 				Match(INT);
-				State = 1122;
+				State = 1141;
 				Match(RPAREN);
+				}
+				break;
+			case 17:
+				EnterOuterAlt(_localctx, 17);
+				{
+				State = 1142;
+				Match(LPAREN);
+				State = 1143;
+				Match(MAX_POSTCONDITIONS_DEPTH);
+				State = 1144;
+				Match(INT);
+				State = 1145;
+				Match(RPAREN);
+				}
+				break;
+			case 18:
+				EnterOuterAlt(_localctx, 18);
+				{
+				State = 1146;
+				Match(LPAREN);
+				State = 1147;
+				Match(MAX_MODAL_DEPTH);
+				State = 1148;
+				Match(INT);
+				State = 1149;
+				Match(RPAREN);
+				}
+				break;
+			case 19:
+				EnterOuterAlt(_localctx, 19);
+				{
+				State = 1150;
+				Match(FINITARY_THEORY);
 				}
 				break;
 			}
@@ -8168,7 +8283,7 @@ public partial class EPDDLParser : Parser {
 	}
 
 	private static int[] _serializedATN = {
-		4,1,85,1126,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
+		4,1,91,1154,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
 		7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,14,
 		2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,2,20,7,20,2,21,7,21,
 		2,22,7,22,2,23,7,23,2,24,7,24,2,25,7,25,2,26,7,26,2,27,7,27,2,28,7,28,
@@ -8188,355 +8303,371 @@ public partial class EPDDLParser : Parser {
 		10,2,12,2,242,9,2,1,2,1,2,1,3,1,3,1,3,1,3,1,3,1,3,1,3,5,3,253,8,3,10,3,
 		12,3,256,9,3,1,3,1,3,1,4,1,4,1,4,1,4,1,4,1,4,3,4,266,8,4,1,5,1,5,1,5,1,
 		5,1,5,3,5,273,8,5,1,6,1,6,1,6,1,6,1,6,1,6,1,6,1,6,1,6,1,6,3,6,285,8,6,
-		1,7,1,7,1,7,1,7,4,7,291,8,7,11,7,12,7,292,1,7,1,7,1,8,1,8,1,8,1,8,1,8,
-		1,8,1,9,1,9,1,9,1,9,1,9,1,9,1,10,1,10,1,10,1,10,4,10,313,8,10,11,10,12,
-		10,314,1,10,1,10,1,11,1,11,1,11,1,11,1,11,1,11,5,11,325,8,11,10,11,12,
-		11,328,9,11,1,11,1,11,1,11,1,12,1,12,1,12,1,12,1,12,1,12,1,13,1,13,1,13,
-		1,13,4,13,343,8,13,11,13,12,13,344,1,13,1,13,1,14,1,14,1,14,1,14,5,14,
-		353,8,14,10,14,12,14,356,9,14,1,14,1,14,1,15,1,15,1,15,1,15,1,15,1,15,
-		1,16,1,16,1,16,1,16,4,16,370,8,16,11,16,12,16,371,1,16,1,16,1,17,1,17,
-		1,17,1,17,1,17,1,18,1,18,1,18,1,18,1,18,1,18,1,18,1,18,1,18,1,18,1,18,
-		1,19,1,19,1,19,1,19,1,19,1,19,1,20,1,20,1,20,1,20,5,20,402,8,20,10,20,
-		12,20,405,9,20,1,20,1,20,1,21,1,21,1,21,1,21,5,21,413,8,21,10,21,12,21,
-		416,9,21,1,21,1,21,1,22,1,22,1,22,1,22,1,22,1,22,1,22,1,22,1,22,1,23,1,
-		23,1,23,1,23,1,24,1,24,1,24,1,24,3,24,437,8,24,1,25,1,25,1,25,5,25,442,
-		8,25,10,25,12,25,445,9,25,1,25,1,25,1,26,1,26,1,26,1,26,1,26,1,26,1,26,
-		1,26,1,26,1,26,1,26,1,26,3,26,461,8,26,1,27,1,27,1,27,1,27,1,27,1,27,1,
-		27,1,27,1,27,1,27,1,27,1,27,1,27,1,27,1,27,1,27,1,27,3,27,480,8,27,1,28,
-		1,28,1,28,1,28,1,28,1,28,1,28,1,28,1,28,1,28,1,28,1,29,1,29,1,29,1,29,
-		1,29,1,29,1,29,1,29,1,29,1,29,1,30,1,30,1,30,1,30,1,30,1,30,1,31,1,31,
-		1,31,1,31,1,31,1,31,1,32,1,32,1,32,1,32,3,32,519,8,32,1,33,1,33,1,33,1,
-		33,1,33,5,33,526,8,33,10,33,12,33,529,9,33,1,33,1,33,1,34,1,34,1,34,1,
-		34,1,35,1,35,1,35,5,35,540,8,35,10,35,12,35,543,9,35,1,35,3,35,546,8,35,
-		1,36,1,36,5,36,550,8,36,10,36,12,36,553,9,36,1,36,1,36,1,36,1,36,5,36,
-		559,8,36,10,36,12,36,562,9,36,1,37,1,37,5,37,566,8,37,10,37,12,37,569,
-		9,37,1,37,1,37,1,37,1,37,5,37,575,8,37,10,37,12,37,578,9,37,1,38,1,38,
-		3,38,582,8,38,1,39,1,39,1,40,1,40,1,40,1,40,1,40,1,40,1,40,1,40,1,40,1,
-		40,5,40,596,8,40,10,40,12,40,599,9,40,1,40,1,40,1,40,1,40,1,40,1,40,5,
-		40,607,8,40,10,40,12,40,610,9,40,1,40,1,40,1,40,1,40,1,40,1,40,1,40,1,
+		1,7,1,7,1,7,4,7,290,8,7,11,7,12,7,291,1,7,1,7,1,8,1,8,1,8,1,8,1,8,1,9,
+		1,9,1,9,1,9,1,9,1,10,1,10,1,10,4,10,309,8,10,11,10,12,10,310,1,10,1,10,
+		1,11,1,11,1,11,1,11,1,11,1,11,5,11,321,8,11,10,11,12,11,324,9,11,1,11,
+		1,11,1,11,1,12,1,12,1,12,1,12,1,12,1,13,1,13,1,13,4,13,337,8,13,11,13,
+		12,13,338,1,13,1,13,1,14,1,14,1,14,5,14,346,8,14,10,14,12,14,349,9,14,
+		1,14,1,14,1,15,1,15,1,15,1,15,1,15,1,16,1,16,1,16,4,16,361,8,16,11,16,
+		12,16,362,1,16,1,16,1,17,1,17,1,17,1,17,1,17,1,18,1,18,1,18,1,18,1,18,
+		1,18,1,18,1,18,1,18,1,18,1,19,1,19,1,19,1,19,1,19,1,20,1,20,1,20,5,20,
+		390,8,20,10,20,12,20,393,9,20,1,20,1,20,1,21,1,21,1,21,5,21,400,8,21,10,
+		21,12,21,403,9,21,1,21,1,21,1,22,1,22,1,22,1,22,1,22,1,22,1,22,1,22,1,
+		23,1,23,1,23,1,24,1,24,1,24,3,24,421,8,24,1,25,1,25,1,25,5,25,426,8,25,
+		10,25,12,25,429,9,25,1,25,1,25,1,26,1,26,1,26,1,26,1,26,1,26,1,26,1,26,
+		1,26,1,26,1,26,1,26,3,26,445,8,26,1,27,1,27,1,27,1,27,1,27,1,27,1,27,1,
+		27,1,27,1,27,1,27,1,27,1,27,1,27,1,27,1,27,1,27,3,27,464,8,27,1,28,1,28,
+		1,28,1,28,1,28,1,28,1,28,1,28,1,28,1,28,1,29,1,29,1,29,1,29,1,29,1,29,
+		1,29,1,29,1,29,1,30,1,30,1,30,1,30,1,30,1,31,1,31,1,31,1,31,1,31,1,32,
+		1,32,1,32,3,32,498,8,32,1,33,1,33,1,33,1,33,5,33,504,8,33,10,33,12,33,
+		507,9,33,1,33,1,33,1,34,1,34,1,34,1,35,1,35,5,35,516,8,35,10,35,12,35,
+		519,9,35,1,35,3,35,522,8,35,1,36,1,36,5,36,526,8,36,10,36,12,36,529,9,
+		36,1,36,1,36,1,36,1,36,5,36,535,8,36,10,36,12,36,538,9,36,1,37,1,37,5,
+		37,542,8,37,10,37,12,37,545,9,37,1,37,1,37,1,37,1,37,3,37,551,8,37,1,37,
+		3,37,554,8,37,1,38,1,38,3,38,558,8,38,1,39,1,39,1,40,1,40,1,40,1,40,1,
+		40,1,40,1,40,1,40,1,40,1,40,5,40,572,8,40,10,40,12,40,575,9,40,1,40,1,
+		40,1,40,1,40,1,40,1,40,5,40,583,8,40,10,40,12,40,586,9,40,1,40,1,40,1,
 		40,1,40,1,40,1,40,1,40,1,40,1,40,1,40,1,40,1,40,1,40,1,40,1,40,1,40,1,
-		40,1,40,1,40,1,40,1,40,1,40,1,40,1,40,1,40,3,40,642,8,40,1,41,1,41,1,41,
-		1,41,5,41,648,8,41,10,41,12,41,651,9,41,1,41,1,41,1,41,3,41,656,8,41,1,
-		42,1,42,1,42,1,42,1,42,1,42,3,42,664,8,42,1,43,1,43,1,43,5,43,669,8,43,
-		10,43,12,43,672,9,43,1,43,1,43,1,43,1,43,1,43,1,43,1,43,1,43,3,43,682,
-		8,43,1,44,1,44,1,44,5,44,687,8,44,10,44,12,44,690,9,44,1,44,1,44,1,45,
-		1,45,1,45,1,45,1,45,1,45,1,46,1,46,3,46,702,8,46,1,47,1,47,3,47,706,8,
-		47,1,48,1,48,3,48,710,8,48,1,49,1,49,1,49,1,49,1,49,1,50,1,50,1,50,1,50,
-		1,50,1,51,1,51,3,51,724,8,51,1,52,1,52,1,52,3,52,729,8,52,1,53,1,53,5,
-		53,733,8,53,10,53,12,53,736,9,53,1,54,1,54,1,55,1,55,1,56,1,56,1,57,1,
-		57,1,58,1,58,1,59,1,59,1,60,1,60,1,61,1,61,1,62,1,62,1,63,1,63,1,64,1,
-		64,1,65,1,65,1,65,5,65,763,8,65,10,65,12,65,766,9,65,1,65,1,65,1,66,1,
-		66,3,66,772,8,66,1,67,1,67,1,67,1,67,4,67,778,8,67,11,67,12,67,779,1,67,
-		1,67,1,68,1,68,1,68,1,68,1,69,4,69,789,8,69,11,69,12,69,790,1,69,1,69,
-		1,69,3,69,796,8,69,1,70,1,70,1,70,4,70,801,8,70,11,70,12,70,802,1,70,1,
-		70,1,71,1,71,1,71,1,71,1,71,1,72,1,72,1,72,1,72,1,73,4,73,817,8,73,11,
-		73,12,73,818,1,73,1,73,1,73,3,73,824,8,73,1,74,1,74,1,74,1,74,5,74,830,
-		8,74,10,74,12,74,833,9,74,1,74,1,74,1,74,1,75,1,75,1,75,1,75,4,75,842,
-		8,75,11,75,12,75,843,1,75,1,75,1,76,1,76,1,76,1,76,5,76,852,8,76,10,76,
-		12,76,855,9,76,1,76,1,76,3,76,859,8,76,1,77,1,77,1,77,1,77,1,77,1,77,3,
-		77,867,8,77,1,78,4,78,870,8,78,11,78,12,78,871,1,78,1,78,1,78,1,78,1,78,
-		1,78,3,78,880,8,78,1,79,1,79,1,79,1,79,1,79,1,79,1,79,1,79,1,79,3,79,891,
-		8,79,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,
-		1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,
-		1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,3,80,930,8,80,1,81,1,
-		81,1,82,1,82,1,82,1,82,1,82,1,82,1,83,1,83,1,83,3,83,943,8,83,1,84,1,84,
-		1,84,3,84,948,8,84,1,85,1,85,3,85,952,8,85,1,86,1,86,1,86,1,86,1,86,1,
-		86,1,86,1,86,4,86,962,8,86,11,86,12,86,963,1,86,1,86,1,87,1,87,1,87,3,
-		87,971,8,87,1,88,1,88,1,88,1,88,1,88,1,89,1,89,1,89,1,89,1,89,1,89,1,89,
-		1,90,1,90,1,90,1,90,1,90,1,90,1,91,1,91,1,92,1,92,5,92,995,8,92,10,92,
-		12,92,998,9,92,1,93,1,93,1,94,1,94,1,94,5,94,1005,8,94,10,94,12,94,1008,
-		9,94,1,94,1,94,1,95,1,95,1,95,1,95,5,95,1016,8,95,10,95,12,95,1019,9,95,
-		1,95,1,95,3,95,1023,8,95,1,96,1,96,1,96,4,96,1028,8,96,11,96,12,96,1029,
-		1,97,1,97,1,97,5,97,1035,8,97,10,97,12,97,1038,9,97,1,97,1,97,1,98,1,98,
-		1,98,1,98,1,99,4,99,1047,8,99,11,99,12,99,1048,1,99,1,99,1,99,3,99,1054,
-		8,99,1,100,1,100,1,100,4,100,1059,8,100,11,100,12,100,1060,1,100,1,100,
-		1,101,1,101,1,101,1,101,1,101,1,102,1,102,1,102,1,102,5,102,1074,8,102,
-		10,102,12,102,1077,9,102,1,102,1,102,1,103,1,103,5,103,1083,8,103,10,103,
-		12,103,1086,9,103,1,103,1,103,1,103,1,103,3,103,1092,8,103,1,104,1,104,
-		1,104,1,104,1,104,1,105,1,105,1,105,1,105,1,105,1,105,1,105,1,105,1,105,
+		40,1,40,1,40,1,40,1,40,1,40,1,40,1,40,1,40,1,40,1,40,1,40,1,40,1,40,3,
+		40,618,8,40,1,41,1,41,1,41,1,41,5,41,624,8,41,10,41,12,41,627,9,41,1,41,
+		1,41,1,41,3,41,632,8,41,1,42,1,42,1,42,1,42,1,42,1,42,3,42,640,8,42,1,
+		43,1,43,1,43,5,43,645,8,43,10,43,12,43,648,9,43,1,43,1,43,1,43,1,43,1,
+		43,1,43,1,43,1,43,3,43,658,8,43,1,44,1,44,1,44,1,44,1,44,1,44,1,44,1,44,
+		1,44,4,44,669,8,44,11,44,12,44,670,1,44,1,44,1,44,1,44,1,44,4,44,678,8,
+		44,11,44,12,44,679,1,44,1,44,1,44,1,44,1,44,1,44,1,44,1,44,1,44,1,44,1,
+		44,1,44,1,44,1,44,1,44,1,44,1,44,1,44,1,44,1,44,1,44,1,44,1,44,1,44,1,
+		44,1,44,5,44,708,8,44,10,44,12,44,711,9,44,1,44,1,44,3,44,715,8,44,1,45,
+		1,45,1,45,1,45,1,45,1,45,1,46,1,46,3,46,725,8,46,1,47,1,47,3,47,729,8,
+		47,1,48,1,48,3,48,733,8,48,1,49,1,49,1,49,1,49,1,49,1,49,1,49,1,49,1,49,
+		1,49,3,49,745,8,49,1,50,1,50,1,50,1,50,1,50,1,50,1,50,1,50,1,50,1,50,3,
+		50,757,8,50,1,51,1,51,3,51,761,8,51,1,52,1,52,1,52,3,52,766,8,52,1,53,
+		1,53,5,53,770,8,53,10,53,12,53,773,9,53,1,54,1,54,1,55,1,55,1,56,1,56,
+		1,57,1,57,1,58,1,58,1,59,1,59,1,60,1,60,1,61,1,61,1,62,1,62,1,63,1,63,
+		1,64,1,64,1,65,1,65,1,65,5,65,800,8,65,10,65,12,65,803,9,65,1,65,1,65,
+		1,66,1,66,3,66,809,8,66,1,67,1,67,1,67,4,67,814,8,67,11,67,12,67,815,1,
+		67,1,67,1,68,1,68,1,68,1,69,4,69,824,8,69,11,69,12,69,825,1,69,1,69,1,
+		69,3,69,831,8,69,1,70,1,70,1,70,4,70,836,8,70,11,70,12,70,837,1,70,1,70,
+		1,71,1,71,1,71,1,71,1,71,1,72,1,72,1,72,1,73,4,73,851,8,73,11,73,12,73,
+		852,1,73,1,73,1,73,3,73,858,8,73,1,74,1,74,1,74,1,74,5,74,864,8,74,10,
+		74,12,74,867,9,74,1,74,1,74,1,74,1,75,1,75,1,75,4,75,875,8,75,11,75,12,
+		75,876,1,75,1,75,1,76,1,76,1,76,1,76,5,76,885,8,76,10,76,12,76,888,9,76,
+		1,76,1,76,3,76,892,8,76,1,77,1,77,1,77,1,77,1,77,1,77,3,77,900,8,77,1,
+		78,5,78,903,8,78,10,78,12,78,906,9,78,1,78,1,78,1,78,1,78,1,78,3,78,913,
+		8,78,1,79,1,79,1,79,1,79,1,79,1,79,1,79,1,79,1,79,3,79,924,8,79,1,80,1,
+		80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,
+		80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,1,80,3,80,954,
+		8,80,1,81,1,81,1,82,1,82,1,82,1,82,1,82,1,82,1,83,1,83,1,83,3,83,967,8,
+		83,1,84,1,84,3,84,971,8,84,1,85,1,85,3,85,975,8,85,1,86,1,86,1,86,1,86,
+		1,86,1,86,1,86,1,86,4,86,985,8,86,11,86,12,86,986,1,86,1,86,1,87,1,87,
+		1,87,3,87,994,8,87,1,88,1,88,1,88,1,88,1,88,1,89,1,89,1,89,1,89,1,89,1,
+		89,1,89,1,90,1,90,1,90,1,90,1,90,1,90,1,91,1,91,1,92,1,92,5,92,1018,8,
+		92,10,92,12,92,1021,9,92,1,93,1,93,1,94,1,94,1,94,5,94,1028,8,94,10,94,
+		12,94,1031,9,94,1,94,1,94,1,95,1,95,1,95,5,95,1038,8,95,10,95,12,95,1041,
+		9,95,1,95,1,95,3,95,1045,8,95,1,96,1,96,4,96,1049,8,96,11,96,12,96,1050,
+		1,97,1,97,1,97,5,97,1056,8,97,10,97,12,97,1059,9,97,1,97,1,97,1,98,1,98,
+		1,98,1,99,4,99,1067,8,99,11,99,12,99,1068,1,99,1,99,1,99,3,99,1074,8,99,
+		1,100,1,100,1,100,4,100,1079,8,100,11,100,12,100,1080,1,100,1,100,1,101,
+		1,101,1,101,1,101,1,101,1,102,1,102,1,102,5,102,1093,8,102,10,102,12,102,
+		1096,9,102,1,102,1,102,1,103,5,103,1101,8,103,10,103,12,103,1104,9,103,
+		1,103,1,103,5,103,1108,8,103,10,103,12,103,1111,9,103,1,103,1,103,1,103,
+		1,103,3,103,1117,8,103,1,104,1,104,1,104,1,104,1,104,1,105,1,105,1,105,
 		1,105,1,105,1,105,1,105,1,105,1,105,1,105,1,105,1,105,1,105,1,105,1,105,
-		1,105,1,105,1,105,1,105,3,105,1124,8,105,1,105,0,0,106,0,2,4,6,8,10,12,
-		14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,
-		62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,92,94,96,98,100,102,104,106,
-		108,110,112,114,116,118,120,122,124,126,128,130,132,134,136,138,140,142,
-		144,146,148,150,152,154,156,158,160,162,164,166,168,170,172,174,176,178,
-		180,182,184,186,188,190,192,194,196,198,200,202,204,206,208,210,0,3,2,
-		0,38,42,61,61,3,0,2,2,4,4,48,48,2,0,2,2,48,48,1144,0,215,1,0,0,0,2,217,
-		1,0,0,0,4,231,1,0,0,0,6,245,1,0,0,0,8,265,1,0,0,0,10,272,1,0,0,0,12,284,
-		1,0,0,0,14,286,1,0,0,0,16,296,1,0,0,0,18,302,1,0,0,0,20,308,1,0,0,0,22,
-		318,1,0,0,0,24,332,1,0,0,0,26,338,1,0,0,0,28,348,1,0,0,0,30,359,1,0,0,
-		0,32,365,1,0,0,0,34,375,1,0,0,0,36,380,1,0,0,0,38,391,1,0,0,0,40,397,1,
-		0,0,0,42,408,1,0,0,0,44,419,1,0,0,0,46,428,1,0,0,0,48,436,1,0,0,0,50,438,
-		1,0,0,0,52,460,1,0,0,0,54,479,1,0,0,0,56,481,1,0,0,0,58,492,1,0,0,0,60,
-		502,1,0,0,0,62,508,1,0,0,0,64,518,1,0,0,0,66,520,1,0,0,0,68,532,1,0,0,
-		0,70,545,1,0,0,0,72,560,1,0,0,0,74,576,1,0,0,0,76,581,1,0,0,0,78,583,1,
-		0,0,0,80,641,1,0,0,0,82,655,1,0,0,0,84,663,1,0,0,0,86,681,1,0,0,0,88,683,
-		1,0,0,0,90,693,1,0,0,0,92,701,1,0,0,0,94,705,1,0,0,0,96,709,1,0,0,0,98,
-		711,1,0,0,0,100,716,1,0,0,0,102,723,1,0,0,0,104,728,1,0,0,0,106,730,1,
-		0,0,0,108,737,1,0,0,0,110,739,1,0,0,0,112,741,1,0,0,0,114,743,1,0,0,0,
-		116,745,1,0,0,0,118,747,1,0,0,0,120,749,1,0,0,0,122,751,1,0,0,0,124,753,
-		1,0,0,0,126,755,1,0,0,0,128,757,1,0,0,0,130,759,1,0,0,0,132,771,1,0,0,
-		0,134,773,1,0,0,0,136,783,1,0,0,0,138,795,1,0,0,0,140,797,1,0,0,0,142,
-		806,1,0,0,0,144,811,1,0,0,0,146,823,1,0,0,0,148,825,1,0,0,0,150,837,1,
-		0,0,0,152,858,1,0,0,0,154,866,1,0,0,0,156,879,1,0,0,0,158,890,1,0,0,0,
-		160,929,1,0,0,0,162,931,1,0,0,0,164,933,1,0,0,0,166,942,1,0,0,0,168,947,
-		1,0,0,0,170,951,1,0,0,0,172,953,1,0,0,0,174,970,1,0,0,0,176,972,1,0,0,
-		0,178,977,1,0,0,0,180,984,1,0,0,0,182,990,1,0,0,0,184,992,1,0,0,0,186,
-		999,1,0,0,0,188,1001,1,0,0,0,190,1022,1,0,0,0,192,1024,1,0,0,0,194,1031,
-		1,0,0,0,196,1041,1,0,0,0,198,1053,1,0,0,0,200,1055,1,0,0,0,202,1064,1,
-		0,0,0,204,1069,1,0,0,0,206,1091,1,0,0,0,208,1093,1,0,0,0,210,1123,1,0,
-		0,0,212,216,3,2,1,0,213,216,3,4,2,0,214,216,3,6,3,0,215,212,1,0,0,0,215,
-		213,1,0,0,0,215,214,1,0,0,0,216,1,1,0,0,0,217,218,5,9,0,0,218,219,5,31,
-		0,0,219,220,5,9,0,0,220,221,5,32,0,0,221,222,3,112,56,0,222,226,5,10,0,
-		0,223,225,3,8,4,0,224,223,1,0,0,0,225,228,1,0,0,0,226,224,1,0,0,0,226,
-		227,1,0,0,0,227,229,1,0,0,0,228,226,1,0,0,0,229,230,5,10,0,0,230,3,1,0,
-		0,0,231,232,5,9,0,0,232,233,5,31,0,0,233,234,5,9,0,0,234,235,5,33,0,0,
-		235,236,3,116,58,0,236,240,5,10,0,0,237,239,3,10,5,0,238,237,1,0,0,0,239,
-		242,1,0,0,0,240,238,1,0,0,0,240,241,1,0,0,0,241,243,1,0,0,0,242,240,1,
-		0,0,0,243,244,5,10,0,0,244,5,1,0,0,0,245,246,5,9,0,0,246,247,5,31,0,0,
-		247,248,5,9,0,0,248,249,5,34,0,0,249,250,3,114,57,0,250,254,5,10,0,0,251,
-		253,3,12,6,0,252,251,1,0,0,0,253,256,1,0,0,0,254,252,1,0,0,0,254,255,1,
-		0,0,0,255,257,1,0,0,0,256,254,1,0,0,0,257,258,5,10,0,0,258,7,1,0,0,0,259,
-		266,3,14,7,0,260,266,3,28,14,0,261,266,3,30,15,0,262,266,3,32,16,0,263,
-		266,3,40,20,0,264,266,3,36,18,0,265,259,1,0,0,0,265,260,1,0,0,0,265,261,
-		1,0,0,0,265,262,1,0,0,0,265,263,1,0,0,0,265,264,1,0,0,0,266,9,1,0,0,0,
-		267,273,3,28,14,0,268,273,3,40,20,0,269,273,3,42,21,0,270,273,3,56,28,
-		0,271,273,3,44,22,0,272,267,1,0,0,0,272,268,1,0,0,0,272,269,1,0,0,0,272,
-		270,1,0,0,0,272,271,1,0,0,0,273,11,1,0,0,0,274,285,3,16,8,0,275,285,3,
-		28,14,0,276,285,3,40,20,0,277,285,3,18,9,0,278,285,3,20,10,0,279,285,3,
-		24,12,0,280,285,3,26,13,0,281,285,3,60,30,0,282,285,3,58,29,0,283,285,
-		3,62,31,0,284,274,1,0,0,0,284,275,1,0,0,0,284,276,1,0,0,0,284,277,1,0,
-		0,0,284,278,1,0,0,0,284,279,1,0,0,0,284,280,1,0,0,0,284,281,1,0,0,0,284,
-		282,1,0,0,0,284,283,1,0,0,0,285,13,1,0,0,0,286,287,5,9,0,0,287,288,5,15,
-		0,0,288,290,5,35,0,0,289,291,3,116,58,0,290,289,1,0,0,0,291,292,1,0,0,
-		0,292,290,1,0,0,0,292,293,1,0,0,0,293,294,1,0,0,0,294,295,5,10,0,0,295,
-		15,1,0,0,0,296,297,5,9,0,0,297,298,5,15,0,0,298,299,5,32,0,0,299,300,3,
-		112,56,0,300,301,5,10,0,0,301,17,1,0,0,0,302,303,5,9,0,0,303,304,5,15,
-		0,0,304,305,5,62,0,0,305,306,3,206,103,0,306,307,5,10,0,0,307,19,1,0,0,
-		0,308,309,5,9,0,0,309,310,5,15,0,0,310,312,5,63,0,0,311,313,3,22,11,0,
-		312,311,1,0,0,0,313,314,1,0,0,0,314,312,1,0,0,0,314,315,1,0,0,0,315,316,
-		1,0,0,0,316,317,5,10,0,0,317,21,1,0,0,0,318,319,5,9,0,0,319,320,3,186,
-		93,0,320,321,5,24,0,0,321,322,5,9,0,0,322,326,3,126,63,0,323,325,3,126,
-		63,0,324,323,1,0,0,0,325,328,1,0,0,0,326,324,1,0,0,0,326,327,1,0,0,0,327,
-		329,1,0,0,0,328,326,1,0,0,0,329,330,5,10,0,0,330,331,5,10,0,0,331,23,1,
-		0,0,0,332,333,5,9,0,0,333,334,5,15,0,0,334,335,5,59,0,0,335,336,3,72,36,
-		0,336,337,5,10,0,0,337,25,1,0,0,0,338,339,5,9,0,0,339,340,5,15,0,0,340,
-		342,5,60,0,0,341,343,3,130,65,0,342,341,1,0,0,0,343,344,1,0,0,0,344,342,
-		1,0,0,0,344,345,1,0,0,0,345,346,1,0,0,0,346,347,5,10,0,0,347,27,1,0,0,
-		0,348,349,5,9,0,0,349,350,5,15,0,0,350,354,5,36,0,0,351,353,3,210,105,
-		0,352,351,1,0,0,0,353,356,1,0,0,0,354,352,1,0,0,0,354,355,1,0,0,0,355,
-		357,1,0,0,0,356,354,1,0,0,0,357,358,5,10,0,0,358,29,1,0,0,0,359,360,5,
-		9,0,0,360,361,5,15,0,0,361,362,5,37,0,0,362,363,3,72,36,0,363,364,5,10,
-		0,0,364,31,1,0,0,0,365,366,5,9,0,0,366,367,5,15,0,0,367,369,5,43,0,0,368,
-		370,3,34,17,0,369,368,1,0,0,0,370,371,1,0,0,0,371,369,1,0,0,0,371,372,
-		1,0,0,0,372,373,1,0,0,0,373,374,5,10,0,0,374,33,1,0,0,0,375,376,5,9,0,
-		0,376,377,3,110,55,0,377,378,3,74,37,0,378,379,5,10,0,0,379,35,1,0,0,0,
-		380,381,5,9,0,0,381,382,5,15,0,0,382,383,5,45,0,0,383,384,3,122,61,0,384,
-		385,3,38,19,0,385,386,3,64,32,0,386,387,3,66,33,0,387,388,3,68,34,0,388,
-		389,3,70,35,0,389,390,5,10,0,0,390,37,1,0,0,0,391,392,5,15,0,0,392,393,
-		5,46,0,0,393,394,5,9,0,0,394,395,3,74,37,0,395,396,5,10,0,0,396,39,1,0,
-		0,0,397,398,5,9,0,0,398,399,5,15,0,0,399,403,5,44,0,0,400,402,3,128,64,
-		0,401,400,1,0,0,0,402,405,1,0,0,0,403,401,1,0,0,0,403,404,1,0,0,0,404,
-		406,1,0,0,0,405,403,1,0,0,0,406,407,5,10,0,0,407,41,1,0,0,0,408,409,5,
-		9,0,0,409,410,5,15,0,0,410,414,5,47,0,0,411,413,3,184,92,0,412,411,1,0,
-		0,0,413,416,1,0,0,0,414,412,1,0,0,0,414,415,1,0,0,0,415,417,1,0,0,0,416,
-		414,1,0,0,0,417,418,5,10,0,0,418,43,1,0,0,0,419,420,5,9,0,0,420,421,5,
-		15,0,0,421,422,5,49,0,0,422,423,3,124,62,0,423,424,3,38,19,0,424,425,3,
-		46,23,0,425,426,3,48,24,0,426,427,5,10,0,0,427,45,1,0,0,0,428,429,5,15,
-		0,0,429,430,5,50,0,0,430,431,3,168,84,0,431,47,1,0,0,0,432,433,5,15,0,
-		0,433,434,5,51,0,0,434,437,3,50,25,0,435,437,1,0,0,0,436,432,1,0,0,0,436,
-		435,1,0,0,0,437,49,1,0,0,0,438,439,5,9,0,0,439,443,5,15,0,0,440,442,3,
-		52,26,0,441,440,1,0,0,0,442,445,1,0,0,0,443,441,1,0,0,0,443,444,1,0,0,
-		0,444,446,1,0,0,0,445,443,1,0,0,0,446,447,5,10,0,0,447,51,1,0,0,0,448,
-		461,3,54,27,0,449,450,5,9,0,0,450,451,5,21,0,0,451,452,5,9,0,0,452,453,
-		3,74,37,0,453,454,5,10,0,0,454,455,3,54,27,0,455,456,5,10,0,0,456,461,
-		1,0,0,0,457,458,5,9,0,0,458,459,5,4,0,0,459,461,5,10,0,0,460,448,1,0,0,
-		0,460,449,1,0,0,0,460,457,1,0,0,0,461,53,1,0,0,0,462,463,5,9,0,0,463,464,
-		5,26,0,0,464,465,3,168,84,0,465,466,3,154,77,0,466,467,5,10,0,0,467,480,
-		1,0,0,0,468,469,5,9,0,0,469,470,5,27,0,0,470,471,3,168,84,0,471,472,3,
-		154,77,0,472,473,5,10,0,0,473,480,1,0,0,0,474,475,5,9,0,0,475,476,5,28,
-		0,0,476,477,3,154,77,0,477,478,5,10,0,0,478,480,1,0,0,0,479,462,1,0,0,
-		0,479,468,1,0,0,0,479,474,1,0,0,0,480,55,1,0,0,0,481,482,5,9,0,0,482,483,
-		5,15,0,0,483,484,5,67,0,0,484,485,3,162,81,0,485,486,3,38,19,0,486,487,
-		3,190,95,0,487,488,3,192,96,0,488,489,3,196,98,0,489,490,3,204,102,0,490,
-		491,5,10,0,0,491,57,1,0,0,0,492,493,5,9,0,0,493,494,5,15,0,0,494,495,5,
-		52,0,0,495,496,3,118,59,0,496,497,3,134,67,0,497,498,3,136,68,0,498,499,
-		3,144,72,0,499,500,3,150,75,0,500,501,5,10,0,0,501,59,1,0,0,0,502,503,
-		5,9,0,0,503,504,5,15,0,0,504,505,5,53,0,0,505,506,3,156,78,0,506,507,5,
-		10,0,0,507,61,1,0,0,0,508,509,5,9,0,0,509,510,5,15,0,0,510,511,5,54,0,
-		0,511,512,3,80,40,0,512,513,5,10,0,0,513,63,1,0,0,0,514,515,5,15,0,0,515,
-		516,5,55,0,0,516,519,3,82,41,0,517,519,1,0,0,0,518,514,1,0,0,0,518,517,
-		1,0,0,0,519,65,1,0,0,0,520,521,5,15,0,0,521,522,5,67,0,0,522,523,5,9,0,
-		0,523,527,3,162,81,0,524,526,3,164,82,0,525,524,1,0,0,0,526,529,1,0,0,
-		0,527,525,1,0,0,0,527,528,1,0,0,0,528,530,1,0,0,0,529,527,1,0,0,0,530,
-		531,5,10,0,0,531,67,1,0,0,0,532,533,5,15,0,0,533,534,5,50,0,0,534,535,
-		3,168,84,0,535,69,1,0,0,0,536,537,5,15,0,0,537,541,5,66,0,0,538,540,3,
-		170,85,0,539,538,1,0,0,0,540,543,1,0,0,0,541,539,1,0,0,0,541,542,1,0,0,
-		0,542,546,1,0,0,0,543,541,1,0,0,0,544,546,1,0,0,0,545,536,1,0,0,0,545,
-		544,1,0,0,0,546,71,1,0,0,0,547,551,5,1,0,0,548,550,5,1,0,0,549,548,1,0,
-		0,0,550,553,1,0,0,0,551,549,1,0,0,0,551,552,1,0,0,0,552,554,1,0,0,0,553,
-		551,1,0,0,0,554,555,5,24,0,0,555,556,3,76,38,0,556,557,3,72,36,0,557,559,
-		1,0,0,0,558,547,1,0,0,0,559,562,1,0,0,0,560,558,1,0,0,0,560,561,1,0,0,
-		0,561,73,1,0,0,0,562,560,1,0,0,0,563,567,5,4,0,0,564,566,5,4,0,0,565,564,
-		1,0,0,0,566,569,1,0,0,0,567,565,1,0,0,0,567,568,1,0,0,0,568,570,1,0,0,
-		0,569,567,1,0,0,0,570,571,5,24,0,0,571,572,3,76,38,0,572,573,3,74,37,0,
-		573,575,1,0,0,0,574,563,1,0,0,0,575,578,1,0,0,0,576,574,1,0,0,0,576,577,
-		1,0,0,0,577,75,1,0,0,0,578,576,1,0,0,0,579,582,3,78,39,0,580,582,5,1,0,
-		0,581,579,1,0,0,0,581,580,1,0,0,0,582,77,1,0,0,0,583,584,7,0,0,0,584,79,
-		1,0,0,0,585,586,5,9,0,0,586,587,5,16,0,0,587,588,3,80,40,0,588,589,3,80,
-		40,0,589,590,5,10,0,0,590,642,1,0,0,0,591,592,5,9,0,0,592,593,5,17,0,0,
-		593,597,3,80,40,0,594,596,3,80,40,0,595,594,1,0,0,0,596,599,1,0,0,0,597,
-		595,1,0,0,0,597,598,1,0,0,0,598,600,1,0,0,0,599,597,1,0,0,0,600,601,5,
-		10,0,0,601,642,1,0,0,0,602,603,5,9,0,0,603,604,5,18,0,0,604,608,3,80,40,
-		0,605,607,3,80,40,0,606,605,1,0,0,0,607,610,1,0,0,0,608,606,1,0,0,0,608,
-		609,1,0,0,0,609,611,1,0,0,0,610,608,1,0,0,0,611,612,5,10,0,0,612,642,1,
-		0,0,0,613,614,5,9,0,0,614,615,5,19,0,0,615,616,3,80,40,0,616,617,5,10,
-		0,0,617,642,1,0,0,0,618,619,5,9,0,0,619,620,5,20,0,0,620,621,5,9,0,0,621,
-		622,3,74,37,0,622,623,5,10,0,0,623,624,3,80,40,0,624,625,5,10,0,0,625,
-		642,1,0,0,0,626,627,5,9,0,0,627,628,5,21,0,0,628,629,5,9,0,0,629,630,3,
-		74,37,0,630,631,5,10,0,0,631,632,3,80,40,0,632,633,5,10,0,0,633,642,1,
-		0,0,0,634,635,3,96,48,0,635,636,3,80,40,0,636,642,1,0,0,0,637,642,3,88,
-		44,0,638,642,3,90,45,0,639,642,5,22,0,0,640,642,5,23,0,0,641,585,1,0,0,
-		0,641,591,1,0,0,0,641,602,1,0,0,0,641,613,1,0,0,0,641,618,1,0,0,0,641,
-		626,1,0,0,0,641,634,1,0,0,0,641,637,1,0,0,0,641,638,1,0,0,0,641,639,1,
-		0,0,0,641,640,1,0,0,0,642,81,1,0,0,0,643,644,5,9,0,0,644,645,5,18,0,0,
-		645,649,3,84,42,0,646,648,3,84,42,0,647,646,1,0,0,0,648,651,1,0,0,0,649,
-		647,1,0,0,0,649,650,1,0,0,0,650,652,1,0,0,0,651,649,1,0,0,0,652,653,5,
-		10,0,0,653,656,1,0,0,0,654,656,3,84,42,0,655,643,1,0,0,0,655,654,1,0,0,
-		0,656,83,1,0,0,0,657,664,3,86,43,0,658,659,5,9,0,0,659,660,5,19,0,0,660,
-		661,3,86,43,0,661,662,5,10,0,0,662,664,1,0,0,0,663,657,1,0,0,0,663,658,
-		1,0,0,0,664,85,1,0,0,0,665,666,5,9,0,0,666,670,3,110,55,0,667,669,3,92,
-		46,0,668,667,1,0,0,0,669,672,1,0,0,0,670,668,1,0,0,0,670,671,1,0,0,0,671,
-		673,1,0,0,0,672,670,1,0,0,0,673,674,5,10,0,0,674,682,1,0,0,0,675,676,5,
-		9,0,0,676,677,5,24,0,0,677,678,3,92,46,0,678,679,3,92,46,0,679,680,5,10,
-		0,0,680,682,1,0,0,0,681,665,1,0,0,0,681,675,1,0,0,0,682,87,1,0,0,0,683,
-		684,5,9,0,0,684,688,3,110,55,0,685,687,3,92,46,0,686,685,1,0,0,0,687,690,
-		1,0,0,0,688,686,1,0,0,0,688,689,1,0,0,0,689,691,1,0,0,0,690,688,1,0,0,
-		0,691,692,5,10,0,0,692,89,1,0,0,0,693,694,5,9,0,0,694,695,5,24,0,0,695,
-		696,3,92,46,0,696,697,3,92,46,0,697,698,5,10,0,0,698,91,1,0,0,0,699,702,
-		3,94,47,0,700,702,5,4,0,0,701,699,1,0,0,0,701,700,1,0,0,0,702,93,1,0,0,
-		0,703,706,5,1,0,0,704,706,3,126,63,0,705,703,1,0,0,0,705,704,1,0,0,0,706,
-		95,1,0,0,0,707,710,3,98,49,0,708,710,3,100,50,0,709,707,1,0,0,0,709,708,
-		1,0,0,0,710,97,1,0,0,0,711,712,5,9,0,0,712,713,3,102,51,0,713,714,3,104,
-		52,0,714,715,5,10,0,0,715,99,1,0,0,0,716,717,5,9,0,0,717,718,3,102,51,
-		0,718,719,3,106,53,0,719,720,5,10,0,0,720,101,1,0,0,0,721,724,3,128,64,
-		0,722,724,1,0,0,0,723,721,1,0,0,0,723,722,1,0,0,0,724,103,1,0,0,0,725,
-		729,3,126,63,0,726,729,5,4,0,0,727,729,3,108,54,0,728,725,1,0,0,0,728,
-		726,1,0,0,0,728,727,1,0,0,0,729,105,1,0,0,0,730,734,3,104,52,0,731,733,
-		3,104,52,0,732,731,1,0,0,0,733,736,1,0,0,0,734,732,1,0,0,0,734,735,1,0,
-		0,0,735,107,1,0,0,0,736,734,1,0,0,0,737,738,5,48,0,0,738,109,1,0,0,0,739,
-		740,5,1,0,0,740,111,1,0,0,0,741,742,5,1,0,0,742,113,1,0,0,0,743,744,5,
-		1,0,0,744,115,1,0,0,0,745,746,5,1,0,0,746,117,1,0,0,0,747,748,5,1,0,0,
-		748,119,1,0,0,0,749,750,5,1,0,0,750,121,1,0,0,0,751,752,5,1,0,0,752,123,
-		1,0,0,0,753,754,5,1,0,0,754,125,1,0,0,0,755,756,5,2,0,0,756,127,1,0,0,
-		0,757,758,5,3,0,0,758,129,1,0,0,0,759,760,5,9,0,0,760,764,3,110,55,0,761,
-		763,3,132,66,0,762,761,1,0,0,0,763,766,1,0,0,0,764,762,1,0,0,0,764,765,
-		1,0,0,0,765,767,1,0,0,0,766,764,1,0,0,0,767,768,5,10,0,0,768,131,1,0,0,
-		0,769,772,5,1,0,0,770,772,3,126,63,0,771,769,1,0,0,0,771,770,1,0,0,0,772,
-		133,1,0,0,0,773,774,5,15,0,0,774,775,5,68,0,0,775,777,5,9,0,0,776,778,
-		3,120,60,0,777,776,1,0,0,0,778,779,1,0,0,0,779,777,1,0,0,0,779,780,1,0,
-		0,0,780,781,1,0,0,0,781,782,5,10,0,0,782,135,1,0,0,0,783,784,5,15,0,0,
-		784,785,5,56,0,0,785,786,3,138,69,0,786,137,1,0,0,0,787,789,3,140,70,0,
-		788,787,1,0,0,0,789,790,1,0,0,0,790,788,1,0,0,0,790,791,1,0,0,0,791,796,
-		1,0,0,0,792,793,5,9,0,0,793,794,5,69,0,0,794,796,5,10,0,0,795,788,1,0,
-		0,0,795,792,1,0,0,0,796,139,1,0,0,0,797,798,5,9,0,0,798,800,3,152,76,0,
-		799,801,3,142,71,0,800,799,1,0,0,0,801,802,1,0,0,0,802,800,1,0,0,0,802,
-		803,1,0,0,0,803,804,1,0,0,0,804,805,5,10,0,0,805,141,1,0,0,0,806,807,5,
-		9,0,0,807,808,3,120,60,0,808,809,3,120,60,0,809,810,5,10,0,0,810,143,1,
-		0,0,0,811,812,5,15,0,0,812,813,5,64,0,0,813,814,3,146,73,0,814,145,1,0,
-		0,0,815,817,3,148,74,0,816,815,1,0,0,0,817,818,1,0,0,0,818,816,1,0,0,0,
-		818,819,1,0,0,0,819,824,1,0,0,0,820,821,5,9,0,0,821,822,5,69,0,0,822,824,
-		5,10,0,0,823,816,1,0,0,0,823,820,1,0,0,0,824,147,1,0,0,0,825,826,5,9,0,
-		0,826,827,3,120,60,0,827,831,5,11,0,0,828,830,3,154,77,0,829,828,1,0,0,
-		0,830,833,1,0,0,0,831,829,1,0,0,0,831,832,1,0,0,0,832,834,1,0,0,0,833,
-		831,1,0,0,0,834,835,5,12,0,0,835,836,5,10,0,0,836,149,1,0,0,0,837,838,
-		5,15,0,0,838,839,5,57,0,0,839,841,5,9,0,0,840,842,3,120,60,0,841,840,1,
-		0,0,0,842,843,1,0,0,0,843,841,1,0,0,0,843,844,1,0,0,0,844,845,1,0,0,0,
-		845,846,5,10,0,0,846,151,1,0,0,0,847,859,3,186,93,0,848,849,5,13,0,0,849,
-		853,3,126,63,0,850,852,3,126,63,0,851,850,1,0,0,0,852,855,1,0,0,0,853,
-		851,1,0,0,0,853,854,1,0,0,0,854,856,1,0,0,0,855,853,1,0,0,0,856,857,5,
-		14,0,0,857,859,1,0,0,0,858,847,1,0,0,0,858,848,1,0,0,0,859,153,1,0,0,0,
-		860,867,3,188,94,0,861,862,5,9,0,0,862,863,5,19,0,0,863,864,3,188,94,0,
-		864,865,5,10,0,0,865,867,1,0,0,0,866,860,1,0,0,0,866,861,1,0,0,0,867,155,
-		1,0,0,0,868,870,3,158,79,0,869,868,1,0,0,0,870,871,1,0,0,0,871,869,1,0,
-		0,0,871,872,1,0,0,0,872,880,1,0,0,0,873,874,5,9,0,0,874,875,5,15,0,0,875,
-		876,5,65,0,0,876,877,3,118,59,0,877,878,5,10,0,0,878,880,1,0,0,0,879,869,
-		1,0,0,0,879,873,1,0,0,0,880,157,1,0,0,0,881,891,3,160,80,0,882,883,5,9,
-		0,0,883,884,5,21,0,0,884,885,5,9,0,0,885,886,3,74,37,0,886,887,5,10,0,
-		0,887,888,3,160,80,0,888,889,5,10,0,0,889,891,1,0,0,0,890,881,1,0,0,0,
-		890,882,1,0,0,0,891,159,1,0,0,0,892,930,3,88,44,0,893,894,5,9,0,0,894,
-		895,5,11,0,0,895,896,5,48,0,0,896,897,5,12,0,0,897,898,3,88,44,0,898,899,
-		5,10,0,0,899,930,1,0,0,0,900,901,5,9,0,0,901,902,5,11,0,0,902,903,5,48,
-		0,0,903,904,5,12,0,0,904,905,5,11,0,0,905,906,3,126,63,0,906,907,5,12,
-		0,0,907,908,3,88,44,0,908,909,5,10,0,0,909,930,1,0,0,0,910,911,5,9,0,0,
-		911,912,5,11,0,0,912,913,5,48,0,0,913,914,5,12,0,0,914,915,3,208,104,0,
-		915,916,3,88,44,0,916,917,5,10,0,0,917,930,1,0,0,0,918,919,5,9,0,0,919,
-		920,5,11,0,0,920,921,5,48,0,0,921,922,5,12,0,0,922,923,5,9,0,0,923,924,
-		5,19,0,0,924,925,3,208,104,0,925,926,3,88,44,0,926,927,5,10,0,0,927,928,
-		5,10,0,0,928,930,1,0,0,0,929,892,1,0,0,0,929,893,1,0,0,0,929,900,1,0,0,
-		0,929,910,1,0,0,0,929,918,1,0,0,0,930,161,1,0,0,0,931,932,5,1,0,0,932,
-		163,1,0,0,0,933,934,5,9,0,0,934,935,5,4,0,0,935,936,5,24,0,0,936,937,3,
-		166,83,0,937,938,5,10,0,0,938,165,1,0,0,0,939,943,3,92,46,0,940,943,3,
-		80,40,0,941,943,3,50,25,0,942,939,1,0,0,0,942,940,1,0,0,0,942,941,1,0,
-		0,0,943,167,1,0,0,0,944,948,3,80,40,0,945,946,5,9,0,0,946,948,5,10,0,0,
-		947,944,1,0,0,0,947,945,1,0,0,0,948,169,1,0,0,0,949,952,3,172,86,0,950,
-		952,3,174,87,0,951,949,1,0,0,0,951,950,1,0,0,0,952,171,1,0,0,0,953,954,
-		5,9,0,0,954,955,5,21,0,0,955,956,5,9,0,0,956,957,5,4,0,0,957,958,5,7,0,
-		0,958,959,3,76,38,0,959,961,5,10,0,0,960,962,3,174,87,0,961,960,1,0,0,
-		0,962,963,1,0,0,0,963,961,1,0,0,0,963,964,1,0,0,0,964,965,1,0,0,0,965,
-		966,5,10,0,0,966,173,1,0,0,0,967,971,3,176,88,0,968,971,3,178,89,0,969,
-		971,3,180,90,0,970,967,1,0,0,0,970,968,1,0,0,0,970,969,1,0,0,0,971,175,
-		1,0,0,0,972,973,5,9,0,0,973,974,3,182,91,0,974,975,3,184,92,0,975,976,
-		5,10,0,0,976,177,1,0,0,0,977,978,5,9,0,0,978,979,5,29,0,0,979,980,3,80,
-		40,0,980,981,3,182,91,0,981,982,3,184,92,0,982,983,5,10,0,0,983,179,1,
-		0,0,0,984,985,5,9,0,0,985,986,5,30,0,0,986,987,3,182,91,0,987,988,3,184,
-		92,0,988,989,5,10,0,0,989,181,1,0,0,0,990,991,7,1,0,0,991,183,1,0,0,0,
-		992,996,3,182,91,0,993,995,3,182,91,0,994,993,1,0,0,0,995,998,1,0,0,0,
-		996,994,1,0,0,0,996,997,1,0,0,0,997,185,1,0,0,0,998,996,1,0,0,0,999,1000,
-		7,2,0,0,1000,187,1,0,0,0,1001,1002,5,9,0,0,1002,1006,3,110,55,0,1003,1005,
-		3,92,46,0,1004,1003,1,0,0,0,1005,1008,1,0,0,0,1006,1004,1,0,0,0,1006,1007,
-		1,0,0,0,1007,1009,1,0,0,0,1008,1006,1,0,0,0,1009,1010,5,10,0,0,1010,189,
-		1,0,0,0,1011,1012,5,15,0,0,1012,1013,5,47,0,0,1013,1017,5,9,0,0,1014,1016,
-		3,184,92,0,1015,1014,1,0,0,0,1016,1019,1,0,0,0,1017,1015,1,0,0,0,1017,
-		1018,1,0,0,0,1018,1020,1,0,0,0,1019,1017,1,0,0,0,1020,1023,5,10,0,0,1021,
-		1023,1,0,0,0,1022,1011,1,0,0,0,1022,1021,1,0,0,0,1023,191,1,0,0,0,1024,
-		1025,5,15,0,0,1025,1027,5,49,0,0,1026,1028,3,194,97,0,1027,1026,1,0,0,
-		0,1028,1029,1,0,0,0,1029,1027,1,0,0,0,1029,1030,1,0,0,0,1030,193,1,0,0,
-		0,1031,1032,5,9,0,0,1032,1036,3,124,62,0,1033,1035,3,164,82,0,1034,1033,
-		1,0,0,0,1035,1038,1,0,0,0,1036,1034,1,0,0,0,1036,1037,1,0,0,0,1037,1039,
-		1,0,0,0,1038,1036,1,0,0,0,1039,1040,5,10,0,0,1040,195,1,0,0,0,1041,1042,
-		5,15,0,0,1042,1043,5,56,0,0,1043,1044,3,198,99,0,1044,197,1,0,0,0,1045,
-		1047,3,200,100,0,1046,1045,1,0,0,0,1047,1048,1,0,0,0,1048,1046,1,0,0,0,
-		1048,1049,1,0,0,0,1049,1054,1,0,0,0,1050,1051,5,9,0,0,1051,1052,5,69,0,
-		0,1052,1054,5,10,0,0,1053,1046,1,0,0,0,1053,1050,1,0,0,0,1054,199,1,0,
-		0,0,1055,1056,5,9,0,0,1056,1058,3,152,76,0,1057,1059,3,202,101,0,1058,
-		1057,1,0,0,0,1059,1060,1,0,0,0,1060,1058,1,0,0,0,1060,1061,1,0,0,0,1061,
-		1062,1,0,0,0,1062,1063,5,10,0,0,1063,201,1,0,0,0,1064,1065,5,9,0,0,1065,
-		1066,3,124,62,0,1066,1067,3,124,62,0,1067,1068,5,10,0,0,1068,203,1,0,0,
-		0,1069,1070,5,15,0,0,1070,1071,5,57,0,0,1071,1075,5,9,0,0,1072,1074,3,
-		124,62,0,1073,1072,1,0,0,0,1074,1077,1,0,0,0,1075,1073,1,0,0,0,1075,1076,
-		1,0,0,0,1076,1078,1,0,0,0,1077,1075,1,0,0,0,1078,1079,5,10,0,0,1079,205,
-		1,0,0,0,1080,1084,5,2,0,0,1081,1083,5,2,0,0,1082,1081,1,0,0,0,1083,1086,
-		1,0,0,0,1084,1082,1,0,0,0,1084,1085,1,0,0,0,1085,1087,1,0,0,0,1086,1084,
-		1,0,0,0,1087,1088,5,7,0,0,1088,1089,3,76,38,0,1089,1090,3,206,103,0,1090,
-		1092,1,0,0,0,1091,1080,1,0,0,0,1091,1092,1,0,0,0,1092,207,1,0,0,0,1093,
-		1094,5,11,0,0,1094,1095,5,3,0,0,1095,1096,3,126,63,0,1096,1097,5,12,0,
-		0,1097,209,1,0,0,0,1098,1124,5,70,0,0,1099,1124,5,71,0,0,1100,1124,5,72,
-		0,0,1101,1124,5,73,0,0,1102,1124,5,74,0,0,1103,1124,5,75,0,0,1104,1124,
-		5,76,0,0,1105,1124,5,77,0,0,1106,1124,5,78,0,0,1107,1124,5,79,0,0,1108,
-		1124,5,80,0,0,1109,1124,5,81,0,0,1110,1124,5,82,0,0,1111,1112,5,9,0,0,
-		1112,1113,5,83,0,0,1113,1114,5,5,0,0,1114,1124,5,10,0,0,1115,1116,5,9,
-		0,0,1116,1117,5,84,0,0,1117,1118,5,5,0,0,1118,1124,5,10,0,0,1119,1120,
-		5,9,0,0,1120,1121,5,85,0,0,1121,1122,5,5,0,0,1122,1124,5,10,0,0,1123,1098,
-		1,0,0,0,1123,1099,1,0,0,0,1123,1100,1,0,0,0,1123,1101,1,0,0,0,1123,1102,
-		1,0,0,0,1123,1103,1,0,0,0,1123,1104,1,0,0,0,1123,1105,1,0,0,0,1123,1106,
-		1,0,0,0,1123,1107,1,0,0,0,1123,1108,1,0,0,0,1123,1109,1,0,0,0,1123,1110,
-		1,0,0,0,1123,1111,1,0,0,0,1123,1115,1,0,0,0,1123,1119,1,0,0,0,1124,211,
-		1,0,0,0,78,215,226,240,254,265,272,284,292,314,326,344,354,371,403,414,
-		436,443,460,479,518,527,541,545,551,560,567,576,581,597,608,641,649,655,
-		663,670,681,688,701,705,709,723,728,734,764,771,779,790,795,802,818,823,
-		831,843,853,858,866,871,879,890,929,942,947,951,963,970,996,1006,1017,
-		1022,1029,1036,1048,1053,1060,1075,1084,1091,1123
+		1,105,1,105,1,105,1,105,1,105,1,105,1,105,1,105,1,105,1,105,1,105,1,105,
+		1,105,3,105,1152,8,105,1,105,0,0,106,0,2,4,6,8,10,12,14,16,18,20,22,24,
+		26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,
+		74,76,78,80,82,84,86,88,90,92,94,96,98,100,102,104,106,108,110,112,114,
+		116,118,120,122,124,126,128,130,132,134,136,138,140,142,144,146,148,150,
+		152,154,156,158,160,162,164,166,168,170,172,174,176,178,180,182,184,186,
+		188,190,192,194,196,198,200,202,204,206,208,210,0,3,2,0,67,71,74,74,3,
+		0,72,72,77,77,79,79,2,0,72,72,77,77,1187,0,215,1,0,0,0,2,217,1,0,0,0,4,
+		231,1,0,0,0,6,245,1,0,0,0,8,265,1,0,0,0,10,272,1,0,0,0,12,284,1,0,0,0,
+		14,286,1,0,0,0,16,295,1,0,0,0,18,300,1,0,0,0,20,305,1,0,0,0,22,314,1,0,
+		0,0,24,328,1,0,0,0,26,333,1,0,0,0,28,342,1,0,0,0,30,352,1,0,0,0,32,357,
+		1,0,0,0,34,366,1,0,0,0,36,371,1,0,0,0,38,381,1,0,0,0,40,386,1,0,0,0,42,
+		396,1,0,0,0,44,406,1,0,0,0,46,414,1,0,0,0,48,420,1,0,0,0,50,422,1,0,0,
+		0,52,444,1,0,0,0,54,463,1,0,0,0,56,465,1,0,0,0,58,475,1,0,0,0,60,484,1,
+		0,0,0,62,489,1,0,0,0,64,497,1,0,0,0,66,499,1,0,0,0,68,510,1,0,0,0,70,521,
+		1,0,0,0,72,536,1,0,0,0,74,553,1,0,0,0,76,557,1,0,0,0,78,559,1,0,0,0,80,
+		617,1,0,0,0,82,631,1,0,0,0,84,639,1,0,0,0,86,657,1,0,0,0,88,714,1,0,0,
+		0,90,716,1,0,0,0,92,724,1,0,0,0,94,728,1,0,0,0,96,732,1,0,0,0,98,744,1,
+		0,0,0,100,756,1,0,0,0,102,760,1,0,0,0,104,765,1,0,0,0,106,767,1,0,0,0,
+		108,774,1,0,0,0,110,776,1,0,0,0,112,778,1,0,0,0,114,780,1,0,0,0,116,782,
+		1,0,0,0,118,784,1,0,0,0,120,786,1,0,0,0,122,788,1,0,0,0,124,790,1,0,0,
+		0,126,792,1,0,0,0,128,794,1,0,0,0,130,796,1,0,0,0,132,808,1,0,0,0,134,
+		810,1,0,0,0,136,819,1,0,0,0,138,830,1,0,0,0,140,832,1,0,0,0,142,841,1,
+		0,0,0,144,846,1,0,0,0,146,857,1,0,0,0,148,859,1,0,0,0,150,871,1,0,0,0,
+		152,891,1,0,0,0,154,899,1,0,0,0,156,912,1,0,0,0,158,923,1,0,0,0,160,953,
+		1,0,0,0,162,955,1,0,0,0,164,957,1,0,0,0,166,966,1,0,0,0,168,970,1,0,0,
+		0,170,974,1,0,0,0,172,976,1,0,0,0,174,993,1,0,0,0,176,995,1,0,0,0,178,
+		1000,1,0,0,0,180,1007,1,0,0,0,182,1013,1,0,0,0,184,1015,1,0,0,0,186,1022,
+		1,0,0,0,188,1024,1,0,0,0,190,1044,1,0,0,0,192,1046,1,0,0,0,194,1052,1,
+		0,0,0,196,1062,1,0,0,0,198,1073,1,0,0,0,200,1075,1,0,0,0,202,1084,1,0,
+		0,0,204,1089,1,0,0,0,206,1116,1,0,0,0,208,1118,1,0,0,0,210,1151,1,0,0,
+		0,212,216,3,2,1,0,213,216,3,4,2,0,214,216,3,6,3,0,215,212,1,0,0,0,215,
+		213,1,0,0,0,215,214,1,0,0,0,216,1,1,0,0,0,217,218,5,84,0,0,218,219,5,63,
+		0,0,219,220,5,84,0,0,220,221,5,64,0,0,221,222,3,112,56,0,222,226,5,85,
+		0,0,223,225,3,8,4,0,224,223,1,0,0,0,225,228,1,0,0,0,226,224,1,0,0,0,226,
+		227,1,0,0,0,227,229,1,0,0,0,228,226,1,0,0,0,229,230,5,85,0,0,230,3,1,0,
+		0,0,231,232,5,84,0,0,232,233,5,63,0,0,233,234,5,84,0,0,234,235,5,65,0,
+		0,235,236,3,116,58,0,236,240,5,85,0,0,237,239,3,10,5,0,238,237,1,0,0,0,
+		239,242,1,0,0,0,240,238,1,0,0,0,240,241,1,0,0,0,241,243,1,0,0,0,242,240,
+		1,0,0,0,243,244,5,85,0,0,244,5,1,0,0,0,245,246,5,84,0,0,246,247,5,63,0,
+		0,247,248,5,84,0,0,248,249,5,66,0,0,249,250,3,114,57,0,250,254,5,85,0,
+		0,251,253,3,12,6,0,252,251,1,0,0,0,253,256,1,0,0,0,254,252,1,0,0,0,254,
+		255,1,0,0,0,255,257,1,0,0,0,256,254,1,0,0,0,257,258,5,85,0,0,258,7,1,0,
+		0,0,259,266,3,14,7,0,260,266,3,28,14,0,261,266,3,30,15,0,262,266,3,32,
+		16,0,263,266,3,40,20,0,264,266,3,36,18,0,265,259,1,0,0,0,265,260,1,0,0,
+		0,265,261,1,0,0,0,265,262,1,0,0,0,265,263,1,0,0,0,265,264,1,0,0,0,266,
+		9,1,0,0,0,267,273,3,28,14,0,268,273,3,40,20,0,269,273,3,42,21,0,270,273,
+		3,56,28,0,271,273,3,44,22,0,272,267,1,0,0,0,272,268,1,0,0,0,272,269,1,
+		0,0,0,272,270,1,0,0,0,272,271,1,0,0,0,273,11,1,0,0,0,274,285,3,16,8,0,
+		275,285,3,28,14,0,276,285,3,40,20,0,277,285,3,18,9,0,278,285,3,20,10,0,
+		279,285,3,24,12,0,280,285,3,26,13,0,281,285,3,60,30,0,282,285,3,58,29,
+		0,283,285,3,62,31,0,284,274,1,0,0,0,284,275,1,0,0,0,284,276,1,0,0,0,284,
+		277,1,0,0,0,284,278,1,0,0,0,284,279,1,0,0,0,284,280,1,0,0,0,284,281,1,
+		0,0,0,284,282,1,0,0,0,284,283,1,0,0,0,285,13,1,0,0,0,286,287,5,84,0,0,
+		287,289,5,15,0,0,288,290,3,116,58,0,289,288,1,0,0,0,290,291,1,0,0,0,291,
+		289,1,0,0,0,291,292,1,0,0,0,292,293,1,0,0,0,293,294,5,85,0,0,294,15,1,
+		0,0,0,295,296,5,84,0,0,296,297,5,30,0,0,297,298,3,112,56,0,298,299,5,85,
+		0,0,299,17,1,0,0,0,300,301,5,84,0,0,301,302,5,20,0,0,302,303,3,206,103,
+		0,303,304,5,85,0,0,304,19,1,0,0,0,305,306,5,84,0,0,306,308,5,21,0,0,307,
+		309,3,22,11,0,308,307,1,0,0,0,309,310,1,0,0,0,310,308,1,0,0,0,310,311,
+		1,0,0,0,311,312,1,0,0,0,312,313,5,85,0,0,313,21,1,0,0,0,314,315,5,84,0,
+		0,315,316,3,186,93,0,316,317,5,56,0,0,317,318,5,84,0,0,318,322,3,126,63,
+		0,319,321,3,126,63,0,320,319,1,0,0,0,321,324,1,0,0,0,322,320,1,0,0,0,322,
+		323,1,0,0,0,323,325,1,0,0,0,324,322,1,0,0,0,325,326,5,85,0,0,326,327,5,
+		85,0,0,327,23,1,0,0,0,328,329,5,84,0,0,329,330,5,18,0,0,330,331,3,72,36,
+		0,331,332,5,85,0,0,332,25,1,0,0,0,333,334,5,84,0,0,334,336,5,19,0,0,335,
+		337,3,130,65,0,336,335,1,0,0,0,337,338,1,0,0,0,338,336,1,0,0,0,338,339,
+		1,0,0,0,339,340,1,0,0,0,340,341,5,85,0,0,341,27,1,0,0,0,342,343,5,84,0,
+		0,343,347,5,16,0,0,344,346,3,210,105,0,345,344,1,0,0,0,346,349,1,0,0,0,
+		347,345,1,0,0,0,347,348,1,0,0,0,348,350,1,0,0,0,349,347,1,0,0,0,350,351,
+		5,85,0,0,351,29,1,0,0,0,352,353,5,84,0,0,353,354,5,17,0,0,354,355,3,72,
+		36,0,355,356,5,85,0,0,356,31,1,0,0,0,357,358,5,84,0,0,358,360,5,10,0,0,
+		359,361,3,34,17,0,360,359,1,0,0,0,361,362,1,0,0,0,362,360,1,0,0,0,362,
+		363,1,0,0,0,363,364,1,0,0,0,364,365,5,85,0,0,365,33,1,0,0,0,366,367,5,
+		84,0,0,367,368,3,110,55,0,368,369,3,74,37,0,369,370,5,85,0,0,370,35,1,
+		0,0,0,371,372,5,84,0,0,372,373,5,12,0,0,373,374,3,122,61,0,374,375,3,38,
+		19,0,375,376,3,64,32,0,376,377,3,68,34,0,377,378,3,66,33,0,378,379,3,70,
+		35,0,379,380,5,85,0,0,380,37,1,0,0,0,381,382,5,13,0,0,382,383,5,84,0,0,
+		383,384,3,74,37,0,384,385,5,85,0,0,385,39,1,0,0,0,386,387,5,84,0,0,387,
+		391,5,11,0,0,388,390,3,128,64,0,389,388,1,0,0,0,390,393,1,0,0,0,391,389,
+		1,0,0,0,391,392,1,0,0,0,392,394,1,0,0,0,393,391,1,0,0,0,394,395,5,85,0,
+		0,395,41,1,0,0,0,396,397,5,84,0,0,397,401,5,14,0,0,398,400,3,184,92,0,
+		399,398,1,0,0,0,400,403,1,0,0,0,401,399,1,0,0,0,401,402,1,0,0,0,402,404,
+		1,0,0,0,403,401,1,0,0,0,404,405,5,85,0,0,405,43,1,0,0,0,406,407,5,84,0,
+		0,407,408,5,1,0,0,408,409,3,124,62,0,409,410,3,38,19,0,410,411,3,46,23,
+		0,411,412,3,48,24,0,412,413,5,85,0,0,413,45,1,0,0,0,414,415,5,2,0,0,415,
+		416,3,168,84,0,416,47,1,0,0,0,417,418,5,3,0,0,418,421,3,50,25,0,419,421,
+		1,0,0,0,420,417,1,0,0,0,420,419,1,0,0,0,421,49,1,0,0,0,422,423,5,84,0,
+		0,423,427,5,47,0,0,424,426,3,52,26,0,425,424,1,0,0,0,426,429,1,0,0,0,427,
+		425,1,0,0,0,427,428,1,0,0,0,428,430,1,0,0,0,429,427,1,0,0,0,430,431,5,
+		85,0,0,431,51,1,0,0,0,432,445,3,54,27,0,433,434,5,84,0,0,434,435,5,53,
+		0,0,435,436,5,84,0,0,436,437,3,74,37,0,437,438,5,85,0,0,438,439,3,54,27,
+		0,439,440,5,85,0,0,440,445,1,0,0,0,441,442,5,84,0,0,442,443,5,79,0,0,443,
+		445,5,85,0,0,444,432,1,0,0,0,444,433,1,0,0,0,444,441,1,0,0,0,445,53,1,
+		0,0,0,446,447,5,84,0,0,447,448,5,58,0,0,448,449,3,168,84,0,449,450,3,154,
+		77,0,450,451,5,85,0,0,451,464,1,0,0,0,452,453,5,84,0,0,453,454,5,59,0,
+		0,454,455,3,168,84,0,455,456,3,154,77,0,456,457,5,85,0,0,457,464,1,0,0,
+		0,458,459,5,84,0,0,459,460,5,60,0,0,460,461,3,154,77,0,461,462,5,85,0,
+		0,462,464,1,0,0,0,463,446,1,0,0,0,463,452,1,0,0,0,463,458,1,0,0,0,464,
+		55,1,0,0,0,465,466,5,84,0,0,466,467,5,25,0,0,467,468,3,162,81,0,468,469,
+		3,38,19,0,469,470,3,190,95,0,470,471,3,192,96,0,471,472,3,196,98,0,472,
+		473,3,204,102,0,473,474,5,85,0,0,474,57,1,0,0,0,475,476,5,84,0,0,476,477,
+		5,4,0,0,477,478,3,118,59,0,478,479,3,134,67,0,479,480,3,136,68,0,480,481,
+		3,144,72,0,481,482,3,150,75,0,482,483,5,85,0,0,483,59,1,0,0,0,484,485,
+		5,84,0,0,485,486,5,5,0,0,486,487,3,156,78,0,487,488,5,85,0,0,488,61,1,
+		0,0,0,489,490,5,84,0,0,490,491,5,6,0,0,491,492,3,80,40,0,492,493,5,85,
+		0,0,493,63,1,0,0,0,494,495,5,7,0,0,495,498,3,82,41,0,496,498,1,0,0,0,497,
+		494,1,0,0,0,497,496,1,0,0,0,498,65,1,0,0,0,499,500,5,25,0,0,500,501,5,
+		84,0,0,501,505,3,162,81,0,502,504,3,164,82,0,503,502,1,0,0,0,504,507,1,
+		0,0,0,505,503,1,0,0,0,505,506,1,0,0,0,506,508,1,0,0,0,507,505,1,0,0,0,
+		508,509,5,85,0,0,509,67,1,0,0,0,510,511,5,2,0,0,511,512,3,168,84,0,512,
+		69,1,0,0,0,513,517,5,24,0,0,514,516,3,170,85,0,515,514,1,0,0,0,516,519,
+		1,0,0,0,517,515,1,0,0,0,517,518,1,0,0,0,518,522,1,0,0,0,519,517,1,0,0,
+		0,520,522,1,0,0,0,521,513,1,0,0,0,521,520,1,0,0,0,522,71,1,0,0,0,523,527,
+		5,76,0,0,524,526,5,76,0,0,525,524,1,0,0,0,526,529,1,0,0,0,527,525,1,0,
+		0,0,527,528,1,0,0,0,528,530,1,0,0,0,529,527,1,0,0,0,530,531,5,56,0,0,531,
+		532,3,76,38,0,532,533,3,72,36,0,533,535,1,0,0,0,534,523,1,0,0,0,535,538,
+		1,0,0,0,536,534,1,0,0,0,536,537,1,0,0,0,537,73,1,0,0,0,538,536,1,0,0,0,
+		539,543,5,79,0,0,540,542,5,79,0,0,541,540,1,0,0,0,542,545,1,0,0,0,543,
+		541,1,0,0,0,543,544,1,0,0,0,544,546,1,0,0,0,545,543,1,0,0,0,546,547,5,
+		83,0,0,547,548,3,76,38,0,548,549,3,74,37,0,549,551,1,0,0,0,550,539,1,0,
+		0,0,550,551,1,0,0,0,551,554,1,0,0,0,552,554,1,0,0,0,553,550,1,0,0,0,553,
+		552,1,0,0,0,554,75,1,0,0,0,555,558,3,78,39,0,556,558,5,76,0,0,557,555,
+		1,0,0,0,557,556,1,0,0,0,558,77,1,0,0,0,559,560,7,0,0,0,560,79,1,0,0,0,
+		561,562,5,84,0,0,562,563,5,48,0,0,563,564,3,80,40,0,564,565,3,80,40,0,
+		565,566,5,85,0,0,566,618,1,0,0,0,567,568,5,84,0,0,568,569,5,49,0,0,569,
+		573,3,80,40,0,570,572,3,80,40,0,571,570,1,0,0,0,572,575,1,0,0,0,573,571,
+		1,0,0,0,573,574,1,0,0,0,574,576,1,0,0,0,575,573,1,0,0,0,576,577,5,85,0,
+		0,577,618,1,0,0,0,578,579,5,84,0,0,579,580,5,50,0,0,580,584,3,80,40,0,
+		581,583,3,80,40,0,582,581,1,0,0,0,583,586,1,0,0,0,584,582,1,0,0,0,584,
+		585,1,0,0,0,585,587,1,0,0,0,586,584,1,0,0,0,587,588,5,85,0,0,588,618,1,
+		0,0,0,589,590,5,84,0,0,590,591,5,51,0,0,591,592,3,80,40,0,592,593,5,85,
+		0,0,593,618,1,0,0,0,594,595,5,84,0,0,595,596,5,52,0,0,596,597,5,84,0,0,
+		597,598,3,74,37,0,598,599,5,85,0,0,599,600,3,80,40,0,600,601,5,85,0,0,
+		601,618,1,0,0,0,602,603,5,84,0,0,603,604,5,53,0,0,604,605,5,84,0,0,605,
+		606,3,74,37,0,606,607,5,85,0,0,607,608,3,80,40,0,608,609,5,85,0,0,609,
+		618,1,0,0,0,610,611,3,96,48,0,611,612,3,80,40,0,612,618,1,0,0,0,613,618,
+		3,88,44,0,614,618,3,90,45,0,615,618,5,54,0,0,616,618,5,55,0,0,617,561,
+		1,0,0,0,617,567,1,0,0,0,617,578,1,0,0,0,617,589,1,0,0,0,617,594,1,0,0,
+		0,617,602,1,0,0,0,617,610,1,0,0,0,617,613,1,0,0,0,617,614,1,0,0,0,617,
+		615,1,0,0,0,617,616,1,0,0,0,618,81,1,0,0,0,619,620,5,84,0,0,620,621,5,
+		50,0,0,621,625,3,84,42,0,622,624,3,84,42,0,623,622,1,0,0,0,624,627,1,0,
+		0,0,625,623,1,0,0,0,625,626,1,0,0,0,626,628,1,0,0,0,627,625,1,0,0,0,628,
+		629,5,85,0,0,629,632,1,0,0,0,630,632,3,84,42,0,631,619,1,0,0,0,631,630,
+		1,0,0,0,632,83,1,0,0,0,633,640,3,86,43,0,634,635,5,84,0,0,635,636,5,51,
+		0,0,636,637,3,86,43,0,637,638,5,85,0,0,638,640,1,0,0,0,639,633,1,0,0,0,
+		639,634,1,0,0,0,640,85,1,0,0,0,641,642,5,84,0,0,642,646,3,110,55,0,643,
+		645,3,92,46,0,644,643,1,0,0,0,645,648,1,0,0,0,646,644,1,0,0,0,646,647,
+		1,0,0,0,647,649,1,0,0,0,648,646,1,0,0,0,649,650,5,85,0,0,650,658,1,0,0,
+		0,651,652,5,84,0,0,652,653,5,56,0,0,653,654,3,92,46,0,654,655,3,92,46,
+		0,655,656,5,85,0,0,656,658,1,0,0,0,657,641,1,0,0,0,657,651,1,0,0,0,658,
+		87,1,0,0,0,659,660,5,84,0,0,660,661,5,48,0,0,661,662,3,88,44,0,662,663,
+		3,88,44,0,663,664,5,85,0,0,664,715,1,0,0,0,665,666,5,84,0,0,666,668,5,
+		49,0,0,667,669,3,88,44,0,668,667,1,0,0,0,669,670,1,0,0,0,670,668,1,0,0,
+		0,670,671,1,0,0,0,671,672,1,0,0,0,672,673,5,85,0,0,673,715,1,0,0,0,674,
+		675,5,84,0,0,675,677,5,50,0,0,676,678,3,88,44,0,677,676,1,0,0,0,678,679,
+		1,0,0,0,679,677,1,0,0,0,679,680,1,0,0,0,680,681,1,0,0,0,681,682,5,85,0,
+		0,682,715,1,0,0,0,683,684,5,84,0,0,684,685,5,51,0,0,685,686,3,88,44,0,
+		686,687,5,85,0,0,687,715,1,0,0,0,688,689,5,84,0,0,689,690,5,52,0,0,690,
+		691,5,84,0,0,691,692,3,74,37,0,692,693,5,85,0,0,693,694,3,88,44,0,694,
+		695,5,85,0,0,695,715,1,0,0,0,696,697,5,84,0,0,697,698,5,53,0,0,698,699,
+		5,84,0,0,699,700,3,74,37,0,700,701,5,85,0,0,701,702,3,88,44,0,702,703,
+		5,85,0,0,703,715,1,0,0,0,704,705,5,84,0,0,705,709,3,110,55,0,706,708,3,
+		94,47,0,707,706,1,0,0,0,708,711,1,0,0,0,709,707,1,0,0,0,709,710,1,0,0,
+		0,710,712,1,0,0,0,711,709,1,0,0,0,712,713,5,85,0,0,713,715,1,0,0,0,714,
+		659,1,0,0,0,714,665,1,0,0,0,714,674,1,0,0,0,714,683,1,0,0,0,714,688,1,
+		0,0,0,714,696,1,0,0,0,714,704,1,0,0,0,715,89,1,0,0,0,716,717,5,84,0,0,
+		717,718,5,56,0,0,718,719,3,92,46,0,719,720,3,92,46,0,720,721,5,85,0,0,
+		721,91,1,0,0,0,722,725,3,94,47,0,723,725,5,79,0,0,724,722,1,0,0,0,724,
+		723,1,0,0,0,725,93,1,0,0,0,726,729,5,76,0,0,727,729,3,126,63,0,728,726,
+		1,0,0,0,728,727,1,0,0,0,729,95,1,0,0,0,730,733,3,98,49,0,731,733,3,100,
+		50,0,732,730,1,0,0,0,732,731,1,0,0,0,733,97,1,0,0,0,734,735,5,86,0,0,735,
+		736,3,102,51,0,736,737,3,104,52,0,737,738,5,87,0,0,738,745,1,0,0,0,739,
+		740,5,90,0,0,740,741,3,102,51,0,741,742,3,104,52,0,742,743,5,91,0,0,743,
+		745,1,0,0,0,744,734,1,0,0,0,744,739,1,0,0,0,745,99,1,0,0,0,746,747,5,86,
+		0,0,747,748,3,102,51,0,748,749,3,106,53,0,749,750,5,87,0,0,750,757,1,0,
+		0,0,751,752,5,90,0,0,752,753,3,102,51,0,753,754,3,106,53,0,754,755,5,91,
+		0,0,755,757,1,0,0,0,756,746,1,0,0,0,756,751,1,0,0,0,757,101,1,0,0,0,758,
+		761,3,128,64,0,759,761,1,0,0,0,760,758,1,0,0,0,760,759,1,0,0,0,761,103,
+		1,0,0,0,762,766,3,126,63,0,763,766,5,79,0,0,764,766,3,108,54,0,765,762,
+		1,0,0,0,765,763,1,0,0,0,765,764,1,0,0,0,766,105,1,0,0,0,767,771,3,104,
+		52,0,768,770,3,104,52,0,769,768,1,0,0,0,770,773,1,0,0,0,771,769,1,0,0,
+		0,771,772,1,0,0,0,772,107,1,0,0,0,773,771,1,0,0,0,774,775,5,72,0,0,775,
+		109,1,0,0,0,776,777,5,76,0,0,777,111,1,0,0,0,778,779,5,76,0,0,779,113,
+		1,0,0,0,780,781,5,76,0,0,781,115,1,0,0,0,782,783,5,76,0,0,783,117,1,0,
+		0,0,784,785,5,76,0,0,785,119,1,0,0,0,786,787,5,76,0,0,787,121,1,0,0,0,
+		788,789,5,76,0,0,789,123,1,0,0,0,790,791,5,76,0,0,791,125,1,0,0,0,792,
+		793,5,77,0,0,793,127,1,0,0,0,794,795,5,78,0,0,795,129,1,0,0,0,796,797,
+		5,84,0,0,797,801,3,110,55,0,798,800,3,132,66,0,799,798,1,0,0,0,800,803,
+		1,0,0,0,801,799,1,0,0,0,801,802,1,0,0,0,802,804,1,0,0,0,803,801,1,0,0,
+		0,804,805,5,85,0,0,805,131,1,0,0,0,806,809,5,76,0,0,807,809,3,126,63,0,
+		808,806,1,0,0,0,808,807,1,0,0,0,809,133,1,0,0,0,810,811,5,26,0,0,811,813,
+		5,84,0,0,812,814,3,120,60,0,813,812,1,0,0,0,814,815,1,0,0,0,815,813,1,
+		0,0,0,815,816,1,0,0,0,816,817,1,0,0,0,817,818,5,85,0,0,818,135,1,0,0,0,
+		819,820,5,8,0,0,820,821,3,138,69,0,821,137,1,0,0,0,822,824,3,140,70,0,
+		823,822,1,0,0,0,824,825,1,0,0,0,825,823,1,0,0,0,825,826,1,0,0,0,826,831,
+		1,0,0,0,827,828,5,84,0,0,828,829,5,75,0,0,829,831,5,85,0,0,830,823,1,0,
+		0,0,830,827,1,0,0,0,831,139,1,0,0,0,832,833,5,84,0,0,833,835,3,152,76,
+		0,834,836,3,142,71,0,835,834,1,0,0,0,836,837,1,0,0,0,837,835,1,0,0,0,837,
+		838,1,0,0,0,838,839,1,0,0,0,839,840,5,85,0,0,840,141,1,0,0,0,841,842,5,
+		84,0,0,842,843,3,120,60,0,843,844,3,120,60,0,844,845,5,85,0,0,845,143,
+		1,0,0,0,846,847,5,22,0,0,847,848,3,146,73,0,848,145,1,0,0,0,849,851,3,
+		148,74,0,850,849,1,0,0,0,851,852,1,0,0,0,852,850,1,0,0,0,852,853,1,0,0,
+		0,853,858,1,0,0,0,854,855,5,84,0,0,855,856,5,75,0,0,856,858,5,85,0,0,857,
+		850,1,0,0,0,857,854,1,0,0,0,858,147,1,0,0,0,859,860,5,84,0,0,860,861,3,
+		120,60,0,861,865,5,86,0,0,862,864,3,154,77,0,863,862,1,0,0,0,864,867,1,
+		0,0,0,865,863,1,0,0,0,865,866,1,0,0,0,866,868,1,0,0,0,867,865,1,0,0,0,
+		868,869,5,87,0,0,869,870,5,85,0,0,870,149,1,0,0,0,871,872,5,9,0,0,872,
+		874,5,84,0,0,873,875,3,120,60,0,874,873,1,0,0,0,875,876,1,0,0,0,876,874,
+		1,0,0,0,876,877,1,0,0,0,877,878,1,0,0,0,878,879,5,85,0,0,879,151,1,0,0,
+		0,880,892,3,186,93,0,881,882,5,88,0,0,882,886,3,126,63,0,883,885,3,126,
+		63,0,884,883,1,0,0,0,885,888,1,0,0,0,886,884,1,0,0,0,886,887,1,0,0,0,887,
+		889,1,0,0,0,888,886,1,0,0,0,889,890,5,89,0,0,890,892,1,0,0,0,891,880,1,
+		0,0,0,891,881,1,0,0,0,892,153,1,0,0,0,893,900,3,188,94,0,894,895,5,84,
+		0,0,895,896,5,51,0,0,896,897,3,188,94,0,897,898,5,85,0,0,898,900,1,0,0,
+		0,899,893,1,0,0,0,899,894,1,0,0,0,900,155,1,0,0,0,901,903,3,158,79,0,902,
+		901,1,0,0,0,903,906,1,0,0,0,904,902,1,0,0,0,904,905,1,0,0,0,905,913,1,
+		0,0,0,906,904,1,0,0,0,907,908,5,84,0,0,908,909,5,23,0,0,909,910,3,118,
+		59,0,910,911,5,85,0,0,911,913,1,0,0,0,912,904,1,0,0,0,912,907,1,0,0,0,
+		913,157,1,0,0,0,914,924,3,160,80,0,915,916,5,84,0,0,916,917,5,53,0,0,917,
+		918,5,84,0,0,918,919,3,74,37,0,919,920,5,85,0,0,920,921,3,160,80,0,921,
+		922,5,85,0,0,922,924,1,0,0,0,923,914,1,0,0,0,923,915,1,0,0,0,924,159,1,
+		0,0,0,925,954,3,88,44,0,926,927,5,86,0,0,927,928,5,72,0,0,928,929,5,87,
+		0,0,929,954,3,88,44,0,930,931,5,86,0,0,931,932,5,72,0,0,932,933,5,87,0,
+		0,933,934,5,86,0,0,934,935,3,126,63,0,935,936,5,87,0,0,936,937,3,88,44,
+		0,937,954,1,0,0,0,938,939,5,86,0,0,939,940,5,72,0,0,940,941,5,87,0,0,941,
+		942,3,208,104,0,942,943,3,88,44,0,943,954,1,0,0,0,944,945,5,86,0,0,945,
+		946,5,72,0,0,946,947,5,87,0,0,947,948,5,84,0,0,948,949,5,51,0,0,949,950,
+		3,208,104,0,950,951,3,88,44,0,951,952,5,85,0,0,952,954,1,0,0,0,953,925,
+		1,0,0,0,953,926,1,0,0,0,953,930,1,0,0,0,953,938,1,0,0,0,953,944,1,0,0,
+		0,954,161,1,0,0,0,955,956,5,76,0,0,956,163,1,0,0,0,957,958,5,84,0,0,958,
+		959,5,79,0,0,959,960,5,56,0,0,960,961,3,166,83,0,961,962,5,85,0,0,962,
+		165,1,0,0,0,963,967,3,92,46,0,964,967,3,80,40,0,965,967,3,50,25,0,966,
+		963,1,0,0,0,966,964,1,0,0,0,966,965,1,0,0,0,967,167,1,0,0,0,968,971,3,
+		80,40,0,969,971,5,75,0,0,970,968,1,0,0,0,970,969,1,0,0,0,971,169,1,0,0,
+		0,972,975,3,172,86,0,973,975,3,174,87,0,974,972,1,0,0,0,974,973,1,0,0,
+		0,975,171,1,0,0,0,976,977,5,84,0,0,977,978,5,53,0,0,978,979,5,84,0,0,979,
+		980,5,79,0,0,980,981,5,83,0,0,981,982,3,76,38,0,982,984,5,85,0,0,983,985,
+		3,174,87,0,984,983,1,0,0,0,985,986,1,0,0,0,986,984,1,0,0,0,986,987,1,0,
+		0,0,987,988,1,0,0,0,988,989,5,85,0,0,989,173,1,0,0,0,990,994,3,176,88,
+		0,991,994,3,178,89,0,992,994,3,180,90,0,993,990,1,0,0,0,993,991,1,0,0,
+		0,993,992,1,0,0,0,994,175,1,0,0,0,995,996,5,84,0,0,996,997,3,182,91,0,
+		997,998,3,184,92,0,998,999,5,85,0,0,999,177,1,0,0,0,1000,1001,5,84,0,0,
+		1001,1002,5,61,0,0,1002,1003,3,80,40,0,1003,1004,3,182,91,0,1004,1005,
+		3,184,92,0,1005,1006,5,85,0,0,1006,179,1,0,0,0,1007,1008,5,84,0,0,1008,
+		1009,5,62,0,0,1009,1010,3,182,91,0,1010,1011,3,184,92,0,1011,1012,5,85,
+		0,0,1012,181,1,0,0,0,1013,1014,7,1,0,0,1014,183,1,0,0,0,1015,1019,3,182,
+		91,0,1016,1018,3,182,91,0,1017,1016,1,0,0,0,1018,1021,1,0,0,0,1019,1017,
+		1,0,0,0,1019,1020,1,0,0,0,1020,185,1,0,0,0,1021,1019,1,0,0,0,1022,1023,
+		7,2,0,0,1023,187,1,0,0,0,1024,1025,5,84,0,0,1025,1029,3,110,55,0,1026,
+		1028,3,92,46,0,1027,1026,1,0,0,0,1028,1031,1,0,0,0,1029,1027,1,0,0,0,1029,
+		1030,1,0,0,0,1030,1032,1,0,0,0,1031,1029,1,0,0,0,1032,1033,5,85,0,0,1033,
+		189,1,0,0,0,1034,1035,5,14,0,0,1035,1039,5,84,0,0,1036,1038,3,184,92,0,
+		1037,1036,1,0,0,0,1038,1041,1,0,0,0,1039,1037,1,0,0,0,1039,1040,1,0,0,
+		0,1040,1042,1,0,0,0,1041,1039,1,0,0,0,1042,1045,5,85,0,0,1043,1045,1,0,
+		0,0,1044,1034,1,0,0,0,1044,1043,1,0,0,0,1045,191,1,0,0,0,1046,1048,5,1,
+		0,0,1047,1049,3,194,97,0,1048,1047,1,0,0,0,1049,1050,1,0,0,0,1050,1048,
+		1,0,0,0,1050,1051,1,0,0,0,1051,193,1,0,0,0,1052,1053,5,84,0,0,1053,1057,
+		3,124,62,0,1054,1056,3,164,82,0,1055,1054,1,0,0,0,1056,1059,1,0,0,0,1057,
+		1055,1,0,0,0,1057,1058,1,0,0,0,1058,1060,1,0,0,0,1059,1057,1,0,0,0,1060,
+		1061,5,85,0,0,1061,195,1,0,0,0,1062,1063,5,8,0,0,1063,1064,3,198,99,0,
+		1064,197,1,0,0,0,1065,1067,3,200,100,0,1066,1065,1,0,0,0,1067,1068,1,0,
+		0,0,1068,1066,1,0,0,0,1068,1069,1,0,0,0,1069,1074,1,0,0,0,1070,1071,5,
+		84,0,0,1071,1072,5,75,0,0,1072,1074,5,85,0,0,1073,1066,1,0,0,0,1073,1070,
+		1,0,0,0,1074,199,1,0,0,0,1075,1076,5,84,0,0,1076,1078,3,152,76,0,1077,
+		1079,3,202,101,0,1078,1077,1,0,0,0,1079,1080,1,0,0,0,1080,1078,1,0,0,0,
+		1080,1081,1,0,0,0,1081,1082,1,0,0,0,1082,1083,5,85,0,0,1083,201,1,0,0,
+		0,1084,1085,5,84,0,0,1085,1086,3,124,62,0,1086,1087,3,124,62,0,1087,1088,
+		5,85,0,0,1088,203,1,0,0,0,1089,1090,5,9,0,0,1090,1094,5,84,0,0,1091,1093,
+		3,124,62,0,1092,1091,1,0,0,0,1093,1096,1,0,0,0,1094,1092,1,0,0,0,1094,
+		1095,1,0,0,0,1095,1097,1,0,0,0,1096,1094,1,0,0,0,1097,1098,5,85,0,0,1098,
+		205,1,0,0,0,1099,1101,5,77,0,0,1100,1099,1,0,0,0,1101,1104,1,0,0,0,1102,
+		1100,1,0,0,0,1102,1103,1,0,0,0,1103,1117,1,0,0,0,1104,1102,1,0,0,0,1105,
+		1109,5,77,0,0,1106,1108,5,77,0,0,1107,1106,1,0,0,0,1108,1111,1,0,0,0,1109,
+		1107,1,0,0,0,1109,1110,1,0,0,0,1110,1112,1,0,0,0,1111,1109,1,0,0,0,1112,
+		1113,5,83,0,0,1113,1114,3,76,38,0,1114,1115,3,206,103,0,1115,1117,1,0,
+		0,0,1116,1102,1,0,0,0,1116,1105,1,0,0,0,1117,207,1,0,0,0,1118,1119,5,86,
+		0,0,1119,1120,5,78,0,0,1120,1121,3,126,63,0,1121,1122,5,87,0,0,1122,209,
+		1,0,0,0,1123,1152,5,27,0,0,1124,1152,5,28,0,0,1125,1152,5,29,0,0,1126,
+		1152,5,32,0,0,1127,1152,5,33,0,0,1128,1152,5,31,0,0,1129,1152,5,34,0,0,
+		1130,1152,5,35,0,0,1131,1152,5,36,0,0,1132,1152,5,37,0,0,1133,1152,5,38,
+		0,0,1134,1152,5,39,0,0,1135,1152,5,40,0,0,1136,1152,5,41,0,0,1137,1152,
+		5,42,0,0,1138,1139,5,84,0,0,1139,1140,5,43,0,0,1140,1141,5,80,0,0,1141,
+		1152,5,85,0,0,1142,1143,5,84,0,0,1143,1144,5,44,0,0,1144,1145,5,80,0,0,
+		1145,1152,5,85,0,0,1146,1147,5,84,0,0,1147,1148,5,45,0,0,1148,1149,5,80,
+		0,0,1149,1152,5,85,0,0,1150,1152,5,46,0,0,1151,1123,1,0,0,0,1151,1124,
+		1,0,0,0,1151,1125,1,0,0,0,1151,1126,1,0,0,0,1151,1127,1,0,0,0,1151,1128,
+		1,0,0,0,1151,1129,1,0,0,0,1151,1130,1,0,0,0,1151,1131,1,0,0,0,1151,1132,
+		1,0,0,0,1151,1133,1,0,0,0,1151,1134,1,0,0,0,1151,1135,1,0,0,0,1151,1136,
+		1,0,0,0,1151,1137,1,0,0,0,1151,1138,1,0,0,0,1151,1142,1,0,0,0,1151,1146,
+		1,0,0,0,1151,1150,1,0,0,0,1152,211,1,0,0,0,85,215,226,240,254,265,272,
+		284,291,310,322,338,347,362,391,401,420,427,444,463,497,505,517,521,527,
+		536,543,550,553,557,573,584,617,625,631,639,646,657,670,679,709,714,724,
+		728,732,744,756,760,765,771,801,808,815,825,830,837,852,857,865,876,886,
+		891,899,904,912,923,953,966,970,974,986,993,1019,1029,1039,1044,1050,1057,
+		1068,1073,1080,1094,1102,1109,1116,1151
 	};
 
 	public static readonly ATN _ATN =

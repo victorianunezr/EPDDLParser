@@ -1,2 +1,4 @@
 Notes:
 - Parser rule "Parameter" (used by action-type and events) doesn't match syntax from examples.
+- Some requirement keys that appear in examples are not defined in grammar, e.g. 'ma-star-finitary-theory', 'ontic-actions'
+- Modalities definition rule missing in .cf file (:modalities, in cb5(3).epddl). It appears as a requirement key in current grammar rules, but in example it appears as a problem item with a parameter.
