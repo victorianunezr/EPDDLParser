@@ -1,88 +1,46 @@
-(define (domain cc)
-    (:requirements :del :multi-agent :ontic-actions :modal-preconditions)
+(define (domain lever-control)
+    (:requirements :strips :typing :multi-agent :modal-preconditions)
 
-    (:action-type-libraries ma-star)
-
-    (:types box room)
-
-    (:predicates (at ?i - agent ?r - room)
-                 (at ?b - box   ?r - room)
+    (:types
+        agent position
     )
-    
-    (:action left
-        :parameters (?ag - agent)
+
+    (:predicates
+        (lever-at ?pos - position)
+        (leftmost ?pos - position)
+        (rightmost ?pos - position)
+        (next ?from - position ?to - position)
+        (controls ?agent - agent ?action - action)
+    )
+
+    (:action move-left
+        :parameters (?agent - agent ?pos - position ?next-pos - position)
+        :events
+            (e1
+                :precondition (and (lever-at ?pos) (next ?pos ?next-pos))
+                :effect (and (not (lever-at ?pos)) (lever-at ?next-pos))
+            )
+        :accessibility ()
+    )
+
+    (:action move-right
+        :parameters (?agent - agent ?pos - position ?prev-pos - position)
         :precondition
-            (exists (?room_from - room)
-                (and
-                    (at ?ag ?room_from)
-                    (not (leftmost ?room_from))
-                )
+            (and
+                (lever-at ?pos)
+                (next ?prev-pos ?pos)
+                (controls ?agent move-right)
             )
         :action-type
             (ontic
                 (~effects
-                    (forall (?room_from - room ?room_to - room)
-                        (iff
-                            (and (at ?ag ?room_from) (neighbor ?room_to ?room_from))
-                            (at ?ag ?room_to)
-                        )
+                    (and
+                        (not (lever-at ?pos))
+                        (lever-at ?prev-pos)
                     )
-                ))
-        :observability-conditions (always All Fully)
-    )
-
-    (:action right
-        :parameters (?ag - agent)
-        :precondition
-            (exists (?room_from - room)
-                (and
-                    (at ?ag ?room_from)
-                    (not (rightmost ?room_from))
                 )
-            )
-        :action-type
-            (ontic
-                (~effects
-                    (forall (?room_from - room ?room_to - room)
-                        (iff
-                            (and (at ?ag ?room_from) (neighbor ?room_from ?room_to))
-                            (at ?ag ?room_to)
-                        )
-                    )
-                ))
-        :observability-conditions (always All Fully)
-    )
-
-    (:action check
-        :parameters (?ag - agent ?box - box ?room - room)
-        :precondition (at ?ag ?room)
-        :action-type
-            (sensing
-                (~predicate (at ?box ?room))
             )
         :observability-conditions
-            (and
-                (always ?ag Fully)
-                (forall (?i - agent)
-                    (always ?i Oblivious)
-                )
-            )
-    )
-
-    (:action tell
-        :parameters (?ag - agent ?box - box ?room - room)
-        :precondition [?ag](at ?box ?room)
-        :action-type
-            (announcement
-                (~formula (at ?box ?room))
-            )
-        :observability-conditions
-            (and
-                (always ?ag Fully)
-                (forall (?ag' - agent ?r_ag - room)
-                    (if (and (at ?ag ?r_ag) (at ?ag' ?r_ag)) ?ag' Fully)
-                    (else ?ag' Oblivious)
-                )
-            )
+            (always ?agent Fully)
     )
 )

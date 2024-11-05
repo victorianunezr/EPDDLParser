@@ -1,4 +1,23 @@
 Notes:
 - Parser rule "Parameter" (used by action-type and events) doesn't match syntax from examples.
 - Some requirement keys that appear in examples are not defined in grammar, e.g. 'ma-star-finitary-theory', 'ontic-actions'
+    - Since we don't need requirement keys for our purposes, I've just allowed any string starting with ':' to be parsed as a requirement key.
 - Modalities definition rule missing in .cf file (:modalities, in cb5(3).epddl). It appears as a requirement key in current grammar rules, but in example it appears as a problem item with a parameter.
+- Making actionTypeSignatureDef optional in the action definition, for simplicity.
+actionDef
+    : LPAREN ACTION actionName parametersDef actionConditionDef actionPreDef actionTypeSignatureDef? actionObsDef RPAREN
+    ;
+- Action/initial state definition: I'm going to change the structure in which actions are defined, allowing to define event model already in the library, going away from action type definitions, as this is unnecessary complexity for testing forward induction.
+    Changing the entry points: actionDef, initDef.
+    Created new rules e.g. worldsDef, eventsDef, accessibility...
+    - As in PDDL, the worlds in a state define which predicates are true in a given world:
+        "The initial state (init) defines specifically what predicates are true at the start of the problem. This is not a logical expression because it is simply a list of predicates which are true."
+        https://planning.wiki/ref/pddl/problem#init
+
+
+TODO
+In Parser:
+- Implement action owners in EPDDL.
+
+In DEL implementation:
+- Allow for propositions to take in parameters.

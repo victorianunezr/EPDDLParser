@@ -94,10 +94,60 @@ predicateDef
     : LPAREN predicateName typedVariableList RPAREN
     ;
 
+// actionDef
+//     : LPAREN ACTION actionName parametersDef actionConditionDef actionPreDef actionTypeSignatureDef actionObsDef RPAREN
+//     ;
+
 actionDef
-    : LPAREN ACTION actionName parametersDef actionConditionDef actionPreDef actionTypeSignatureDef actionObsDef RPAREN
+    : LPAREN ACTION actionName parametersDef owners eventsDef accessibilityDef RPAREN
     ;
 
+owners
+    : OWNERS agentList
+    ;
+
+agentList
+    : LPAREN (agentName)* RPAREN
+    | ALL
+    ;
+
+eventsDef
+    : EVENTS LPAREN (eventDef)+ RPAREN
+    ;
+
+eventDef
+    : LPAREN NAME
+      (PRECONDITION formulaOrEmpty)
+      (EFFECT LPAREN (literal)+ RPAREN)
+      RPAREN
+    ;
+
+literal
+    : predicate
+    | LPAREN NOT predicate RPAREN
+    ;
+
+accessibilityDef
+    : ACCESSIBILITY LPAREN (accessibilityRel)+ RPAREN
+    ;
+
+accessibilityRel
+    : LPAREN NAME NAME (agentName)+ RPAREN
+    ;
+
+// eventDef
+//     : LPAREN EVENT eventName parametersDef eventPreDef eventPostDef RPAREN
+//     ;
+
+eventPreDef
+    : PRECONDITION formulaOrEmpty
+    ;
+
+eventPostDef
+    : POSTCONDITIONS postconditionBlock
+    | /* empty */
+    ;
+    
 parametersDef
     : PARAMETERS LPAREN typedVariableList RPAREN
     ;
@@ -108,19 +158,6 @@ modalityDef
 
 observabilityGroupsDef
     : LPAREN OBSERVABILITY_GROUPS (observingAgentGroup)* RPAREN
-    ;
-
-eventDef
-    : LPAREN EVENT eventName parametersDef eventPreDef eventPostDef RPAREN
-    ;
-
-eventPreDef
-    : PRECONDITION formulaOrEmpty
-    ;
-
-eventPostDef
-    : POSTCONDITIONS postconditionBlock
-    | /* empty */
     ;
 
 postconditionBlock
@@ -147,8 +184,20 @@ stateDef
     : LPAREN STATE stateName stateWorldsDef stateRelDef stateValDef stateDesignDef RPAREN
     ;
 
+// initDef
+//     : LPAREN INIT initialStateDescr RPAREN
+//     ;
+
 initDef
-    : LPAREN INIT initialStateDescr RPAREN
+    : LPAREN INIT worldsDef accessibilityDef RPAREN
+    ;
+
+worldsDef
+    : WORLDS LPAREN (worldDef)+ RPAREN
+    ;
+
+worldDef
+    : LPAREN worldName LPAREN (predicate)+ RPAREN RPAREN
     ;
 
 goalDef
@@ -162,6 +211,7 @@ actionConditionDef
 
 actionTypeSignatureDef
     : ACTION_TYPE LPAREN actionTypeName (parameter)* RPAREN
+    | /* empty */ 
     ;
 
 actionPreDef
@@ -174,12 +224,18 @@ actionObsDef
     ;
 
 typedIdentList
-    : (NAME (NAME)* ASSIGN type typedIdentList)*
+    : (NAME)*
+    | NAME (NAME)* DASH type typedIdentList
     ;
 
 typedVariableList
-    : (VARIABLE (VARIABLE)* DASH type typedVariableList)?
-    | /* empty */  // For optional empty list case
+    : (VARIABLE)*
+    | VARIABLE (VARIABLE)* DASH type typedVariableList
+    ;
+
+typedAgentList
+    : (AGENT_NAME)*
+    | AGENT_NAME (AGENT_NAME)* DASH type typedAgentList
     ;
 
 type
@@ -370,19 +426,11 @@ stateDesignDef
     : DESIGNATED LPAREN (worldName)+ RPAREN
     ;
 
-// Agent Group Definition
 agentGroup
     : agentGroupName
     | LBRACE agentName (agentName)* RBRACE
     ;
 
-// Literal Definition
-literal
-    : predicate
-    | LPAREN NOT predicate RPAREN
-    ;
-
-// Initial State Description
 initialStateDescr
     : (fTheoryFormula)*
     | LPAREN STATE_NAME stateName RPAREN
@@ -418,8 +466,8 @@ expression
     ;
 
 formulaOrEmpty
-    : formula
-    | TRIVIAL_DEF  // Trivial case, representing an empty formula
+    : TRIVIAL_DEF
+    | formula
     ;
 
 obsConditionDef
@@ -502,33 +550,10 @@ actionTypeDesignDef
     : DESIGNATED LPAREN (eventName)* RPAREN
     ;
 
-typedAgentList
-    : (AGENT_NAME)*
-    | AGENT_NAME (AGENT_NAME)* DASH type typedAgentList
-    ;
-
 knowsWhether
     : LBRACKET MODALITY_NAME agentName RBRACKET
     ;
 
 requirementKey
-    : DEL
-    | TYPING
-    | EQUALITY
-    | MULTI_AGENT
-    | ONTIC_ACTIONS
-    | EXISTENTIAL_FORMULAE
-    | UNIVERSAL_FORMULAE
-    | UNIVERSAL_POSTCONDITIONS
-    | MODAL_PRECONDITIONS
-    | MODAL_POSTCONDITIONS
-    | MODALITIES
-    | ONTIC_CHANGE
-    | COMMON_KNOWLEDGE
-    | DYNAMIC_COMMON_KNOWLEDGE
-    | FINITARY_S5_THEORY
-    | LPAREN MAX_PRECONDITIONS_DEPTH INT RPAREN
-    | LPAREN MAX_POSTCONDITIONS_DEPTH INT RPAREN
-    | LPAREN MAX_MODAL_DEPTH INT RPAREN
-    | FINITARY_THEORY
+    : REQUIREMENT_NAME
     ;
