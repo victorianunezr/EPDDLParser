@@ -99,10 +99,10 @@ predicateDef
 //     ;
 
 actionDef
-    : LPAREN ACTION actionName parametersDef owners eventsDef accessibilityDef RPAREN
+    : LPAREN ACTION actionName parametersDef ownersDef eventsDef accessibilityDef RPAREN
     ;
 
-owners
+ownersDef
     : OWNERS agentList
     ;
 
@@ -128,7 +128,7 @@ literal
     ;
 
 accessibilityDef
-    : ACCESSIBILITY LPAREN (accessibilityRel)+ RPAREN
+    : ACCESSIBILITY LPAREN (accessibilityRel)* RPAREN
     ;
 
 accessibilityRel

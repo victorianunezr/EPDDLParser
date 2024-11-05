@@ -17,7 +17,11 @@ actionDef
 
 TODO
 In Parser:
-- Implement action owners in EPDDL.
+- Implement action owners in EPDDL. Should they be defined at the domain level?
+- Designated worlds/events.
 
 In DEL implementation:
 - Allow for propositions to take in parameters.
+
+QUESTIONS
+- Should action owners be defined as part of the domain?

@@ -1,46 +1,36 @@
-(define (domain lever-control)
-    (:requirements :strips :typing :multi-agent :modal-preconditions)
+(define (domain lever-domain)
+    (:requirements :del)
 
     (:types
-        agent position
+        position
     )
 
     (:predicates
-        (lever-at ?pos - position)
+        (at ?pos - position)
+        (adjacent ?pos0 - position ?pos1 - position) ; ?pos0 is to the left of ?pos1
         (leftmost ?pos - position)
         (rightmost ?pos - position)
-        (next ?from - position ?to - position)
-        (controls ?agent - agent ?action - action)
     )
 
     (:action move-left
-        :parameters (?agent - agent ?pos - position ?next-pos - position)
+        :parameters (?pos - position ?next-pos - position)
+        :owners (Alice)
         :events
             (e1
-                :precondition (and (lever-at ?pos) (next ?pos ?next-pos))
-                :effect (and (not (lever-at ?pos)) (lever-at ?next-pos))
+                :precondition (and (at ?pos) (not (leftmost ?pos) (adjacent ?next-pos ?pos)))
+                :effect ((at ?next-pos) (not (at ?pos)))
             )
         :accessibility ()
     )
 
     (:action move-right
-        :parameters (?agent - agent ?pos - position ?prev-pos - position)
-        :precondition
-            (and
-                (lever-at ?pos)
-                (next ?prev-pos ?pos)
-                (controls ?agent move-right)
+        :parameters (?pos - position ?next-pos - position)
+        :owners (Bob)
+        :events
+            (e1
+                :precondition (and (at ?pos) (not (rightmost ?pos) (adjacent ?pos ?next-pos)))
+                :effect ((at ?next-pos) (not (at ?pos)))
             )
-        :action-type
-            (ontic
-                (~effects
-                    (and
-                        (not (lever-at ?pos))
-                        (lever-at ?prev-pos)
-                    )
-                )
-            )
-        :observability-conditions
-            (always ?agent Fully)
+        :accessibility ()
     )
 )
