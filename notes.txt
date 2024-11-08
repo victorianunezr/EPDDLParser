@@ -25,3 +25,27 @@ In DEL implementation:
 
 QUESTIONS
 - Should action owners be defined as part of the domain?
+
+DESIGN
+Since the DEL project already defines all the necessary models (actions, events, states, etc.), implementing the visitor in the DEL project does make more sense.
+
+Single Set of Model Classes: I only need model classes in the DEL project, avoiding duplication of the definitions across projects.
+
+Visitor Implementation in DEL: By implementing the visitor directly in the DEL project, leverage the existing models and avoid coupling the parser too tightly with any specific interpretation of EPDDL.
+
+Why Implement the Visitor in the DEL Project?
+The visitor’s purpose is to translate the parsed EPDDL structure into instantiated DEL objects. If the DEL project already has these model classes, implementing the visitor there:
+
+Centralizes Object Creation Logic: The DEL project becomes the source of truth for instantiating and managing these objects.
+Maintains Separation: The parser project can stay focused on parsing, without embedding any application-specific logic (like DEL’s interpretation of actions and states).
+Increases Reusability: Other projects or components can use the EPDDL parser independently, without assuming that DEL's logic will always be applied.
+Revised Step-by-Step Plan
+Parser Project: Keep the parser project as is, focusing on parsing EPDDL syntax and generating an abstract syntax tree (AST) or parse tree.
+
+DEL Project:
+
+Visitor Implementation: Implement a visitor in the DEL project that walks through the AST produced by the EPDDL parser and creates instances of DEL’s State, Action, EventModel, etc., based on the parsed EPDDL input.
+Parsing Integration: Use the EPDDL parser from the DEL project, feeding the parse tree directly into the DEL-specific visitor.
+Integration: From an entry point in the DEL project (such as Program.cs), parse the EPDDL input, apply the visitor, and generate DEL-compatible objects.
+
+This setup keeps the parser general and reusable while placing the DEL-specific interpretation logic in the DEL project, where it naturally belongs.
