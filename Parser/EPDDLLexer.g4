@@ -87,7 +87,7 @@ NAME            : [a-z] [a-zA-Z0-9_'-]* ;
 AGENT_NAME      : [A-Z] [a-zA-Z0-9_'-]* ;
 MODALITY_NAME   : [a-z] [a-zA-Z0-9_'-]* '.' ;
 REQUIREMENT_NAME: ':' [a-zA-Z]+ ('-' [a-zA-Z]+)*;
-VARIABLE        : '?' [a-zA-Z] [a-zA-Z0-9_']* ;
+VARIABLE        : '?' [a-zA-Z] [a-zA-Z0-9_'-]* ;
 INT             : [0-9]+ ;
 WS              : [ \t\n\r]+ -> skip ;
 COMMENT         : ';' ~[\r\n]* -> skip ;

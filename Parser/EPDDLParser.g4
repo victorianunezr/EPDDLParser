@@ -128,7 +128,8 @@ literal
     ;
 
 accessibilityDef
-    : ACCESSIBILITY LPAREN (accessibilityRel)* RPAREN
+    : ACCESSIBILITY TRIVIAL_DEF
+    | ACCESSIBILITY LPAREN (accessibilityRel)+ RPAREN
     ;
 
 accessibilityRel
@@ -288,7 +289,7 @@ predicateFormula
     | LPAREN 'not' predicateFormula RPAREN
     | LPAREN 'exists' LPAREN typedVariableList RPAREN predicateFormula RPAREN
     | LPAREN 'forall' LPAREN typedVariableList RPAREN predicateFormula RPAREN
-    | LPAREN predicateName (groundTerm)* RPAREN
+    | LPAREN predicateName (term)* RPAREN
     ;
 
 atomicEqFormula

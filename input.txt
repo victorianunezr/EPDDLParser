@@ -16,9 +16,11 @@
         :parameters (?pos - position ?next-pos - position)
         :owners (Alice)
         :events
-            (e1
-                :precondition (and (at ?pos) (not (leftmost ?pos) (adjacent ?next-pos ?pos)))
-                :effect ((at ?next-pos) (not (at ?pos)))
+            (
+                (e1
+                    :precondition (and (at ?pos) (not (leftmost ?pos)) (adjacent ?next-pos ?pos))
+                    :effect ((at ?next-pos) (not (at ?pos)))
+                )
             )
         :accessibility ()
     )
@@ -27,9 +29,11 @@
         :parameters (?pos - position ?next-pos - position)
         :owners (Bob)
         :events
-            (e1
-                :precondition (and (at ?pos) (not (rightmost ?pos) (adjacent ?pos ?next-pos)))
-                :effect ((at ?next-pos) (not (at ?pos)))
+            (
+                (e1
+                    :precondition (and (at ?pos) (not (rightmost ?pos)) (adjacent ?pos ?next-pos))
+                    :effect ((at ?next-pos) (not (at ?pos)))
+                )
             )
         :accessibility ()
     )
