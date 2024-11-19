@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from EPDDLParser.g4 by ANTLR 4.13.2
+// Generated from Parser/EPDDLParser.g4 by ANTLR 4.13.2
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -264,6 +264,126 @@ public partial class EPDDLParserBaseListener : IEPDDLParserListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitActionDef([NotNull] EPDDLParser.ActionDefContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.ownersDef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOwnersDef([NotNull] EPDDLParser.OwnersDefContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.ownersDef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOwnersDef([NotNull] EPDDLParser.OwnersDefContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.agentList"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterAgentList([NotNull] EPDDLParser.AgentListContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.agentList"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitAgentList([NotNull] EPDDLParser.AgentListContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.eventsDef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterEventsDef([NotNull] EPDDLParser.EventsDefContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.eventsDef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitEventsDef([NotNull] EPDDLParser.EventsDefContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.eventDef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterEventDef([NotNull] EPDDLParser.EventDefContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.eventDef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitEventDef([NotNull] EPDDLParser.EventDefContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.effectDef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterEffectDef([NotNull] EPDDLParser.EffectDefContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.effectDef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitEffectDef([NotNull] EPDDLParser.EffectDefContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.literal"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterLiteral([NotNull] EPDDLParser.LiteralContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.literal"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitLiteral([NotNull] EPDDLParser.LiteralContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.accessibilityDef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterAccessibilityDef([NotNull] EPDDLParser.AccessibilityDefContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.accessibilityDef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitAccessibilityDef([NotNull] EPDDLParser.AccessibilityDefContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.accessibilityRel"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterAccessibilityRel([NotNull] EPDDLParser.AccessibilityRelContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.accessibilityRel"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitAccessibilityRel([NotNull] EPDDLParser.AccessibilityRelContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.eventPreDef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterEventPreDef([NotNull] EPDDLParser.EventPreDefContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.eventPreDef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitEventPreDef([NotNull] EPDDLParser.EventPreDefContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.eventPostDef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterEventPostDef([NotNull] EPDDLParser.EventPostDefContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.eventPostDef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitEventPostDef([NotNull] EPDDLParser.EventPostDefContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="EPDDLParser.parametersDef"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
@@ -299,42 +419,6 @@ public partial class EPDDLParserBaseListener : IEPDDLParserListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitObservabilityGroupsDef([NotNull] EPDDLParser.ObservabilityGroupsDefContext context) { }
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="EPDDLParser.eventDef"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterEventDef([NotNull] EPDDLParser.EventDefContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="EPDDLParser.eventDef"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitEventDef([NotNull] EPDDLParser.EventDefContext context) { }
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="EPDDLParser.eventPreDef"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterEventPreDef([NotNull] EPDDLParser.EventPreDefContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="EPDDLParser.eventPreDef"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitEventPreDef([NotNull] EPDDLParser.EventPreDefContext context) { }
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="EPDDLParser.eventPostDef"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterEventPostDef([NotNull] EPDDLParser.EventPostDefContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="EPDDLParser.eventPostDef"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitEventPostDef([NotNull] EPDDLParser.EventPostDefContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="EPDDLParser.postconditionBlock"/>.
 	/// <para>The default implementation does nothing.</para>
@@ -407,6 +491,30 @@ public partial class EPDDLParserBaseListener : IEPDDLParserListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitInitDef([NotNull] EPDDLParser.InitDefContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.worldsDef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterWorldsDef([NotNull] EPDDLParser.WorldsDefContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.worldsDef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitWorldsDef([NotNull] EPDDLParser.WorldsDefContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.worldDef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterWorldDef([NotNull] EPDDLParser.WorldDefContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.worldDef"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitWorldDef([NotNull] EPDDLParser.WorldDefContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="EPDDLParser.goalDef"/>.
 	/// <para>The default implementation does nothing.</para>
@@ -491,6 +599,18 @@ public partial class EPDDLParserBaseListener : IEPDDLParserListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitTypedVariableList([NotNull] EPDDLParser.TypedVariableListContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.typedAgentList"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterTypedAgentList([NotNull] EPDDLParser.TypedAgentListContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.typedAgentList"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitTypedAgentList([NotNull] EPDDLParser.TypedAgentListContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="EPDDLParser.type"/>.
 	/// <para>The default implementation does nothing.</para>
@@ -960,18 +1080,6 @@ public partial class EPDDLParserBaseListener : IEPDDLParserListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitAgentGroup([NotNull] EPDDLParser.AgentGroupContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="EPDDLParser.literal"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterLiteral([NotNull] EPDDLParser.LiteralContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="EPDDLParser.literal"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitLiteral([NotNull] EPDDLParser.LiteralContext context) { }
-	/// <summary>
 	/// Enter a parse tree produced by <see cref="EPDDLParser.initialStateDescr"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
@@ -1271,18 +1379,6 @@ public partial class EPDDLParserBaseListener : IEPDDLParserListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitActionTypeDesignDef([NotNull] EPDDLParser.ActionTypeDesignDefContext context) { }
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="EPDDLParser.typedAgentList"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterTypedAgentList([NotNull] EPDDLParser.TypedAgentListContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="EPDDLParser.typedAgentList"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitTypedAgentList([NotNull] EPDDLParser.TypedAgentListContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="EPDDLParser.knowsWhether"/>.
 	/// <para>The default implementation does nothing.</para>

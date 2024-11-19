@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from EPDDLParser.g4 by ANTLR 4.13.2
+// Generated from Parser/EPDDLParser.g4 by ANTLR 4.13.2
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -221,6 +221,106 @@ public interface IEPDDLParserListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitActionDef([NotNull] EPDDLParser.ActionDefContext context);
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.ownersDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOwnersDef([NotNull] EPDDLParser.OwnersDefContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.ownersDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOwnersDef([NotNull] EPDDLParser.OwnersDefContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.agentList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterAgentList([NotNull] EPDDLParser.AgentListContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.agentList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitAgentList([NotNull] EPDDLParser.AgentListContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.eventsDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterEventsDef([NotNull] EPDDLParser.EventsDefContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.eventsDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitEventsDef([NotNull] EPDDLParser.EventsDefContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.eventDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterEventDef([NotNull] EPDDLParser.EventDefContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.eventDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitEventDef([NotNull] EPDDLParser.EventDefContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.effectDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterEffectDef([NotNull] EPDDLParser.EffectDefContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.effectDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitEffectDef([NotNull] EPDDLParser.EffectDefContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.literal"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterLiteral([NotNull] EPDDLParser.LiteralContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.literal"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitLiteral([NotNull] EPDDLParser.LiteralContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.accessibilityDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterAccessibilityDef([NotNull] EPDDLParser.AccessibilityDefContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.accessibilityDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitAccessibilityDef([NotNull] EPDDLParser.AccessibilityDefContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.accessibilityRel"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterAccessibilityRel([NotNull] EPDDLParser.AccessibilityRelContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.accessibilityRel"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitAccessibilityRel([NotNull] EPDDLParser.AccessibilityRelContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.eventPreDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterEventPreDef([NotNull] EPDDLParser.EventPreDefContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.eventPreDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitEventPreDef([NotNull] EPDDLParser.EventPreDefContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.eventPostDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterEventPostDef([NotNull] EPDDLParser.EventPostDefContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.eventPostDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitEventPostDef([NotNull] EPDDLParser.EventPostDefContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="EPDDLParser.parametersDef"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -250,36 +350,6 @@ public interface IEPDDLParserListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitObservabilityGroupsDef([NotNull] EPDDLParser.ObservabilityGroupsDefContext context);
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="EPDDLParser.eventDef"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterEventDef([NotNull] EPDDLParser.EventDefContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="EPDDLParser.eventDef"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitEventDef([NotNull] EPDDLParser.EventDefContext context);
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="EPDDLParser.eventPreDef"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterEventPreDef([NotNull] EPDDLParser.EventPreDefContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="EPDDLParser.eventPreDef"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitEventPreDef([NotNull] EPDDLParser.EventPreDefContext context);
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="EPDDLParser.eventPostDef"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterEventPostDef([NotNull] EPDDLParser.EventPostDefContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="EPDDLParser.eventPostDef"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitEventPostDef([NotNull] EPDDLParser.EventPostDefContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="EPDDLParser.postconditionBlock"/>.
 	/// </summary>
@@ -340,6 +410,26 @@ public interface IEPDDLParserListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitInitDef([NotNull] EPDDLParser.InitDefContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.worldsDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterWorldsDef([NotNull] EPDDLParser.WorldsDefContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.worldsDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitWorldsDef([NotNull] EPDDLParser.WorldsDefContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.worldDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterWorldDef([NotNull] EPDDLParser.WorldDefContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.worldDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitWorldDef([NotNull] EPDDLParser.WorldDefContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="EPDDLParser.goalDef"/>.
 	/// </summary>
@@ -410,6 +500,16 @@ public interface IEPDDLParserListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitTypedVariableList([NotNull] EPDDLParser.TypedVariableListContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="EPDDLParser.typedAgentList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterTypedAgentList([NotNull] EPDDLParser.TypedAgentListContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="EPDDLParser.typedAgentList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitTypedAgentList([NotNull] EPDDLParser.TypedAgentListContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="EPDDLParser.type"/>.
 	/// </summary>
@@ -801,16 +901,6 @@ public interface IEPDDLParserListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitAgentGroup([NotNull] EPDDLParser.AgentGroupContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="EPDDLParser.literal"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterLiteral([NotNull] EPDDLParser.LiteralContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="EPDDLParser.literal"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitLiteral([NotNull] EPDDLParser.LiteralContext context);
-	/// <summary>
 	/// Enter a parse tree produced by <see cref="EPDDLParser.initialStateDescr"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -1060,16 +1150,6 @@ public interface IEPDDLParserListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitActionTypeDesignDef([NotNull] EPDDLParser.ActionTypeDesignDefContext context);
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="EPDDLParser.typedAgentList"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterTypedAgentList([NotNull] EPDDLParser.TypedAgentListContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="EPDDLParser.typedAgentList"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitTypedAgentList([NotNull] EPDDLParser.TypedAgentListContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="EPDDLParser.knowsWhether"/>.
 	/// </summary>

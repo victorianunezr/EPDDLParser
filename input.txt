@@ -1,40 +1,25 @@
 (define (domain lever-domain)
     (:requirements :del)
-
-    (:types
-        position
-    )
-
+    (:types position)
     (:predicates
         (at ?pos - position)
-        (adjacent ?pos0 - position ?pos1 - position) ; ?pos0 is to the left of ?pos1
+        (adjacent ?pos0 - position ?pos1 - position)
         (leftmost ?pos - position)
         (rightmost ?pos - position)
     )
-
-    (:action move-left
+    (:action action1
         :parameters (?pos - position ?next-pos - position)
-        :owners (Alice)
-        :events
-            (
-                (e1
-                    :precondition (and (at ?pos) (not (leftmost ?pos)) (adjacent ?next-pos ?pos))
-                    :effect ((at ?next-pos) (not (at ?pos)))
-                )
+        :owners (All)
+        :events (
+            (e1
+                :precondition (and (at ?pos) (not (leftmost ?pos)) (adjacent ?next-pos ?pos))
+                :effect ()
             )
-        :accessibility ()
-    )
-
-    (:action move-right
-        :parameters (?pos - position ?next-pos - position)
-        :owners (Bob)
-        :events
-            (
-                (e1
-                    :precondition (and (at ?pos) (not (rightmost ?pos)) (adjacent ?pos ?next-pos))
-                    :effect ((at ?next-pos) (not (at ?pos)))
-                )
+            (e2
+                :precondition (and (at ?pos) (not (leftmost ?pos)) (adjacent ?next-pos ?pos))
+                :effect ((at ?next-pos) (not (at ?pos)))
             )
+        )
         :accessibility ()
     )
 )

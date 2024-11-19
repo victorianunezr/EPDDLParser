@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from EPDDLParser.g4 by ANTLR 4.13.2
+// Generated from Parser/EPDDLParser.g4 by ANTLR 4.13.2
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -146,6 +146,66 @@ public interface IEPDDLParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitActionDef([NotNull] EPDDLParser.ActionDefContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="EPDDLParser.ownersDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOwnersDef([NotNull] EPDDLParser.OwnersDefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="EPDDLParser.agentList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitAgentList([NotNull] EPDDLParser.AgentListContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="EPDDLParser.eventsDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEventsDef([NotNull] EPDDLParser.EventsDefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="EPDDLParser.eventDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEventDef([NotNull] EPDDLParser.EventDefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="EPDDLParser.effectDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEffectDef([NotNull] EPDDLParser.EffectDefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="EPDDLParser.literal"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitLiteral([NotNull] EPDDLParser.LiteralContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="EPDDLParser.accessibilityDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitAccessibilityDef([NotNull] EPDDLParser.AccessibilityDefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="EPDDLParser.accessibilityRel"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitAccessibilityRel([NotNull] EPDDLParser.AccessibilityRelContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="EPDDLParser.eventPreDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEventPreDef([NotNull] EPDDLParser.EventPreDefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="EPDDLParser.eventPostDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEventPostDef([NotNull] EPDDLParser.EventPostDefContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="EPDDLParser.parametersDef"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -163,24 +223,6 @@ public interface IEPDDLParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitObservabilityGroupsDef([NotNull] EPDDLParser.ObservabilityGroupsDefContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="EPDDLParser.eventDef"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitEventDef([NotNull] EPDDLParser.EventDefContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="EPDDLParser.eventPreDef"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitEventPreDef([NotNull] EPDDLParser.EventPreDefContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="EPDDLParser.eventPostDef"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitEventPostDef([NotNull] EPDDLParser.EventPostDefContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="EPDDLParser.postconditionBlock"/>.
 	/// </summary>
@@ -217,6 +259,18 @@ public interface IEPDDLParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitInitDef([NotNull] EPDDLParser.InitDefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="EPDDLParser.worldsDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitWorldsDef([NotNull] EPDDLParser.WorldsDefContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="EPDDLParser.worldDef"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitWorldDef([NotNull] EPDDLParser.WorldDefContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="EPDDLParser.goalDef"/>.
 	/// </summary>
@@ -259,6 +313,12 @@ public interface IEPDDLParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitTypedVariableList([NotNull] EPDDLParser.TypedVariableListContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="EPDDLParser.typedAgentList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitTypedAgentList([NotNull] EPDDLParser.TypedAgentListContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="EPDDLParser.type"/>.
 	/// </summary>
@@ -494,12 +554,6 @@ public interface IEPDDLParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitAgentGroup([NotNull] EPDDLParser.AgentGroupContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="EPDDLParser.literal"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitLiteral([NotNull] EPDDLParser.LiteralContext context);
-	/// <summary>
 	/// Visit a parse tree produced by <see cref="EPDDLParser.initialStateDescr"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -649,12 +703,6 @@ public interface IEPDDLParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitActionTypeDesignDef([NotNull] EPDDLParser.ActionTypeDesignDefContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="EPDDLParser.typedAgentList"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitTypedAgentList([NotNull] EPDDLParser.TypedAgentListContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="EPDDLParser.knowsWhether"/>.
 	/// </summary>

@@ -21,7 +21,8 @@ In Parser:
 - Designated worlds/events.
 
 In DEL implementation:
-- Allow for propositions to take in parameters.
+- Test empty owners
+- Test accessibility between events
 
 QUESTIONS
 - Should action owners be defined as part of the domain?
@@ -49,3 +50,12 @@ Parsing Integration: Use the EPDDL parser from the DEL project, feeding the pars
 Integration: From an entry point in the DEL project (such as Program.cs), parse the EPDDL input, apply the visitor, and generate DEL-compatible objects.
 
 This setup keeps the parser general and reusable while placing the DEL-specific interpretation logic in the DEL project, where it naturally belongs.
+
+---------------------
+COMMANDS
+To generate parser:
+java -jar antlr-4.13.2-complete.jar -Dlanguage=CSharp -visitor Parser/EPDDLLexer.g4 Parser/EPDDLParser.g4
+
+To pack parser:
+Change version in csproj and run:
+dotnet pack -o ~/NuGetLocalPackages

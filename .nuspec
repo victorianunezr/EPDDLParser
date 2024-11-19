@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <title>EPDDLParser</title>
+    <authors>victorianunezr</authors>
+    <owners>victorianunezr</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>https://github.com/victorianunezr/EPDDLParser</projectUrl>
+    <description>A description of your package.</description>
+    <readme>\README.md</readme>
+  </metadata>
+  <!-- <files>
+    <file src="bin/Release/net8.0.0/EPDDLParser.dll" target="lib/net8.0" />
+  </files> -->
+</package>

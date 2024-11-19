@@ -118,8 +118,13 @@ eventsDef
 eventDef
     : LPAREN NAME
       (PRECONDITION formulaOrEmpty)
-      (EFFECT LPAREN (literal)+ RPAREN)
+      (EFFECT effectDef)
       RPAREN
+    ;
+
+effectDef
+    : TRIVIAL_DEF // effect is Top, i.e. everything applies as before the event
+    | LPAREN (literal)+ RPAREN
     ;
 
 literal
