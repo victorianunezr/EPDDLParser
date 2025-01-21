@@ -1,0 +1,65 @@
+(define (problem lever-epistemic-problem)
+    (:domain lever-domain)
+
+    (:requirements :del)
+
+    (:objects
+        pos0 pos1 pos2 pos3 pos4 - position
+    )
+
+    (:agents
+        Alice Bob - agent
+    )
+
+    (:init
+        :worlds
+        (
+            (w1
+                (
+                    (at pos2)
+                    (adjacent pos0 pos1)
+                    (adjacent pos1 pos2)
+                    (adjacent pos2 pos3)
+                    (adjacent pos3 pos4)
+                    (leftmost pos0)
+                    (rightmost pos4)
+                    (goal pos0)
+                )
+            )
+            (w2
+                (
+                    (at pos2)
+                    (adjacent pos0 pos1)
+                    (adjacent pos1 pos2)
+                    (adjacent pos2 pos3)
+                    (adjacent pos3 pos4)
+                    (leftmost pos0)
+                    (rightmost pos4)
+                    (goal pos0)
+                    (goal pos4)
+                )
+            )
+            (w3
+                (
+                    (at pos2)
+                    (adjacent pos0 pos1)
+                    (adjacent pos1 pos2)
+                    (adjacent pos2 pos3)
+                    (adjacent pos3 pos4)
+                    (leftmost pos0)
+                    (rightmost pos4)
+                    (goal pos4)
+                )
+            )
+        )
+        :accessibility
+        (
+            (w1 w2 Alice)
+            (w2 w3 Bob)
+        )
+    )
+
+    (:goal
+        (or (and (at pos0) (goal pos0)) (and (at pos4) (goal pos4)))
+    )
+)

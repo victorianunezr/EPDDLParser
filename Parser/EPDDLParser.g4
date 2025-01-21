@@ -230,7 +230,7 @@ actionObsDef
     ;
 
 typedIdentList
-    : (NAME)*
+    : type (type)*
     | NAME (NAME)* DASH type typedIdentList
     ;
 
@@ -283,7 +283,7 @@ condition
     ;
 
 atomicCondition
-    : LPAREN predicateName (term)* RPAREN
+    : predicate
     | LPAREN ASSIGN term term RPAREN
     ;
 
@@ -294,7 +294,7 @@ predicateFormula
     | LPAREN 'not' predicateFormula RPAREN
     | LPAREN 'exists' LPAREN typedVariableList RPAREN predicateFormula RPAREN
     | LPAREN 'forall' LPAREN typedVariableList RPAREN predicateFormula RPAREN
-    | LPAREN predicateName (term)* RPAREN
+    | predicate
     ;
 
 atomicEqFormula
@@ -454,8 +454,6 @@ simpleFTheoryFormula
     | LBRACKET ALL RBRACKET knowsWhether predicateFormula
     | LBRACKET ALL RBRACKET LPAREN NOT knowsWhether predicateFormula RPAREN
     ;
-
-    
 
 actionTypeName
     : NAME

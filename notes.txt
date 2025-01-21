@@ -17,32 +17,41 @@ actionDef
 
 TODO
 In Parser:
-- Implement action owners in EPDDL. Should they be defined at the domain level?
 - Designated worlds/events.
 
 In DEL implementation:
-- Test empty owners
-- Test accessibility between events
+
+BUGS
+- Can't parse (:types position agent)
+- Can't parse object list in problem def
 
 QUESTIONS
-- Should action owners be defined as part of the domain?
+- what if one action has several owners, how does that look in the tree? is there a difference in the cost from two branches if two different agents perform the same action?
+it should mean different things if agents have different knowledge.
+- How to turn payoffs into costs/goal formulas?
+    Use propositions p1-...-pn, where pi denotes that there is a goal i steps away (?)
 
 DESIGN
-Since the DEL project already defines all the necessary models (actions, events, states, etc.), implementing the visitor in the DEL project does make more sense.
+    Parser
+        Since the DEL project already defines all the necessary models (actions, events, states, etc.), implementing the visitor in the DEL project does make more sense.
 
-Single Set of Model Classes: I only need model classes in the DEL project, avoiding duplication of the definitions across projects.
+        Single Set of Model Classes: I only need model classes in the DEL project, avoiding duplication of the definitions across projects.
 
-Visitor Implementation in DEL: By implementing the visitor directly in the DEL project, leverage the existing models and avoid coupling the parser too tightly with any specific interpretation of EPDDL.
+        Visitor Implementation in DEL: By implementing the visitor directly in the DEL project, leverage the existing models and avoid coupling the parser too tightly with any specific interpretation of EPDDL.
 
-Why Implement the Visitor in the DEL Project?
-The visitor’s purpose is to translate the parsed EPDDL structure into instantiated DEL objects. If the DEL project already has these model classes, implementing the visitor there:
+        Why Implement the Visitor in the DEL Project?
+        The visitor’s purpose is to translate the parsed EPDDL structure into instantiated DEL objects. If the DEL project already has these model classes, implementing the visitor there:
 
-Centralizes Object Creation Logic: The DEL project becomes the source of truth for instantiating and managing these objects.
-Maintains Separation: The parser project can stay focused on parsing, without embedding any application-specific logic (like DEL’s interpretation of actions and states).
-Increases Reusability: Other projects or components can use the EPDDL parser independently, without assuming that DEL's logic will always be applied.
-Revised Step-by-Step Plan
-Parser Project: Keep the parser project as is, focusing on parsing EPDDL syntax and generating an abstract syntax tree (AST) or parse tree.
+        Centralizes Object Creation Logic: The DEL project becomes the source of truth for instantiating and managing these objects.
+        Maintains Separation: The parser project can stay focused on parsing, without embedding any application-specific logic (like DEL’s interpretation of actions and states).
+        Increases Reusability: Other projects or components can use the EPDDL parser independently, without assuming that DEL's logic will always be applied.
+        Revised Step-by-Step Plan
+        Parser Project: Keep the parser project as is, focusing on parsing EPDDL syntax and generating an abstract syntax tree (AST) or parse tree.
 
+    PDDL
+        Variable grounding:
+            This process of action grounding or precondition evaluation, if done naively (by enumerating all possible tuples of objects and checking each predicate from scratch), it can be slow for large problems. 
+            A more efficient approach is to maintain a data structure that lets you query facts in constant or near-constant time.
 DEL Project:
 
 Visitor Implementation: Implement a visitor in the DEL project that walks through the AST produced by the EPDDL parser and creates instances of DEL’s State, Action, EventModel, etc., based on the parsed EPDDL input.
@@ -58,4 +67,20 @@ java -jar antlr-4.13.2-complete.jar -Dlanguage=CSharp -visitor Parser/EPDDLLexer
 
 To pack parser:
 Change version in csproj and run:
-dotnet pack -o ~/NuGetLocalPackages
+dotnet pack -c Release -o ~/NugetLocalFeed
+
+To uptake latest in consumer project:
+
+
+TEST DOMAINS
+Lever, asymmetric lever, 2-D lever
+MAPFDU
+Blocks world
+Stag hunt
+Tiny Hanabi
+Cupboard or fridge
+https://github.com/ssokota/tiny-hanabi
+
+Story
+Previous notion of implicit coordination 
+why we are allowed to cut indis edges: all agents can compute global costs
