@@ -71,7 +71,11 @@ agentGroupDef
     ;
 
 objectNamesDef
-    : LPAREN OBJECTS typedIdentList RPAREN
+    : LPAREN OBJECTS typedLine* RPAREN
+    ;
+
+typedLine
+    : (NAME)+ DASH type
     ;
 
 staticPredListDef
@@ -138,7 +142,7 @@ accessibilityDef
     ;
 
 accessibilityRel
-    : LPAREN NAME NAME (agentName)+ RPAREN
+    : LPAREN NAME NAME (NAME)+ RPAREN
     ;
 
 // eventDef

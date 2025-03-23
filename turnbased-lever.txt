@@ -1,5 +1,4 @@
 (define (domain lever-domain)
-    (:requirements :del)
     (:types position agent)
     
     (:predicates

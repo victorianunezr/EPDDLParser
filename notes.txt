@@ -14,22 +14,27 @@ actionDef
         "The initial state (init) defines specifically what predicates are true at the start of the problem. This is not a logical expression because it is simply a list of predicates which are true."
         https://planning.wiki/ref/pddl/problem#init
 
+- NAME token only accepts lower case input. Maybe by design? If so, document.
 
-TODO
-In Parser:
-- Designated worlds/events.
 
-In DEL implementation:
 
-BUGS
-- Can't parse (:types position agent)
-- Can't parse object list in problem def
+TODO/BUGS
+x Can't parse (:types position agent)
+x Can't parse object list in problem def
+x initialize accessibility relation with agent definition from problem.
+x Cut edges starting from root's children
+x[need more testing] add agent to edge between states, currently only action
+- extract and print policy
+x child states have no indist edges
+x accessibility relation of init state not parsed properly
+- all worlds are getting pruned
 
 QUESTIONS
 - what if one action has several owners, how does that look in the tree? is there a difference in the cost from two branches if two different agents perform the same action?
 it should mean different things if agents have different knowledge.
 - How to turn payoffs into costs/goal formulas?
     Use propositions p1-...-pn, where pi denotes that there is a goal i steps away (?)
+- action owners: do we get the same result from executing the same action by two different agents? how to best implement action owners? for now, one owner per action, so action models can be duplicate
 
 DESIGN
     Parser
@@ -67,9 +72,12 @@ java -jar antlr-4.13.2-complete.jar -Dlanguage=CSharp -visitor Parser/EPDDLLexer
 
 To pack parser:
 Change version in csproj and run:
+dotnet build -c Release
 dotnet pack -c Release -o ~/NugetLocalFeed
 
 To uptake latest in consumer project:
+Go to dir where csproj lives (src) and run
+dotnet add package EPDDLParser --version 1.0.x
 
 
 TEST DOMAINS

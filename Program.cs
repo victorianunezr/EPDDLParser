@@ -4,7 +4,7 @@ class Program
 {
     static void Main(string[] args)
     {
-        string filePath = "input.txt";
+        string filePath = "/Users/victorianunezr/repos/EPDDLParser/turnbased-lever-problem.txt";
         var input = File.ReadAllText(filePath);
 
         AntlrInputStream inputStream = new AntlrInputStream(input);
